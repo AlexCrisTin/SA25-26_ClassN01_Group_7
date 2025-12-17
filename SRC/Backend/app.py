@@ -1,0 +1,31 @@
+from flask import Flask, request, jsonify
+from business_logic.booking_service import BookingService
+
+app = Flask(__name__)
+booking_service = BookingService() # Controller phụ thuộc vào Service [cite: 432]
+
+@app.route('/api/bookings', methods=['POST'])
+def create_booking():
+    # Layer 1: Nhận request và chuyển cho Layer 2 [cite: 435]
+    data = request.json
+    try:
+        booking = booking_service.create_booking(
+            data.get('guest_name'),
+            data.get('room_type'),
+            data.get('check_in_date'),
+            data.get('total_price')
+        )
+        return jsonify(booking.to_dict()), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/api/bookings/<booking_id>', methods=['GET'])
+def get_booking(booking_id):
+    try:
+        booking = booking_service.get_booking_details(booking_id)
+        return jsonify(booking.to_dict()), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
