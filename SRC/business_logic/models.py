@@ -7,7 +7,7 @@ class Booking:
         self.total_price = total_price
 
     def to_dict(self):
-        # Helper để chuyển object thành JSON trả về cho API [cite: 350]
+ 
         return {
             "id": self.id,
             "guest_name": self.guest_name,

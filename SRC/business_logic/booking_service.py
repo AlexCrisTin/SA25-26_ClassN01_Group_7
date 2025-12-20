@@ -4,14 +4,14 @@ class BookingService:
     """Layer 2: Xử lý logic nghiệp vụ, gọi xuống Persistence."""
 
     def __init__(self):
-        self.repo = BookingRepository() # Service phụ thuộc vào Repository [cite: 407]
+        self.repo = BookingRepository() 
 
     def create_booking(self, guest_name, room_type, check_in_date, total_price):
-        # Business Rule: Giá phòng không được âm [cite: 409]
+
         if total_price <= 0:
             raise ValueError("Invalid Data: Total price must be positive.")
         
-        # Gọi xuống tầng Persistence để lưu [cite: 412]
+       
         return self.repo.save(guest_name, room_type, check_in_date, total_price)
 
     def get_booking_details(self, booking_id):

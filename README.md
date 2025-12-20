@@ -9,7 +9,8 @@ Software Architecture Group 7
 - Pham The Thuy Hoang - hoangZenKo
 
 ##Project Hotel Management System
-###Folders:
+
+##Folders:
 - Documents: plan, SRS, and lab 
 - Design: architectural design documentation
 - SRC: code program

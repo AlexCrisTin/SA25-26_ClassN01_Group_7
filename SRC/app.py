@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify
 from business_logic.booking_service import BookingService
 
 app = Flask(__name__)
-booking_service = BookingService() # Controller phụ thuộc vào Service [cite: 432]
+booking_service = BookingService() 
 
 @app.route('/api/bookings', methods=['POST'])
 def create_booking():
-    # Layer 1: Nhận request và chuyển cho Layer 2 [cite: 435]
+  
     data = request.json
     try:
         booking = booking_service.create_booking(
