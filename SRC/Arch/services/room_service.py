@@ -1,4 +1,4 @@
-from .room_repository import RoomRepository
+from repository.room_repository import RoomRepository
 
 class RoomService:
     """Service: Xử lý logic nghiệp vụ cho Room."""
@@ -48,4 +48,3 @@ class RoomService:
         
         room.status = 'occupied'
         return room
-

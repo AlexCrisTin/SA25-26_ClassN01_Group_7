@@ -1,4 +1,4 @@
-from .staff import Staff
+from models.staff import Staff
 
 # Giả lập Database trong bộ nhớ
 staff_db = {}

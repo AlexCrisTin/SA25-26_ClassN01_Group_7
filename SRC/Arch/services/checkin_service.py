@@ -1,5 +1,5 @@
-from .checkin_repository import CheckInRepository
-from .room_repository import RoomRepository
+from repository.checkin_repository import CheckInRepository
+from repository.room_repository import RoomRepository
 
 class CheckInService:
     """Service: Xử lý logic nghiệp vụ cho CheckIn/CheckOut."""
@@ -48,4 +48,3 @@ class CheckInService:
         if not checkout:
             raise ValueError(f"Check-out with ID {checkout_id} not found.")
         return checkout
-

@@ -1,4 +1,4 @@
-from .checkin import CheckIn, CheckOut
+from models.checkin import CheckIn, CheckOut
 
 # Giả lập Database trong bộ nhớ
 checkin_db = {}

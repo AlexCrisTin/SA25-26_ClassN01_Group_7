@@ -1,4 +1,4 @@
-from .coupon_repository import CouponRepository
+from repository.coupon_repository import CouponRepository
 from datetime import datetime
 
 class CouponService:
@@ -46,4 +46,3 @@ class CouponService:
     def get_all_coupons(self):
         """Lấy tất cả coupons"""
         return self.repo.find_all()
-

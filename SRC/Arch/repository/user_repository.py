@@ -1,4 +1,4 @@
-from .user import User
+from models.user import User
 
 # Giả lập Database trong bộ nhớ
 user_db = {}

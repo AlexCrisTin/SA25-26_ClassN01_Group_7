@@ -1,5 +1,5 @@
 from flask import request
-from models.checkin_service import CheckInService
+from services.checkin_service import CheckInService
 from views.checkin_view import CheckInView
 
 class CheckInController:

@@ -1,4 +1,4 @@
-from .payment import Payment
+from models.payment import Payment
 
 # Giả lập Database trong bộ nhớ
 payment_db = {}

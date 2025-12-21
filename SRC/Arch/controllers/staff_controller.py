@@ -1,5 +1,5 @@
 from flask import request
-from models.staff_service import StaffService
+from services.staff_service import StaffService
 from views.staff_view import StaffView
 
 class StaffController:

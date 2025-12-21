@@ -1,4 +1,4 @@
-from .user_repository import UserRepository
+from repository.user_repository import UserRepository
 
 class UserService:
     """Service: Xử lý logic nghiệp vụ cho User."""
@@ -55,4 +55,3 @@ class UserService:
             user.email = email
         
         return user
-

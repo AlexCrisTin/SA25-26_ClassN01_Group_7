@@ -1,4 +1,4 @@
-from .coupon import Coupon
+from models.coupon import Coupon
 
 # Giả lập Database trong bộ nhớ
 coupon_db = {}

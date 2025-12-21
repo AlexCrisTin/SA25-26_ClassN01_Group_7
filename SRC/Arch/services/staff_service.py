@@ -1,4 +1,4 @@
-from .staff_repository import StaffRepository
+from repository.staff_repository import StaffRepository
 
 class StaffService:
     """Service: Xử lý logic nghiệp vụ cho Staff."""
@@ -52,4 +52,3 @@ class StaffService:
             staff.is_active = is_active
         
         return staff
-

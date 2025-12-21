@@ -1,4 +1,4 @@
-from .booking_repository import BookingRepository
+from repository.booking_repository import BookingRepository
 
 class BookingService:
     """Service: Xử lý logic nghiệp vụ, gọi xuống Repository."""
@@ -33,4 +33,3 @@ class BookingService:
         # In real implementation, check if booking can be cancelled
         self.repo.delete(booking_id)
         return {"message": f"Booking {booking_id} has been cancelled successfully."}
-

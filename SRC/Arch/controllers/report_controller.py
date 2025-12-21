@@ -1,5 +1,5 @@
 from flask import request
-from models.report_service import ReportService
+from services.report_service import ReportService
 from views.report_view import ReportView
 
 class ReportController:

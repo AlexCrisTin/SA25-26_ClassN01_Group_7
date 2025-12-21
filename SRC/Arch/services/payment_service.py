@@ -1,4 +1,4 @@
-from .payment_repository import PaymentRepository
+from repository.payment_repository import PaymentRepository
 
 class PaymentService:
     """Service: Xử lý logic nghiệp vụ cho Payment."""
@@ -32,4 +32,3 @@ class PaymentService:
     def get_all_payments(self):
         """Lấy tất cả payments"""
         return self.repo.find_all()
-

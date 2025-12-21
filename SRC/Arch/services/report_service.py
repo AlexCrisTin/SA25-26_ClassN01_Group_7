@@ -1,6 +1,6 @@
-from .report_repository import ReportRepository
-from .booking_repository import BookingRepository
-from .payment_repository import PaymentRepository
+from repository.report_repository import ReportRepository
+from repository.booking_repository import BookingRepository
+from repository.payment_repository import PaymentRepository
 from datetime import datetime
 
 class ReportService:
@@ -70,4 +70,3 @@ class ReportService:
     def get_all_reports(self):
         """Lấy tất cả reports"""
         return self.repo.find_all()
-

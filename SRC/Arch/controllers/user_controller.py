@@ -1,5 +1,5 @@
 from flask import request
-from models.user_service import UserService
+from services.user_service import UserService
 from views.user_view import UserView
 
 class UserController:

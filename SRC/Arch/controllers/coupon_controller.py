@@ -1,5 +1,5 @@
 from flask import request
-from models.coupon_service import CouponService
+from services.coupon_service import CouponService
 from views.coupon_view import CouponView
 
 class CouponController:

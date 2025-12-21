@@ -1,4 +1,4 @@
-from .service import Service
+from models.service import Service
 
 # Giả lập Database trong bộ nhớ
 service_db = {}

@@ -1,4 +1,4 @@
-from .room import Room
+from models.room import Room
 
 # Giả lập Database trong bộ nhớ
 room_db = {}

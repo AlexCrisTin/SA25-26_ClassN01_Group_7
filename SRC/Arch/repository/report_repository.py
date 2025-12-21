@@ -1,4 +1,4 @@
-from .report import Report
+from models.report import Report
 
 # Giả lập Database trong bộ nhớ
 report_db = {}

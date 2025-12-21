@@ -1,5 +1,5 @@
 from flask import request
-from models.service_service import ServiceService
+from services.service_service import ServiceService
 from views.service_view import ServiceView
 
 class ServiceController:

@@ -1,5 +1,5 @@
 from flask import request
-from models.room_service import RoomService
+from services.room_service import RoomService
 from views.room_view import RoomView
 
 class RoomController:

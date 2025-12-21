@@ -1,5 +1,5 @@
 from flask import request
-from models.payment_service import PaymentService
+from services.payment_service import PaymentService
 from views.payment_view import PaymentView
 
 class PaymentController:

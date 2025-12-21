@@ -1,4 +1,4 @@
-from .service_repository import ServiceRepository
+from repository.service_repository import ServiceRepository
 
 class ServiceService:
     """Service: Xử lý logic nghiệp vụ cho Hotel Service."""
@@ -29,4 +29,3 @@ class ServiceService:
     def get_services_by_category(self, category):
         """Lấy services theo category"""
         return self.repo.find_by_category(category)
-
