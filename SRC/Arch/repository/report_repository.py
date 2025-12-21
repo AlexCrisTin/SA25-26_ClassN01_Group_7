@@ -5,7 +5,7 @@ report_db = {}
 next_report_id = 1
 
 class ReportRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Report."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Report.
     
     def save(self, report_type, generated_date, data, period_start=None, period_end=None):
         global next_report_id

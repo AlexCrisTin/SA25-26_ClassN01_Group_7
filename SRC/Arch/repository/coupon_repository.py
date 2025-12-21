@@ -5,7 +5,7 @@ coupon_db = {}
 next_coupon_id = 1
 
 class CouponRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Coupon."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Coupon.
     
     def save(self, code, discount_type, discount_value, valid_from, valid_to, is_active=True):
         global next_coupon_id

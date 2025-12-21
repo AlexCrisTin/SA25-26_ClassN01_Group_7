@@ -3,14 +3,14 @@ from services.report_service import ReportService
 from views.report_view import ReportView
 
 class ReportController:
-    """Controller: Xử lý HTTP requests cho Report"""
+    #Controller: Xử lý HTTP requests cho Report
     
     def __init__(self):
         self.service = ReportService()
         self.view = ReportView()
     
     def generate_revenue_report(self):
-        """Xử lý POST /api/reports/revenue"""
+        #Xử lý POST /api/reports/revenue
         data = request.json or {}
         try:
             report = self.service.generate_revenue_report(
@@ -22,7 +22,7 @@ class ReportController:
             return self.view.error_response(str(e), 400)
     
     def generate_occupancy_report(self):
-        """Xử lý POST /api/reports/occupancy"""
+        #Xử lý POST /api/reports/occupancy
         data = request.json or {}
         try:
             report = self.service.generate_occupancy_report(
@@ -34,7 +34,7 @@ class ReportController:
             return self.view.error_response(str(e), 400)
     
     def generate_booking_report(self):
-        """Xử lý POST /api/reports/booking"""
+        #Xử lý POST /api/reports/booking
         data = request.json or {}
         try:
             report = self.service.generate_booking_report(
@@ -46,7 +46,7 @@ class ReportController:
             return self.view.error_response(str(e), 400)
     
     def get_report(self, report_id):
-        """Xử lý GET /api/reports/<report_id>"""
+        #Xử lý GET /api/reports/<report_id>
         try:
             report = self.service.get_report_details(report_id)
             return self.view.report_found(report)
@@ -54,7 +54,7 @@ class ReportController:
             return self.view.error_response(str(e), 404)
     
     def get_reports_by_type(self, report_type):
-        """Xử lý GET /api/reports/type/<report_type>"""
+        #Xử lý GET /api/reports/type/<report_type>
         try:
             reports = self.service.get_reports_by_type(report_type)
             return self.view.reports_found(reports)

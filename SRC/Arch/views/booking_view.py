@@ -1,7 +1,7 @@
 from flask import jsonify
 
 class BookingView:
-    """View: Xử lý format response cho API"""
+    #View: Xử lý format response cho API
     @staticmethod
     def success_response(data, status_code=200):
         return jsonify(data), status_code
@@ -20,11 +20,11 @@ class BookingView:
     
     @staticmethod
     def bookings_found(bookings):
-        """Response khi tìm thấy danh sách bookings"""
+        #Response khi tìm thấy danh sách bookings
         return jsonify([booking.to_dict() for booking in bookings]), 200
     
     @staticmethod
     def booking_cancelled(result):
-        """Response khi hủy booking thành công"""
+        #Response khi hủy booking thành công
         return jsonify(result), 200
 

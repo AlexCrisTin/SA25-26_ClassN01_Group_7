@@ -1,5 +1,5 @@
 class Staff:
-    """Model: Định nghĩa cấu trúc dữ liệu Staff"""
+    #Model: Định nghĩa cấu trúc dữ liệu Staff
     
     def __init__(self, staff_id, full_name, email, phone, position, department, hire_date, is_active=True):
         self.id = staff_id
@@ -12,7 +12,7 @@ class Staff:
         self.is_active = is_active
 
     def to_dict(self):
-        """Chuyển đổi Staff object thành dictionary"""
+        #Chuyển đổi Staff object thành dictionary
         return {
             "id": self.id,
             "full_name": self.full_name,

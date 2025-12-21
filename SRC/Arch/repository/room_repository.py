@@ -5,7 +5,7 @@ room_db = {}
 next_room_id = 1
 
 class RoomRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Room."""
+            #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Room.
     
     def save(self, room_number, room_type, price, status, capacity=None):
         global next_room_id

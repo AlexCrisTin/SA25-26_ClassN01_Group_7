@@ -5,7 +5,7 @@ staff_db = {}
 next_staff_id = 1
 
 class StaffRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Staff."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Staff.
     
     def save(self, full_name, email, phone, position, department, hire_date, is_active=True):
         global next_staff_id

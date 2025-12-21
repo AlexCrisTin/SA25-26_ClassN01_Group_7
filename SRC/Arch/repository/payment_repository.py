@@ -5,7 +5,7 @@ payment_db = {}
 next_payment_id = 1
 
 class PaymentRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Payment."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Payment.
     
     def save(self, booking_id, amount, payment_method, status, transaction_id=None):
         global next_payment_id

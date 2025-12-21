@@ -5,12 +5,12 @@ booking_db = {}
 next_id = 1
 
 class BookingRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu.
     
-    def save(self, guest_name, room_type, check_in_date, total_price):
+    def save(self, guest_name, room_type, check_in_date, total_price, check_out_date=None, status='pending'):
         global next_id
         booking_id = str(next_id)
-        new_booking = Booking(booking_id, guest_name, room_type, check_in_date, total_price)
+        new_booking = Booking(booking_id, guest_name, room_type, check_in_date, total_price, check_out_date, status)
         booking_db[booking_id] = new_booking
         next_id += 1
         return new_booking
@@ -22,7 +22,7 @@ class BookingRepository:
         return list(booking_db.values())
     
     def delete(self, booking_id):
-        """Xóa booking"""
+        #Xóa booking
         if booking_id in booking_db:
             del booking_db[booking_id]
             return True

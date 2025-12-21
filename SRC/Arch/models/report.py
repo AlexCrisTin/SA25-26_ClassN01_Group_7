@@ -1,5 +1,5 @@
 class Report:
-    """Model: Định nghĩa cấu trúc dữ liệu Report"""
+    #Model: Định nghĩa cấu trúc dữ liệu Report
     
     def __init__(self, report_id, report_type, generated_date, data, period_start=None, period_end=None):
         self.id = report_id
@@ -10,7 +10,7 @@ class Report:
         self.period_end = period_end
 
     def to_dict(self):
-        """Chuyển đổi Report object thành dictionary"""
+            #Chuyển đổi Report object thành dictionary
         return {
             "id": self.id,
             "report_type": self.report_type,

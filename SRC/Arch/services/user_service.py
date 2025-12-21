@@ -1,13 +1,13 @@
 from repository.user_repository import UserRepository
 
 class UserService:
-    """Service: Xử lý logic nghiệp vụ cho User."""
+    #Service: Xử lý logic nghiệp vụ cho User.
 
     def __init__(self):
         self.repo = UserRepository()
 
     def create_user(self, username, email, password, full_name, phone, role='user'):
-        """Tạo user mới với validation"""
+        #Tạo user mới với validation
         if not username or not email:
             raise ValueError("Invalid Data: Username and email are required.")
         
@@ -22,25 +22,25 @@ class UserService:
         return self.repo.save(username, email, password, full_name, phone, role)
 
     def get_user_details(self, user_id):
-        """Lấy thông tin user theo ID"""
+        #Lấy thông tin user theo ID
         user = self.repo.find_by_id(user_id)
         if not user:
             raise ValueError(f"User with ID {user_id} not found.")
         return user
     
     def get_user_by_username(self, username):
-        """Lấy user theo username"""
+        #Lấy user theo username
         user = self.repo.find_by_username(username)
         if not user:
             raise ValueError(f"User with username {username} not found.")
         return user
 
     def get_all_users(self):
-        """Lấy tất cả users"""
+        #Lấy tất cả users
         return self.repo.find_all()
     
     def update_profile(self, user_id, full_name=None, phone=None, email=None):
-        """Cập nhật thông tin profile"""
+        #Cập nhật thông tin profile
         user = self.repo.find_by_id(user_id)
         if not user:
             raise ValueError(f"User with ID {user_id} not found.")

@@ -5,7 +5,7 @@ user_db = {}
 next_user_id = 1
 
 class UserRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu User."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu User.
     
     def save(self, username, email, password, full_name, phone, role='user'):
         global next_user_id

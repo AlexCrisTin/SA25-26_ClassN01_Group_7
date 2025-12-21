@@ -7,7 +7,7 @@ next_checkin_id = 1
 next_checkout_id = 1
 
 class CheckInRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu CheckIn."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu CheckIn.
     
     def save_checkin(self, booking_id, room_id, checkin_time, receptionist_id):
         global next_checkin_id

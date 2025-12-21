@@ -5,7 +5,7 @@ service_db = {}
 next_service_id = 1
 
 class ServiceRepository:
-    """Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Service."""
+    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Service.
     
     def save(self, service_name, description, price, category):
         global next_service_id

@@ -3,14 +3,14 @@ from services.room_service import RoomService
 from views.room_view import RoomView
 
 class RoomController:
-    """Controller: Xử lý HTTP requests cho Room"""
+    #Controller: Xử lý HTTP requests cho Room
     
     def __init__(self):
         self.service = RoomService()
         self.view = RoomView()
     
     def search_rooms(self):
-        """Xử lý GET /api/rooms/search"""
+        #Xử lý GET /api/rooms/search
         room_type = request.args.get('room_type')
         status = request.args.get('status', 'available')
         
@@ -21,7 +21,7 @@ class RoomController:
             return self.view.error_response(str(e), 400)
     
     def get_room(self, room_id):
-        """Xử lý GET /api/rooms/<room_id>"""
+        #Xử lý GET /api/rooms/<room_id>
         try:
             room = self.service.get_room_details(room_id)
             return self.view.room_found(room)
@@ -29,7 +29,7 @@ class RoomController:
             return self.view.error_response(str(e), 404)
     
     def get_all_rooms(self):
-        """Xử lý GET /api/rooms"""
+        #Xử lý GET /api/rooms
         try:
             rooms = self.service.get_all_rooms()
             return self.view.rooms_found(rooms)
@@ -37,7 +37,7 @@ class RoomController:
             return self.view.error_response(str(e), 400)
     
     def create_room(self):
-        """Xử lý POST /api/rooms"""
+        #Xử lý POST /api/rooms
         data = request.json
         try:
             room = self.service.create_room(
@@ -52,7 +52,7 @@ class RoomController:
             return self.view.error_response(str(e), 400)
     
     def assign_room(self):
-        """Xử lý POST /api/rooms/assign"""
+            #Xử lý POST /api/rooms/assign
         data = request.json
         try:
             room = self.service.assign_room(

@@ -1,5 +1,5 @@
 class CheckIn:
-    """Model: Định nghĩa cấu trúc dữ liệu CheckIn"""
+    #Model: Định nghĩa cấu trúc dữ liệu CheckIn
     
     def __init__(self, checkin_id, booking_id, room_id, checkin_time, receptionist_id):
         self.id = checkin_id
@@ -9,7 +9,7 @@ class CheckIn:
         self.receptionist_id = receptionist_id
 
     def to_dict(self):
-        """Chuyển đổi CheckIn object thành dictionary"""
+        #Chuyển đổi CheckIn object thành dictionary
         return {
             "id": self.id,
             "booking_id": self.booking_id,

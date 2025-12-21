@@ -3,14 +3,14 @@ from services.user_service import UserService
 from views.user_view import UserView
 
 class UserController:
-    """Controller: Xử lý HTTP requests cho User"""
+    #Controller: Xử lý HTTP requests cho User
     
     def __init__(self):
         self.service = UserService()
         self.view = UserView()
     
     def create_user(self):
-        """Xử lý POST /api/users"""
+        #Xử lý POST /api/users
         data = request.json
         try:
             user = self.service.create_user(
@@ -26,7 +26,7 @@ class UserController:
             return self.view.error_response(str(e), 400)
     
     def get_user(self, user_id):
-        """Xử lý GET /api/users/<user_id>"""
+        #Xử lý GET /api/users/<user_id>
         try:
             user = self.service.get_user_details(user_id)
             return self.view.user_found(user)
@@ -34,7 +34,7 @@ class UserController:
             return self.view.error_response(str(e), 404)
     
     def update_profile(self, user_id):
-        """Xử lý PUT /api/users/<user_id>/profile"""
+            #Xử lý PUT /api/users/<user_id>/profile
         data = request.json
         try:
             user = self.service.update_profile(
