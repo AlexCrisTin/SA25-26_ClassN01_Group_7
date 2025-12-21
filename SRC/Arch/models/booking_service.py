@@ -1,4 +1,4 @@
-from repositories.booking_repository import BookingRepository
+from .booking_repository import BookingRepository
 
 class BookingService:
     """Service: Xử lý logic nghiệp vụ, gọi xuống Repository."""

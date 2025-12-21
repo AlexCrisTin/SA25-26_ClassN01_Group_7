@@ -1,5 +1,5 @@
 from flask import request
-from services.booking_service import BookingService
+from models.booking_service import BookingService
 from views.booking_view import BookingView
 
 class BookingController:

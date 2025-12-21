@@ -1,4 +1,4 @@
-from models.booking import Booking
+from .booking import Booking
 
 # Giả lập Database trong bộ nhớ
 booking_db = {}
