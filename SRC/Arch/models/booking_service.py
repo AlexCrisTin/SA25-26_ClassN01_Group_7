@@ -23,4 +23,14 @@ class BookingService:
     def get_all_bookings(self):
         """Lấy tất cả bookings"""
         return self.repo.find_all()
+    
+    def cancel_booking(self, booking_id):
+        """Hủy booking"""
+        booking = self.repo.find_by_id(booking_id)
+        if not booking:
+            raise ValueError(f"Booking with ID {booking_id} not found.")
+        
+        # In real implementation, check if booking can be cancelled
+        self.repo.delete(booking_id)
+        return {"message": f"Booking {booking_id} has been cancelled successfully."}
 

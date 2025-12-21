@@ -1,0 +1,30 @@
+from flask import jsonify
+
+class ServiceView:
+    """View: Xử lý format response cho Service API"""
+    
+    @staticmethod
+    def service_created(service):
+        """Response khi tạo service thành công"""
+        return jsonify(service.to_dict()), 201
+    
+    @staticmethod
+    def service_found(service):
+        """Response khi tìm thấy service"""
+        return jsonify(service.to_dict()), 200
+    
+    @staticmethod
+    def services_found(services):
+        """Response khi tìm thấy danh sách services"""
+        return jsonify([service.to_dict() for service in services]), 200
+    
+    @staticmethod
+    def service_requested(service):
+        """Response khi request service thành công"""
+        return jsonify({"message": "Service requested successfully", "service": service.to_dict()}), 200
+    
+    @staticmethod
+    def error_response(message, status_code=400):
+        """Format response lỗi"""
+        return jsonify({"error": message}), status_code
+

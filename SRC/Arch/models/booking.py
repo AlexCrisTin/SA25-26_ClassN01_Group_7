@@ -1,6 +1,4 @@
 class Booking:
-    """Model: Định nghĩa cấu trúc dữ liệu Booking"""
-    
     def __init__(self, booking_id, guest_name, room_type, check_in_date, total_price):
         self.id = booking_id
         self.guest_name = guest_name
@@ -9,7 +7,6 @@ class Booking:
         self.total_price = total_price
 
     def to_dict(self):
-        """Chuyển đổi Booking object thành dictionary"""
         return {
             "id": self.id,
             "guest_name": self.guest_name,

@@ -20,4 +20,11 @@ class BookingRepository:
 
     def find_all(self):
         return list(booking_db.values())
+    
+    def delete(self, booking_id):
+        """Xóa booking"""
+        if booking_id in booking_db:
+            del booking_db[booking_id]
+            return True
+        return False
 
