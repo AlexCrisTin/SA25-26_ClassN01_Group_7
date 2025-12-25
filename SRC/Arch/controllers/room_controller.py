@@ -62,4 +62,28 @@ class RoomController:
             return self.view.room_assigned(room)
         except ValueError as e:
             return self.view.error_response(str(e), 400)
+    
+    def update_room(self, room_id):
+        #Xử lý PUT /api/rooms/<room_id>
+        data = request.json
+        try:
+            room = self.service.update_room(
+                room_id,
+                data.get('room_number'),
+                data.get('room_type'),
+                data.get('price'),
+                data.get('status'),
+                data.get('capacity')
+            )
+            return self.view.room_updated(room)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+    
+    def delete_room(self, room_id):
+        #Xử lý DELETE /api/rooms/<room_id>
+        try:
+            result = self.service.delete_room(room_id)
+            return self.view.room_deleted(result)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
 

@@ -26,4 +26,31 @@ class RoomRepository:
     
     def find_by_type(self, room_type):
         return [room for room in room_db.values() if room.room_type == room_type]
+    
+    def update(self, room_id, room_number=None, room_type=None, price=None, status=None, capacity=None):
+        #Cập nhật thông tin phòng
+        room = room_db.get(room_id)
+        if not room:
+            return None
+        
+        # Update only provided fields
+        if room_number is not None:
+            room.room_number = room_number
+        if room_type is not None:
+            room.room_type = room_type
+        if price is not None:
+            room.price = price
+        if status is not None:
+            room.status = status
+        if capacity is not None:
+            room.capacity = capacity
+        
+        return room
+    
+    def delete(self, room_id):
+        #Xóa phòng khỏi database
+        if room_id in room_db:
+            del room_db[room_id]
+            return True
+        return False
 

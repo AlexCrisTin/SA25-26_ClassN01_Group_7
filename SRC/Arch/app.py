@@ -35,6 +35,10 @@ def get_all_bookings():
 def get_booking(booking_id):
     return booking_controller.get_booking(booking_id)
 
+@app.route('/api/bookings/<booking_id>', methods=['PUT'])
+def update_booking(booking_id):
+    return booking_controller.update_booking(booking_id)
+
 @app.route('/api/bookings/<booking_id>', methods=['DELETE'])
 def cancel_booking(booking_id):
     return booking_controller.cancel_booking(booking_id)
@@ -59,6 +63,14 @@ def get_room(room_id):
 @app.route('/api/rooms/assign', methods=['POST'])
 def assign_room():
     return room_controller.assign_room()
+
+@app.route('/api/rooms/<room_id>', methods=['PUT'])
+def update_room(room_id):
+    return room_controller.update_room(room_id)
+
+@app.route('/api/rooms/<room_id>', methods=['DELETE'])
+def delete_room(room_id):
+    return room_controller.delete_room(room_id)
 
 # ========== USER ROUTES ==========
 @app.route('/api/users', methods=['POST'])

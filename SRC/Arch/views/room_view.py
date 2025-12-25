@@ -24,6 +24,16 @@ class RoomView:
         return jsonify({"message": "Room assigned successfully", "room": room.to_dict()}), 200
     
     @staticmethod
+    def room_updated(room):
+        #Response khi cập nhật room thành công
+        return jsonify(room.to_dict()), 200
+    
+    @staticmethod
+    def room_deleted(result):
+        #Response khi xóa room thành công
+        return jsonify(result), 200
+    
+    @staticmethod
     def error_response(message, status_code=400):
             #Format response lỗi
         return jsonify({"error": message}), status_code

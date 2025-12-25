@@ -24,6 +24,11 @@ class BookingView:
         return jsonify([booking.to_dict() for booking in bookings]), 200
     
     @staticmethod
+    def booking_updated(booking):
+        #Response khi cập nhật booking thành công
+        return jsonify(booking.to_dict()), 200
+    
+    @staticmethod
     def booking_cancelled(result):
         #Response khi hủy booking thành công
         return jsonify(result), 200

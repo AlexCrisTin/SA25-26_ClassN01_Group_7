@@ -1,0 +1,167 @@
+bài tập lab 2 ví dụ của dự án khác:
+"Lab 2: Layered Architecture Design (Logical View)
+This lab focuses on designing the Layered Architecture for the ShopSphere application,
+representing the system's static structure and component relationships. This is a crucial step
+before implementation (Lab 3).
+Objectives
+1. Understand the principles and constraints of the Layered Architecture Pattern.
+2. Define the four main layers and their responsibilities.
+3. Identify the key components within each layer for the Product Catalog feature.
+4. Model the logical view using a UML Component Diagram.
+Technology & Tool Installation
+Tool Purpose Installation/Setup Guide
+draw.io
+(Diagrams.net)
+Creating professional UML
+Component Diagrams.
+Access online via a web browser (no
+install needed) or use the desktop
+application.
+Whiteboard/Pen &
+Paper
+Initial brainstorming and sketch
+of layers/components. Standard brainstorming tools.
+Activity Practice 1: Defining Layers and Responsibilities
+Goal: Formally define the four layers and their roles within the ShopSphere monolithic
+structure.
+Step-by-Step Instructions
+1. Define the Four Layers: Document the name and primary purpose of each layer, strictly
+adhering to the Layered Pattern Rule (A layer can only interact with the layer directly
+below it).
+Layer Purpose/Responsibility Output/Artifact
+1. Presentation Layer
+(UI)
+Handles HTTP requests, authentication,
+session management, and rendering
+the user interface (views).
+Controllers (e.g.,
+ProductController)
+2. Business Logic
+Layer
+(Service/Domain)
+Contains the core business rules,
+validation logic, and transaction
+management. Orchestrates data access.
+Managers/Services
+(e.g., ProductService)
+3. Persistence Layer
+(Data Access)
+Responsible for mapping business
+objects to database entities and
+executing CRUD (Create, Read, Update,
+Delete) operations.
+Repositories/DAOs
+(e.g.,
+ProductRepository)
+4. Data Layer
+The physical database storage system
+(e.g., PostgreSQL, MySQL).
+Database Schema
+(Tables)
+2. Define Data Flow: Sketch the typical request flow for a customer viewing a product
+detail page.
+o Action: Trace the flow: Client Request $\rightarrow$ Layer 1 $\rightarrow$ Layer
+2 $\rightarrow$ Layer 3 $\rightarrow$ Layer 4 $\rightarrow$ Layer 3
+$\rightarrow$ Layer 2 $\rightarrow$ Layer 1 $\rightarrow$ Client Response.
+Activity Practice 2: Component Identification (Product Catalog)
+Goal: Break down the Product Catalog feature into concrete components that reside in the top
+three layers.
+Step-by-Step Instructions
+1. Identify Components: For the feature "View Product Details," identify the specific
+software components (classes or modules) that will live in Layers 1, 2, and 3.
+o Layer 1 (Presentation):
+▪ Component Name: ProductController
+▪ Responsibility: Receives a request like GET /products/{id}. Calls the
+Business Logic Layer.
+o Layer 2 (Business Logic):
+▪ Component Name: ProductService
+▪ Responsibility: Receives the request ID, enforces business rules (e.g.,
+check if the product is active/in stock), and calls the Persistence Layer.
+o Layer 3 (Persistence):
+▪ Component Name: ProductRepository
+▪ Responsibility: Translates the request into a database query (e.g., SELECT
+* FROM products WHERE id = ?) and returns the raw data.
+2. Define Interfaces: Determine the primary interface (method signature) provided by the
+Business Logic Layer to the Presentation Layer, and by the Persistence Layer to the
+Business Logic Layer.
+o ProductService Interface (for Layer 1): public Product getProductDetails(String
+productId)
+o ProductRepository Interface (for Layer 2): public ProductEntity findById(String
+productId)
+Activity Practice 3: Component Diagram Modeling
+Goal: Create a visual model of the Layered Architecture using a UML Component Diagram.
+Step-by-Step Instructions (Using draw.io)
+1. Draw Layers: Create three large, stacked rectangles representing the Presentation,
+Business Logic, and Persistence layers.
+2. Place Components: Inside each layer, draw a UML Component shape (a rectangle with
+two small rectangles on the side) for the components identified in Practice 2
+(ProductController, ProductService, ProductRepository).
+3. Define Interfaces (Provided/Required):
+o Provided Interface: Use a lollipop symbol (circle on a line) attached to the
+ProductService component, labeled IProductService. This shows what the
+component offers.
+o Required Interface: Use a socket symbol (semi-circle on a line) attached to the
+ProductController component, which "plugs into" the IProductService lollipop.
+This shows what the component needs.
+o Repeat this for the connection between ProductService and ProductRepository.
+4. Enforce Strict Dependency: Use dashed arrows to show the dependency flow, ensuring
+all arrows point strictly downward (Layer 1 → Layer 2 → Layer 3). This visually enforces
+the layer rule.
+"
+bài báo cáo lab dự án hotel đây:
+"1. Abstract/Summary
+The Hotel Management System project aims to develop a comprehensive platform for managing reservations, facility, staff, rooms, check-ins/check-outs, and hotel services. This second lab focuses on designing the layered architecture. 
+It defines four tiers such as Presentation, Business Logic, Persistence, and Data with strict dependency rules. The Room Reservation feature components (Controller, Service, Repository) were identified. The design enhances Modifiability and Maintainability through separation of concerns. A UML Component Diagram models the structure, preparing the system for implementation.
+2. Lab Specific Section: I. Defining Layers and Responsibilities
+	In this section, we define the four architectural layers for the Hotel Management System, strictly adhering to the Layered Architecture Pattern where a layer can only interact with the layer directly below it.
+2.1. Description of Layers
+Layer	Purpose/Responsibility	Output/Artifact
+1. Presentation Layer (UI)	Handles HTTP requests, user authentication, session management, and renders the user interface. It ensures the separation of the frontend (HTML/CSS) from the backend logic.	Controllers (e.g., RoomController, BookingController), Templates (HTML views), Static Files (CSS/JS).
+2. Business Logic Layer (Service)	Contains the core business rules, validation logic, and transaction management. It orchestrates data access and handles integrations with external systems (like the Payment Gateway).	Services (e.g., BookingService, PaymentService, RoomService).
+3. Persistence Layer (Data Access)	Responsible for mapping business objects to database entities and executing CRUD (Create, Read, Update, Delete) operations. It abstracts the database queries from the business logic.	Repositories/DAOs (e.g., BookingRepository, RoomRepository).
+4. Data Layer	The physical database storage system where all application data is persisted.	Database Schema (MySQL/PostgreSQL), Tables (Guests, Rooms, Bookings).
+
+ 
+2.2. Data Flow
+Scenario: Check Room Availability Flow
+●	Client Request: The user (Guest/Staff Portal) sends an HTTP GET request to the endpoint: /rooms/availability?checkin=2025-12-20&roomType=DELUXE.
+●	Layer 1 (Presentation): The RoomController receives the request, performs user session authentication, and validates the date format. It then invokes Layer 2.
+●	Layer 2 (Business Logic): The RoomService executes the findAvailableRooms(checkin, type) function. Here, the system applies business rules, such as checking for minimum stay duration requirements.
+●	Layer 3 (Persistence): The RoomRepository (shown within the Business Logic flow in the diagram but effectively handling data access) receives the command and constructs a complex SQL query: SELECT r.* FROM rooms r LEFT JOIN reservations res WHERE ... AND roomType = ?.
+●	Layer 4 (Data): The Database (PostgreSQL) executes the JOIN command to filter for rooms that are not booked during the specified period and returns the raw data.
+●	Return Path:
+○	The RoomRepository maps the raw data from the Database into Room Objects.
+○	The RoomService calculates the final pricing (Pricing Logic).
+○	The RoomController returns the "Available rooms response" (JSON/HTML) to the Client.
+
+3. Lab Specific Section: II. Component Identification (Product Catalog)
+This section breaks down the critical "Make a Reservation" feature into concrete software components residing in the top three layers.
+3.1. Identify Components
+Layer 1: Presentation Layer
+●	Component Name: BookingController
+●	Responsibility: Receives the booking request (POST /book), validates input format (forms), and delegates processing to the BookingService.
+Layer 2: Business Logic Layer
+●	Component Name: BookingService
+●	Responsibility: Coordinates the reservation process. It checks room availability via RoomService, processes financial transactions via PaymentService (interface with Payment Gateway), and calculates total costs.
+●	Component Name: PaymentService
+●	Responsibility: Encapsulates the logic for communicating with the external Payment Gateway (Actor), ensuring security and isolating third-party dependencies.
+Layer 3: Persistence Layer
+●	Component Name: BookingRepository
+●	Responsibility: Translates the finalized booking object into a database insert command (INSERT INTO bookings...) to persist the reservation.
+3.2. Define Interfaces
+The following interfaces define the contracts between layers:
+●	Interface provided by Business Logic (for Presentation):
+o	IBookingService.createReservation(bookingRequest: Dict) -> BookingResult
+●	Interface provided by Persistence (for Business Logic):
+o	IBookingRepository.save(booking: BookingEntity) -> void
+o	IBookingRepository.findById(bookingId: int) -> BookingEntity
+
+4. Lab Specific Section: III. Component Diagram Modeling
+The UML Component Diagram below illustrates the logical view of the Layered Architecture for the Make Reservation functionality. It visually enforces the strict dependency rule (Layer 1 -> Layer 2 -> Layer 3):
+ 	
+5. Conclusion & Reflection
+The Layered Architecture pattern design in this lab directly addresses the Architecturally Significant Requirements (ASRs) identified in Lab 1:
+1.	Modifiability (ASR-3): By separating the Presentation Layer (HTML/CSS) from the Business Logic Layer (Python), we ensure that changes to the user interface do not affect backend logic. Furthermore, encapsulating the Payment Gateway interaction within the PaymentService ensures that switching payment providers does not impact other parts of the system.
+2.	Security (ASR-2): Authorization and validation logic are centralized in the Business Logic Layer. This ensures that even if a request bypasses the UI (e.g., via API tools), the core services (BookingService) still enforce security rules before accessing the Persistence Layer.
+
+"
