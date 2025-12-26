@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from controllers.booking_controller import BookingController
 from controllers.room_controller import RoomController
 from controllers.user_controller import UserController
@@ -10,6 +11,8 @@ from controllers.staff_controller import StaffController
 from controllers.report_controller import ReportController
 
 app = Flask(__name__)
+# Enable CORS for all routes to allow frontend to call API
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Initialize controllers
 booking_controller = BookingController()
@@ -71,6 +74,11 @@ def update_room(room_id):
 @app.route('/api/rooms/<room_id>', methods=['DELETE'])
 def delete_room(room_id):
     return room_controller.delete_room(room_id)
+
+# ========== AUTH ROUTES ==========
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    return user_controller.login()
 
 # ========== USER ROUTES ==========
 @app.route('/api/users', methods=['POST'])
@@ -180,4 +188,4 @@ def get_reports_by_type(report_type):
     return report_controller.get_reports_by_type(report_type)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Phòng Của Tôi - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a href="dashboard.html">DASHBOARD</a></li>
+                <li><a href="my-bookings.html" class="active">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="index.html#rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="index.html#contact">LIÊN HỆ</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="userName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Đặt Phòng Của Tôi</h1>
+            <a href="index.html#rooms" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Mới</a>
+        </div>
+
+        <div class="dashboard-section">
+            <div style="margin-bottom: 20px;">
+                <label for="filterStatus" style="margin-right: 10px;">Lọc theo trạng thái:</label>
+                <select id="filterStatus" style="padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 5px;">
+                    <option value="all">Tất cả</option>
+                    <option value="pending">Chờ Xác Nhận</option>
+                    <option value="confirmed">Đã Xác Nhận</option>
+                    <option value="checked_in">Đã Check-in</option>
+                    <option value="checked_out">Đã Check-out</option>
+                    <option value="cancelled">Đã Hủy</option>
+                </select>
+            </div>
+
+            <div id="bookingsContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <h3>Chưa có đặt phòng nào</h3>
+                    <p>Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
+                    <a href="index.html#rooms" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let allBookings = [];
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            if (!AuthManager.requireAuth()) {
+                return;
+            }
+
+            const user = AuthManager.getCurrentUser();
+            document.getElementById('userName').textContent = user.username || user.full_name || 'User';
+
+            // Load bookings
+            await loadBookings();
+
+            // Filter handler
+            document.getElementById('filterStatus').addEventListener('change', function() {
+                filterBookings(this.value);
+            });
+        });
+
+        async function loadBookings() {
+            try {
+                showNotification('Đang tải danh sách đặt phòng...', 'info');
+                allBookings = await BookingAPI.getAllBookings();
+                
+                // In a real app, backend should filter by user_id
+                // For now, we'll show all bookings
+                
+                if (allBookings.length > 0) {
+                    displayBookings(allBookings);
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                showNotification('Lỗi khi tải danh sách đặt phòng: ' + error.message, 'error');
+                showEmptyState();
+            }
+        }
+
+        function filterBookings(status) {
+            if (status === 'all') {
+                displayBookings(allBookings);
+            } else {
+                const filtered = allBookings.filter(b => b.status === status);
+                if (filtered.length > 0) {
+                    displayBookings(filtered);
+                } else {
+                    showEmptyState('Không có đặt phòng nào với trạng thái này');
+                }
+            }
+        }
+
+        function displayBookings(bookings) {
+            const container = document.getElementById('bookingsContainer');
+            
+            container.innerHTML = `
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Mã Đặt Phòng</th>
+                            <th>Tên Khách</th>
+                            <th>Loại Phòng</th>
+                            <th>Ngày Nhận</th>
+                            <th>Ngày Trả</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${bookings.map(booking => `
+                            <tr>
+                                <td><strong>#${booking.id}</strong></td>
+                                <td>${booking.guest_name}</td>
+                                <td>${booking.room_type}</td>
+                                <td>${formatDate(booking.check_in_date)}</td>
+                                <td>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</td>
+                                <td>${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</td>
+                                <td><span class="status-badge status-${booking.status}">${getStatusText(booking.status)}</span></td>
+                                <td>
+                                    <button class="action-btn btn-view" onclick="viewBooking('${booking.id}')">Xem</button>
+                                    ${canEditBooking(booking.status) ? 
+                                        `<button class="action-btn btn-edit" onclick="editBooking('${booking.id}')">Sửa</button>` : ''}
+                                    ${canCancelBooking(booking.status) ? 
+                                        `<button class="action-btn btn-cancel" onclick="cancelBooking('${booking.id}')">Hủy</button>` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function showEmptyState(message = 'Chưa có đặt phòng nào') {
+            const container = document.getElementById('bookingsContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <h3>${message}</h3>
+                    <p>Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
+                    <a href="index.html#rooms" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Ngay</a>
+                </div>
+            `;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Chờ Xác Nhận',
+                'confirmed': 'Đã Xác Nhận',
+                'cancelled': 'Đã Hủy',
+                'checked_in': 'Đã Check-in',
+                'checked_out': 'Đã Check-out'
+            };
+            return statusMap[status] || status;
+        }
+
+        function canEditBooking(status) {
+            return status === 'pending' || status === 'confirmed';
+        }
+
+        function canCancelBooking(status) {
+            return status === 'pending' || status === 'confirmed';
+        }
+
+        function viewBooking(bookingId) {
+            // In a real app, navigate to booking detail page
+            showNotification('Đang mở chi tiết đặt phòng #' + bookingId, 'info');
+            // window.location.href = `booking-detail.html?id=${bookingId}`;
+        }
+
+        function editBooking(bookingId) {
+            // In a real app, navigate to edit booking page
+            showNotification('Chức năng sửa đặt phòng đang được phát triển', 'info');
+            // window.location.href = `edit-booking.html?id=${bookingId}`;
+        }
+
+        async function cancelBooking(bookingId) {
+            if (!confirm('Bạn có chắc chắn muốn hủy đặt phòng này? Hành động này không thể hoàn tác.')) {
+                return;
+            }
+
+            try {
+                showNotification('Đang hủy đặt phòng...', 'info');
+                await BookingAPI.cancelBooking(bookingId);
+                showNotification('Hủy đặt phòng thành công!', 'success');
+                
+                // Reload bookings
+                setTimeout(() => {
+                    loadBookings();
+                }, 1000);
+            } catch (error) {
+                showNotification('Lỗi khi hủy đặt phòng: ' + error.message, 'error');
+            }
+        }
+
+        window.viewBooking = viewBooking;
+        window.editBooking = editBooking;
+        window.cancelBooking = cancelBooking;
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

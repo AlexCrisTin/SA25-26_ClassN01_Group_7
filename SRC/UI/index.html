@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxe Hotel - Khách Sạn Sang Trọng & Đẳng Cấp</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">TRANG CHỦ</a></li>
+                <li><a href="#about">GIỚI THIỆU</a></li>
+                <li><a href="#rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="#services">DỊCH VỤ</a></li>
+                <li><a href="#news">TIN TỨC</a></li>
+                <li><a href="#gallery">HÌNH ẢNH</a></li>
+                <li><a href="#contact">LIÊN HỆ</a></li>
+            </ul>
+            <div class="user-menu" id="userMenu" style="display: none;">
+                <span id="userNameNav" class="user-name"></span>
+                <a href="dashboard.html" class="book-now-btn" style="text-decoration: none; margin-right: 10px;">DASHBOARD</a>
+                <button class="logout-btn" onclick="AuthManager.logout()" style="padding: 8px 15px;">Đăng Xuất</button>
+            </div>
+            <div id="guestMenu">
+                <a href="login.html" class="book-now-btn" style="text-decoration: none; margin-right: 10px; background-color: #666;">Đăng Nhập</a>
+                <button class="book-now-btn">ĐẶT PHÒNG NGAY</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="hero-background">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <p class="hero-subtitle">Thuộc quần thể biệt thự cao cấp</p>
+                    <h1 class="hero-title">Sang trọng & đẳng cấp</h1>
+                    <button class="explore-btn">KHÁM PHÁ PHÒNG</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section class="booking-form-section">
+        <div class="container">
+            <form class="booking-form" id="bookingForm">
+                <div class="form-group">
+                    <label>Ngày nhận phòng</label>
+                    <input type="date" id="checkin" required>
+                </div>
+                <div class="form-group">
+                    <label>Ngày trả phòng</label>
+                    <input type="date" id="checkout" required>
+                </div>
+                <div class="form-group">
+                    <label>Người lớn</label>
+                    <select id="adults" required>
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Trẻ em</label>
+                    <select id="children">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+                <button type="submit" class="book-btn">Đặt phòng</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Welcome & Room Types Section -->
+    <section class="welcome-section" id="rooms">
+        <div class="container">
+            <div class="welcome-content">
+                <div class="welcome-image">
+                    <img src="images/hotel-lobby.jpg" alt="Luxe Hotel Lobby">
+                </div>
+                <div class="welcome-text">
+                    <h2>Chào mừng đến với Luxe Hotel</h2>
+                    <p>Biệt thự và bungalow của Luxe Hotel được trang bị đầy đủ tiện nghi, nội thất sang trọng kết hợp giữa phong cách truyền thống Việt Nam và hiện đại phương Tây. Đội ngũ nhân viên được đào tạo chuyên nghiệp, tận tâm và nhiệt tình.</p>
+                    <p>Luxe Hotel tự tin mang đến cho bạn những trải nghiệm cảm xúc nâng cao và những trải nghiệm tốt nhất, tuyệt vời nhất cho kỳ nghỉ của bạn, chắc chắn bạn sẽ không hối tiếc khi lựa chọn chúng tôi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Room Types Section -->
+    <section class="room-types-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">KHÁM PHÁ</span>
+                <h2 class="section-title">Các Hạng Phòng</h2>
+            </div>
+            <div class="room-types-grid">
+                <div class="room-card">
+                    <img src="images/room-triple.jpg" alt="Phòng Triple">
+                    <h3>Phòng Triple</h3>
+                    <p class="room-price">Chỉ từ 1.500.000 VNĐ/Đêm</p>
+                </div>
+                <div class="room-card">
+                    <img src="images/room-senior.jpg" alt="Phòng Senior">
+                    <h3>Phòng Senior</h3>
+                    <p class="room-price">Chỉ từ 1.100.000 VNĐ/Đêm</p>
+                </div>
+                <div class="room-card">
+                    <img src="images/room-connecting.jpg" alt="Phòng Connecting">
+                    <h3>Phòng Connecting</h3>
+                    <p class="room-price">Chỉ từ 1.650.000 VNĐ/Đêm</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section" id="services">
+        <div class="container">
+            <h2 class="section-title-center">Dịch Vụ</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="images/service-airport.jpg" alt="Đưa đón sân bay">
+                    <div class="service-overlay">
+                        <h3>Đưa đón sân bay</h3>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="images/service-breakfast.jpg" alt="Bữa sáng miễn phí">
+                    <div class="service-overlay">
+                        <h3>Bữa sáng miễn phí</h3>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="images/service-tour.jpg" alt="Hướng dẫn viên du lịch">
+                    <div class="service-overlay">
+                        <h3>Hướng dẫn viên du lịch thành phố</h3>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="images/service-bbq.jpg" alt="Tiệc BBQ bãi biển">
+                    <div class="service-overlay">
+                        <h3>Tiệc BBQ bãi biển</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotional Video Section -->
+    <section class="promo-video-section">
+        <div class="promo-background">
+            <div class="promo-overlay">
+                <p class="promo-tagline">Khám phá. Đi lang thang. Nghỉ ngơi</p>
+                <div class="play-button">
+                    <div class="play-icon">▶</div>
+                </div>
+                <h2 class="promo-title">Một cuộc đi chơi bạn sẽ đặc biệt nhớ tới</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Articles Section -->
+    <section class="articles-section" id="news">
+        <div class="container">
+            <h2 class="section-title-center">Những Bài Viết Nổi Bật</h2>
+            <div class="articles-grid">
+                <div class="article-card">
+                    <img src="images/article-sapa-market.jpg" alt="Chợ Tình Sapa">
+                    <div class="article-content">
+                        <h3>CHỢ TÌNH SAPA</h3>
+                        <p>Chợ tình Sapa được tổ chức tại thị trấn Sapa, đây là phiên chợ của dân tộc Dao được tổ chức vào tối thứ 7 hàng tuần.</p>
+                        <button class="detail-btn">CHI TIẾT</button>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <img src="images/article-fansipan.jpg" alt="Núi Fansipan">
+                    <div class="article-content">
+                        <h3>NÚI FANSIPAN</h3>
+                        <p>Đỉnh Phanxipăng - với độ cao 3.143m so với mực nước biển, nằm về phía Tây Nam thị trấn Sa Pa, huyện Sa Pa.</p>
+                        <button class="detail-btn">CHI TIẾT</button>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <img src="images/article-love-waterfall.jpg" alt="Thác Tình Yêu">
+                    <div class="article-content">
+                        <h3>THÁC TÌNH YÊU</h3>
+                        <p>Thác Tình Yêu là một ngọn thác nổi tiếng nằm ở xã San Sả Hồ, cách trung tâm thị trấn Sa Pa 16 km.</p>
+                        <button class="detail-btn">CHI TIẾT</button>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <img src="images/article-ham-rong.jpg" alt="Núi Hàm Rồng">
+                    <div class="article-content">
+                        <h3>NÚI HÀM RỒNG</h3>
+                        <button class="detail-btn">CHI TIẾT</button>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <img src="images/article-lao-chai.jpg" alt="Bản Lao Chải & Tả Van">
+                    <div class="article-content">
+                        <h3>BẢN LAO CHẢI & TẢ VAN</h3>
+                        <button class="detail-btn">CHI TIẾT</button>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <img src="images/article-cat-cat.jpg" alt="Bản Cát Cát">
+                    <div class="article-content">
+                        <h3>BẢN CÁT CÁT</h3>
+                        <p>Bản làng lâu đời và đẹp nhất Tây bắc</p>
+                        <button class="detail-btn">CHI TIẾT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Feedback Section -->
+    <section class="feedback-section">
+        <div class="container">
+            <h2 class="section-title-center">Phản Hồi Khách Hàng</h2>
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <img src="images/customer-1.jpg" alt="Robert Downey Jr" class="customer-avatar">
+                    <h4>Robert Downey Jr</h4>
+                    <p>"Tôi rất thích buổi sáng đi dạo trong khuân viên của khách sạn, không khí rất trong lành và có rất nhiều loài hoa đẹp mà tôi chưa từng được thấy."</p>
+                    <div class="review-logo">
+                        <img src="images/tripadvisor-logo.png" alt="TripAdvisor">
+                    </div>
+                </div>
+                <div class="feedback-card">
+                    <img src="images/customer-2.jpg" alt="Jenni" class="customer-avatar">
+                    <h4>Jenni</h4>
+                    <p>"Chỗ ở rất thoải mái, rộng rãi và đặc biệt là rất thoáng mát và không khí rất trong lành. Tôi rất ưng ý với những món ăn được phục vụ tại khách sạn. Tôi nhất định sẽ quay trở lại đây trong tương lai..."</p>
+                    <div class="review-logo">
+                        <img src="images/booking-logo.png" alt="Booking.com">
+                    </div>
+                </div>
+                <div class="feedback-card">
+                    <img src="images/customer-3.jpg" alt="Hostal Miralva" class="customer-avatar">
+                    <h4>Hostal Miralva</h4>
+                    <p>"Chất lượng các dịch vụ của khách sạn rất tốt, tôi và gia đình của tôi đã có những trải nghiệm vô cùng tuyệt vời nơi đây."</p>
+                    <div class="review-logo">
+                        <img src="images/booking-logo.png" alt="Booking.com">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spa Section -->
+    <section class="spa-section">
+        <div class="spa-container">
+            <div class="spa-content">
+                <div class="spa-text">
+                    <h2>Spa như chưa từng có trước đây</h2>
+                    <p>Ngay từ khi bạn bước vào, mọi cảm giác đều mời bạn thư giãn. Hãy tham gia một cuộc hành trình khám phá và kết nối lại tâm trí, cơ thể và tinh thần - được hướng dẫn bởi các nhà trị liệu Aman giàu kinh nghiệm của chúng tôi. Chúng tôi mong được chào đón bạn.</p>
+                    <button class="contact-btn">LIÊN HỆ</button>
+                    <div class="spa-navigation">
+                        <button class="nav-arrow">←</button>
+                        <button class="nav-arrow">→</button>
+                    </div>
+                </div>
+                <div class="spa-image">
+                    <img src="images/spa-treatment.jpg" alt="Spa Treatment">
+                </div>
+            </div>
+            <div class="spa-pagination">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title-center">Hình ảnh</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="images/gallery-1.jpg" alt="Hotel Room">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery-2.jpg" alt="Hotel Interior">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery-3.jpg" alt="Hotel Entrance">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery-4.jpg" alt="Hotel Room">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery-5.jpg" alt="Hotel Room">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/gallery-6.jpg" alt="Hotel Room">
+                </div>
+            </div>
+            <button class="view-more-btn">XEM THÊM</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <span class="logo-icon">◆</span>
+                        <span class="logo-text">Luxe</span>
+                    </div>
+                    <p class="footer-url">http://luxehotel.webhotel.vn/</p>
+                </div>
+                <div class="footer-column">
+                    <h3>LIÊN HỆ</h3>
+                    <p>Số 147 Mai Dịch, Cầu Giấy, Hà Nội</p>
+                    <p>0242 242 0777</p>
+                    <p>info@webhotel.vn</p>
+                </div>
+                <div class="footer-column">
+                    <h3>ĐƯỜNG DẪN</h3>
+                    <ul class="footer-links">
+                        <li><a href="#contact">Liên hệ</a></li>
+                        <li><a href="#about">Về chúng tôi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>ĐỪNG BỎ LỠ BẤT KỲ BẢN CẬP NHẬT NÀO</h3>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Email" required>
+                        <button type="submit">ĐĂNG KÝ NGAY</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Update navigation based on login status
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenu = document.getElementById('userMenu');
+            const guestMenu = document.getElementById('guestMenu');
+            
+            if (AuthManager.isLoggedIn()) {
+                const user = AuthManager.getCurrentUser();
+                userMenu.style.display = 'flex';
+                guestMenu.style.display = 'none';
+                document.getElementById('userNameNav').textContent = user.username || user.full_name || 'User';
+            } else {
+                userMenu.style.display = 'none';
+                guestMenu.style.display = 'flex';
+            }
+        });
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

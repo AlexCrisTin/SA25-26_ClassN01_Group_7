@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a href="admin.html" class="active">ADMIN PANEL</a></li>
+                <li><a href="dashboard.html">DASHBOARD</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="adminUserName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Admin Panel</h1>
+            <p>Quản lý hệ thống khách sạn</p>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('rooms')">Quản Lý Phòng</button>
+            <button class="tab-btn" onclick="switchTab('staff')">Quản Lý Nhân Viên</button>
+            <button class="tab-btn" onclick="switchTab('services')">Quản Lý Dịch Vụ</button>
+            <button class="tab-btn" onclick="switchTab('bookings')">Quản Lý Đặt Phòng</button>
+            <button class="tab-btn" onclick="switchTab('reports')">Báo Cáo & Thống Kê</button>
+        </div>
+
+        <!-- Rooms Management Tab -->
+        <div id="rooms-tab" class="tab-content active">
+            <div class="section-header">
+                <h2>Quản Lý Phòng</h2>
+                <button class="btn-primary" onclick="showAddRoomModal()">+ Thêm Phòng Mới</button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="roomSearch" placeholder="Tìm kiếm phòng..." onkeyup="filterRooms()">
+                <select id="roomStatusFilter" onchange="filterRooms()">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="available">Available</option>
+                    <option value="occupied">Occupied</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="reserved">Reserved</option>
+                </select>
+            </div>
+
+            <div id="roomsTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Số Phòng</th>
+                            <th>Loại Phòng</th>
+                            <th>Giá (VNĐ)</th>
+                            <th>Trạng Thái</th>
+                            <th>Sức Chứa</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomsTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Staff Management Tab -->
+        <div id="staff-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Quản Lý Nhân Viên</h2>
+                <button class="btn-primary" onclick="showAddStaffModal()">+ Thêm Nhân Viên</button>
+            </div>
+
+            <div id="staffTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Họ Tên</th>
+                            <th>Email</th>
+                            <th>SĐT</th>
+                            <th>Chức Vụ</th>
+                            <th>Phòng Ban</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Services Management Tab -->
+        <div id="services-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Quản Lý Dịch Vụ</h2>
+                <button class="btn-primary" onclick="showAddServiceModal()">+ Thêm Dịch Vụ</button>
+            </div>
+
+            <div id="servicesTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Dịch Vụ</th>
+                            <th>Mô Tả</th>
+                            <th>Giá (VNĐ)</th>
+                            <th>Danh Mục</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="servicesTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Bookings Management Tab -->
+        <div id="bookings-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Quản Lý Đặt Phòng</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="bookingSearch" placeholder="Tìm kiếm đặt phòng..." onkeyup="filterBookings()">
+                <select id="bookingStatusFilter" onchange="filterBookings()">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="pending">Chờ Xác Nhận</option>
+                    <option value="confirmed">Đã Xác Nhận</option>
+                    <option value="checked_in">Đã Check-in</option>
+                    <option value="checked_out">Đã Check-out</option>
+                    <option value="cancelled">Đã Hủy</option>
+                </select>
+            </div>
+
+            <div id="bookingsTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Khách</th>
+                            <th>Loại Phòng</th>
+                            <th>Ngày Nhận</th>
+                            <th>Ngày Trả</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Báo Cáo & Thống Kê</h2>
+            </div>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Tổng Doanh Thu</h3>
+                    <div class="report-controls">
+                        <input type="date" id="revenueStartDate">
+                        <span>đến</span>
+                        <input type="date" id="revenueEndDate">
+                        <button class="btn-primary" onclick="generateRevenueReport()">Tạo Báo Cáo</button>
+                    </div>
+                    <div id="revenueReportResult"></div>
+                </div>
+
+                <div class="report-card">
+                    <h3>Tỷ Lệ Lấp Đầy</h3>
+                    <div class="report-controls">
+                        <input type="date" id="occupancyStartDate">
+                        <span>đến</span>
+                        <input type="date" id="occupancyEndDate">
+                        <button class="btn-primary" onclick="generateOccupancyReport()">Tạo Báo Cáo</button>
+                    </div>
+                    <div id="occupancyReportResult"></div>
+                </div>
+
+                <div class="report-card">
+                    <h3>Báo Cáo Đặt Phòng</h3>
+                    <div class="report-controls">
+                        <input type="date" id="bookingStartDate">
+                        <span>đến</span>
+                        <input type="date" id="bookingEndDate">
+                        <button class="btn-primary" onclick="generateBookingReport()">Tạo Báo Cáo</button>
+                    </div>
+                    <div id="bookingReportResult"></div>
+                </div>
+            </div>
+
+            <div id="reportsList" class="reports-list"></div>
+        </div>
+    </div>
+
+    <!-- Add Room Modal -->
+    <div id="addRoomModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addRoomModal')">&times;</span>
+            <h2>Thêm Phòng Mới</h2>
+            <form id="addRoomForm">
+                <div class="form-group">
+                    <label>Số Phòng *</label>
+                    <input type="text" id="room_number" required>
+                </div>
+                <div class="form-group">
+                    <label>Loại Phòng *</label>
+                    <input type="text" id="room_type" required placeholder="e.g., Triple, Senior, Connecting">
+                </div>
+                <div class="form-group">
+                    <label>Giá (VNĐ) *</label>
+                    <input type="number" id="room_price" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Trạng Thái</label>
+                    <select id="room_status">
+                        <option value="available">Available</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="reserved">Reserved</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sức Chứa</label>
+                    <input type="number" id="room_capacity" min="1">
+                </div>
+                <button type="submit" class="btn-primary">Thêm Phòng</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Room Modal -->
+    <div id="editRoomModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editRoomModal')">&times;</span>
+            <h2>Sửa Thông Tin Phòng</h2>
+            <form id="editRoomForm">
+                <input type="hidden" id="edit_room_id">
+                <div class="form-group">
+                    <label>Số Phòng *</label>
+                    <input type="text" id="edit_room_number" required>
+                </div>
+                <div class="form-group">
+                    <label>Loại Phòng *</label>
+                    <input type="text" id="edit_room_type" required>
+                </div>
+                <div class="form-group">
+                    <label>Giá (VNĐ) *</label>
+                    <input type="number" id="edit_room_price" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Trạng Thái</label>
+                    <select id="edit_room_status">
+                        <option value="available">Available</option>
+                        <option value="occupied">Occupied</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="reserved">Reserved</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sức Chứa</label>
+                    <input type="number" id="edit_room_capacity" min="1">
+                </div>
+                <button type="submit" class="btn-primary">Cập Nhật</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Staff Modal -->
+    <div id="addStaffModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addStaffModal')">&times;</span>
+            <h2>Thêm Nhân Viên Mới</h2>
+            <form id="addStaffForm">
+                <div class="form-group">
+                    <label>Họ Tên *</label>
+                    <input type="text" id="staff_full_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="staff_email" required>
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại *</label>
+                    <input type="tel" id="staff_phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Chức Vụ *</label>
+                    <input type="text" id="staff_position" required placeholder="e.g., Receptionist, Housekeeper">
+                </div>
+                <div class="form-group">
+                    <label>Phòng Ban *</label>
+                    <input type="text" id="staff_department" required>
+                </div>
+                <div class="form-group">
+                    <label>Ngày Tuyển Dụng</label>
+                    <input type="date" id="staff_hire_date">
+                </div>
+                <button type="submit" class="btn-primary">Thêm Nhân Viên</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div id="addServiceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addServiceModal')">&times;</span>
+            <h2>Thêm Dịch Vụ Mới</h2>
+            <form id="addServiceForm">
+                <div class="form-group">
+                    <label>Tên Dịch Vụ *</label>
+                    <input type="text" id="service_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Mô Tả</label>
+                    <textarea id="service_description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Giá (VNĐ) *</label>
+                    <input type="number" id="service_price" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Danh Mục</label>
+                    <input type="text" id="service_category" placeholder="e.g., Spa, Dining, Transport">
+                </div>
+                <button type="submit" class="btn-primary">Thêm Dịch Vụ</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

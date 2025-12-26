@@ -19,6 +19,14 @@ class UserView:
         return jsonify({"message": "Profile updated successfully", "user": user.to_dict()}), 200
     
     @staticmethod
+    def login_success(user_data):
+        #Response khi login thành công
+        return jsonify({
+            "message": "Login successful",
+            "user": user_data
+        }), 200
+    
+    @staticmethod
     def error_response(message, status_code=400):
         #Format response lỗi
         return jsonify({"error": message}), status_code

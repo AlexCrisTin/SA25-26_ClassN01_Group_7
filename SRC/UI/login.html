@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="logo">
+                    <span class="logo-icon">◆</span>
+                    <span class="logo-text">Luxe</span>
+                </div>
+                <h2>Đăng Nhập</h2>
+                <p>Chào mừng bạn trở lại!</p>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember">
+                        <span>Ghi nhớ đăng nhập</span>
+                    </label>
+                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="auth-btn" id="loginBtn">Đăng Nhập</button>
+
+                <div class="auth-footer">
+                    <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+                    <a href="index.html" class="back-home">← Về trang chủ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Redirect if already logged in
+            if (AuthManager.isLoggedIn()) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (!username || !password) {
+                    showNotification('Vui lòng điền đầy đủ thông tin', 'error');
+                    return;
+                }
+
+                setLoading(loginBtn, true);
+
+                const result = await AuthManager.login(username, password);
+
+                setLoading(loginBtn, false);
+
+                if (result.success) {
+                    showNotification('Đăng nhập thành công!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    showNotification(result.error || 'Đăng nhập thất bại', 'error');
+                }
+            });
+        });
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

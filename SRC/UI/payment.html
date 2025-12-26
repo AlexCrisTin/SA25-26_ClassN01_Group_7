@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a href="dashboard.html">DASHBOARD</a></li>
+                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box" style="max-width: 600px;">
+            <div class="auth-header">
+                <h2>Thanh Toán</h2>
+                <p>Hoàn tất thanh toán cho đặt phòng của bạn</p>
+            </div>
+
+            <div id="paymentFormContainer">
+                <!-- Booking Summary -->
+                <div class="payment-summary" id="bookingSummary">
+                    <h3>Thông Tin Đặt Phòng</h3>
+                    <div class="summary-item">
+                        <span>Mã Đặt Phòng:</span>
+                        <strong id="bookingId">-</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Tên Khách:</span>
+                        <strong id="guestName">-</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Loại Phòng:</span>
+                        <strong id="roomType">-</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Ngày Nhận:</span>
+                        <strong id="checkInDate">-</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Ngày Trả:</span>
+                        <strong id="checkOutDate">-</strong>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Tổng Tiền:</span>
+                        <strong id="totalAmount">-</strong>
+                    </div>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <form id="paymentForm" class="auth-form">
+                    <h3 style="margin-bottom: 20px; color: #1e3a5f;">Chọn Phương Thức Thanh Toán</h3>
+                    
+                    <div class="payment-methods">
+                        <label class="payment-method-option">
+                            <input type="radio" name="payment_method" value="credit_card" checked>
+                            <div class="payment-method-card">
+                                <span class="payment-icon">💳</span>
+                                <span>Thẻ Tín Dụng/Ghi Nợ</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-method-option">
+                            <input type="radio" name="payment_method" value="bank_transfer">
+                            <div class="payment-method-card">
+                                <span class="payment-icon">🏦</span>
+                                <span>Chuyển Khoản Ngân Hàng</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-method-option">
+                            <input type="radio" name="payment_method" value="cash">
+                            <div class="payment-method-card">
+                                <span class="payment-icon">💵</span>
+                                <span>Tiền Mặt</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Credit Card Details (shown when credit_card is selected) -->
+                    <div id="creditCardDetails" class="payment-details">
+                        <div class="form-group">
+                            <label>Số Thẻ *</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Ngày Hết Hạn *</label>
+                                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV *</label>
+                                <input type="text" id="cardCVV" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tên Chủ Thẻ *</label>
+                            <input type="text" id="cardHolderName" placeholder="NGUYEN VAN A">
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Details -->
+                    <div id="bankTransferDetails" class="payment-details" style="display: none;">
+                        <div class="form-group">
+                            <label>Số Tài Khoản *</label>
+                            <input type="text" id="accountNumber" placeholder="Nhập số tài khoản">
+                        </div>
+                        <div class="form-group">
+                            <label>Tên Ngân Hàng *</label>
+                            <input type="text" id="bankName" placeholder="VD: Vietcombank, Techcombank">
+                        </div>
+                        <div class="form-group">
+                            <label>Nội Dung Chuyển Khoản</label>
+                            <input type="text" id="transferNote" placeholder="Thanh toan dat phong #123" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Coupon Code (Optional) -->
+                    <div class="form-group">
+                        <label>Mã Giảm Giá (Tùy chọn)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="couponCode" placeholder="Nhập mã giảm giá" style="flex: 1;">
+                            <button type="button" class="btn-secondary" onclick="applyCoupon()">Áp Dụng</button>
+                        </div>
+                        <div id="couponMessage" style="margin-top: 5px; font-size: 12px;"></div>
+                    </div>
+
+                    <!-- Final Amount -->
+                    <div class="payment-summary" style="margin-top: 20px;">
+                        <div class="summary-item">
+                            <span>Tổng Tiền:</span>
+                            <span id="subtotalAmount">-</span>
+                        </div>
+                        <div class="summary-item" id="discountRow" style="display: none;">
+                            <span>Giảm Giá:</span>
+                            <span style="color: #4caf50;" id="discountAmount">-</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Thành Tiền:</span>
+                            <strong id="finalAmount">-</strong>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-btn" id="submitPaymentBtn">Xác Nhận Thanh Toán</button>
+                </form>
+            </div>
+
+            <div id="paymentSuccess" style="display: none; text-align: center;">
+                <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
+                <h2 style="color: #4caf50; margin-bottom: 10px;">Thanh Toán Thành Công!</h2>
+                <p style="color: #666; margin-bottom: 30px;">Đặt phòng của bạn đã được xác nhận</p>
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                    <p><strong>Mã Thanh Toán:</strong> <span id="paymentId"></span></p>
+                    <p><strong>Mã Đặt Phòng:</strong> <span id="confirmedBookingId"></span></p>
+                </div>
+                <a href="my-bookings.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Xem Đặt Phòng Của Tôi</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let currentBooking = null;
+        let appliedCoupon = null;
+        let finalAmount = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get booking ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingId = urlParams.get('bookingId');
+
+            if (!bookingId) {
+                showNotification('Không tìm thấy thông tin đặt phòng', 'error');
+                setTimeout(() => window.location.href = 'my-bookings.html', 2000);
+                return;
+            }
+
+            loadBookingDetails(bookingId);
+            setupPaymentForm();
+        });
+
+        async function loadBookingDetails(bookingId) {
+            try {
+                currentBooking = await BookingAPI.getBooking(bookingId);
+                
+                if (!currentBooking) {
+                    throw new Error('Không tìm thấy đặt phòng');
+                }
+
+                // Display booking summary
+                document.getElementById('bookingId').textContent = '#' + currentBooking.id;
+                document.getElementById('guestName').textContent = currentBooking.guest_name;
+                document.getElementById('roomType').textContent = currentBooking.room_type;
+                document.getElementById('checkInDate').textContent = formatDate(currentBooking.check_in_date);
+                document.getElementById('checkOutDate').textContent = formatDate(currentBooking.check_out_date);
+                
+                finalAmount = currentBooking.total_price || 0;
+                document.getElementById('totalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                document.getElementById('subtotalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                document.getElementById('finalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+
+                // Set transfer note
+                document.getElementById('transferNote').value = `Thanh toan dat phong #${currentBooking.id}`;
+            } catch (error) {
+                showNotification('Lỗi khi tải thông tin đặt phòng: ' + error.message, 'error');
+            }
+        }
+
+        function setupPaymentForm() {
+            // Payment method change handler
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const method = this.value;
+                    document.getElementById('creditCardDetails').style.display = 
+                        method === 'credit_card' ? 'block' : 'none';
+                    document.getElementById('bankTransferDetails').style.display = 
+                        method === 'bank_transfer' ? 'block' : 'none';
+                });
+            });
+
+            // Card number formatting
+            document.getElementById('cardNumber').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+            });
+
+            // Card expiry formatting
+            document.getElementById('cardExpiry').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+
+            // Form submission
+            document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+                const submitBtn = document.getElementById('submitPaymentBtn');
+
+                // Validate based on payment method
+                if (paymentMethod === 'credit_card') {
+                    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                    const cardExpiry = document.getElementById('cardExpiry').value;
+                    const cardCVV = document.getElementById('cardCVV').value;
+                    const cardHolderName = document.getElementById('cardHolderName').value;
+
+                    if (!cardNumber || cardNumber.length < 16) {
+                        showNotification('Vui lòng nhập số thẻ hợp lệ', 'error');
+                        return;
+                    }
+                    if (!cardExpiry || cardExpiry.length !== 5) {
+                        showNotification('Vui lòng nhập ngày hết hạn hợp lệ (MM/YY)', 'error');
+                        return;
+                    }
+                    if (!cardCVV || cardCVV.length < 3) {
+                        showNotification('Vui lòng nhập CVV hợp lệ', 'error');
+                        return;
+                    }
+                    if (!cardHolderName) {
+                        showNotification('Vui lòng nhập tên chủ thẻ', 'error');
+                        return;
+                    }
+                } else if (paymentMethod === 'bank_transfer') {
+                    const accountNumber = document.getElementById('accountNumber').value;
+                    const bankName = document.getElementById('bankName').value;
+
+                    if (!accountNumber) {
+                        showNotification('Vui lòng nhập số tài khoản', 'error');
+                        return;
+                    }
+                    if (!bankName) {
+                        showNotification('Vui lòng nhập tên ngân hàng', 'error');
+                        return;
+                    }
+                }
+
+                setLoading(submitBtn, true);
+
+                try {
+                    const paymentData = {
+                        booking_id: currentBooking.id,
+                        amount: finalAmount,
+                        payment_method: paymentMethod
+                    };
+
+                    const payment = await PaymentAPI.processPayment(paymentData);
+                    
+                    // Update booking status to confirmed
+                    await BookingAPI.updateBooking(currentBooking.id, { status: 'confirmed' });
+
+                    // Show success
+                    document.getElementById('paymentFormContainer').style.display = 'none';
+                    document.getElementById('paymentSuccess').style.display = 'block';
+                    document.getElementById('paymentId').textContent = payment.id || 'N/A';
+                    document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
+
+                    showNotification('Thanh toán thành công!', 'success');
+                } catch (error) {
+                    showNotification('Lỗi khi thanh toán: ' + error.message, 'error');
+                } finally {
+                    setLoading(submitBtn, false);
+                }
+            });
+        }
+
+        async function applyCoupon() {
+            const couponCode = document.getElementById('couponCode').value;
+            const messageDiv = document.getElementById('couponMessage');
+
+            if (!couponCode) {
+                messageDiv.textContent = 'Vui lòng nhập mã giảm giá';
+                messageDiv.style.color = '#f44336';
+                return;
+            }
+
+            try {
+                const result = await CouponAPI.applyCoupon({
+                    coupon_code: couponCode,
+                    booking_id: currentBooking.id
+                });
+
+                if (result.discount_amount) {
+                    appliedCoupon = result;
+                    const discount = result.discount_amount;
+                    finalAmount = Math.max(0, finalAmount - discount);
+
+                    document.getElementById('discountRow').style.display = 'flex';
+                    document.getElementById('discountAmount').textContent = '-' + discount.toLocaleString('vi-VN') + ' VNĐ';
+                    document.getElementById('finalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+
+                    messageDiv.textContent = 'Áp dụng mã giảm giá thành công!';
+                    messageDiv.style.color = '#4caf50';
+                } else {
+                    throw new Error('Mã giảm giá không hợp lệ');
+                }
+            } catch (error) {
+                messageDiv.textContent = error.message || 'Mã giảm giá không hợp lệ';
+                messageDiv.style.color = '#f44336';
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+
+        window.applyCoupon = applyCoupon;
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

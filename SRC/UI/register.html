@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="logo">
+                    <span class="logo-icon">◆</span>
+                    <span class="logo-text">Luxe</span>
+                </div>
+                <h2>Đăng Ký</h2>
+                <p>Tạo tài khoản mới để đặt phòng dễ dàng</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập *</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="full_name">Họ và tên *</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Số điện thoại *</label>
+                    <input type="tel" id="phone" name="phone" required autocomplete="tel">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu *</label>
+                    <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
+                    <small>Mật khẩu tối thiểu 6 ký tự</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Xác nhận mật khẩu *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="auth-btn" id="registerBtn">Đăng Ký</button>
+
+                <div class="auth-footer">
+                    <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+                    <a href="index.html" class="back-home">← Về trang chủ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const registerBtn = document.getElementById('registerBtn');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm_password');
+
+            // Redirect if already logged in
+            if (AuthManager.isLoggedIn()) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Validate password match
+            confirmPasswordInput.addEventListener('blur', function() {
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    confirmPasswordInput.setCustomValidity('Mật khẩu không khớp');
+                } else {
+                    confirmPasswordInput.setCustomValidity('');
+                }
+            });
+
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (password !== confirmPassword) {
+                    showNotification('Mật khẩu xác nhận không khớp', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showNotification('Mật khẩu phải có ít nhất 6 ký tự', 'error');
+                    return;
+                }
+
+                const userData = {
+                    username: document.getElementById('username').value,
+                    email: document.getElementById('email').value,
+                    password: password,
+                    full_name: document.getElementById('full_name').value,
+                    phone: document.getElementById('phone').value,
+                    role: 'user'
+                };
+
+                setLoading(registerBtn, true);
+
+                const result = await AuthManager.register(userData);
+
+                setLoading(registerBtn, false);
+
+                if (result.success) {
+                    showNotification('Đăng ký thành công! Đang chuyển hướng...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    showNotification(result.error || 'Đăng ký thất bại', 'error');
+                }
+            });
+        });
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

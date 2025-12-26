@@ -46,4 +46,16 @@ class UserController:
             return self.view.profile_updated(user)
         except ValueError as e:
             return self.view.error_response(str(e), 400)
+    
+    def login(self):
+        #Xử lý POST /api/auth/login
+        data = request.json
+        try:
+            user = self.service.authenticate_user(
+                data.get('username'),
+                data.get('password')
+            )
+            return self.view.login_success(user)
+        except ValueError as e:
+            return self.view.error_response(str(e), 401)
 

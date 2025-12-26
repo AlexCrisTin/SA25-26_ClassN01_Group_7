@@ -55,3 +55,18 @@ class UserService:
             user.email = email
         
         return user
+    
+    def authenticate_user(self, username, password):
+        #Xác thực user với username và password
+        user = self.repo.find_by_username(username)
+        if not user:
+            raise ValueError("Invalid username or password.")
+        
+        # Simple password check (in production, use hashed passwords)
+        if user.password != password:
+            raise ValueError("Invalid username or password.")
+        
+        # Return user without password
+        user_dict = user.to_dict()
+        user_dict.pop('password', None)
+        return user_dict

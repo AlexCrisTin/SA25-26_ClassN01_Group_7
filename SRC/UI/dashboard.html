@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a href="dashboard.html">DASHBOARD</a></li>
+                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="index.html#rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="index.html#contact">LIÊN HỆ</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="userName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <div>
+                    <div id="userFullName" class="user-name"></div>
+                    <div id="userEmail" style="font-size: 14px; color: #666;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Tổng Đặt Phòng</h3>
+                <div class="stat-value" id="totalBookings">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Đang Chờ</h3>
+                <div class="stat-value" id="pendingBookings">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Đã Xác Nhận</h3>
+                <div class="stat-value" id="confirmedBookings">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Đã Hủy</h3>
+                <div class="stat-value" id="cancelledBookings">0</div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Đặt Phòng Gần Đây</h2>
+            <div id="recentBookings">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <h3>Chưa có đặt phòng nào</h3>
+                    <p>Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
+                    <a href="index.html#rooms" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Thông Tin Cá Nhân</h2>
+            <form id="profileForm" class="auth-form" style="max-width: 600px;">
+                <div class="form-group">
+                    <label for="profile_full_name">Họ và tên</label>
+                    <input type="text" id="profile_full_name" name="full_name">
+                </div>
+                <div class="form-group">
+                    <label for="profile_email">Email</label>
+                    <input type="email" id="profile_email" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="profile_phone">Số điện thoại</label>
+                    <input type="tel" id="profile_phone" name="phone">
+                </div>
+                <button type="submit" class="auth-btn" id="updateProfileBtn">Cập Nhật Thông Tin</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            if (!AuthManager.requireAuth()) {
+                return;
+            }
+
+            const user = AuthManager.getCurrentUser();
+            
+            // Display user info
+            document.getElementById('userName').textContent = user.username || user.full_name || 'User';
+            document.getElementById('userFullName').textContent = user.full_name || user.username;
+            document.getElementById('userEmail').textContent = user.email;
+            
+            // User avatar
+            const avatar = document.getElementById('userAvatar');
+            if (user.full_name) {
+                avatar.textContent = user.full_name.charAt(0).toUpperCase();
+            } else {
+                avatar.textContent = user.username.charAt(0).toUpperCase();
+            }
+
+            // Load user bookings
+            await loadUserBookings(user.id);
+
+            // Load user profile
+            await loadUserProfile(user.id);
+
+            // Profile update form
+            const profileForm = document.getElementById('profileForm');
+            profileForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const updateBtn = document.getElementById('updateProfileBtn');
+                
+                const profileData = {
+                    full_name: document.getElementById('profile_full_name').value,
+                    email: document.getElementById('profile_email').value,
+                    phone: document.getElementById('profile_phone').value
+                };
+
+                setLoading(updateBtn, true);
+
+                try {
+                    const updated = await UserAPI.updateProfile(user.id, profileData);
+                    showNotification('Cập nhật thông tin thành công!', 'success');
+                    
+                    // Update current user in localStorage
+                    const updatedUser = { ...user, ...updated.user };
+                    AuthManager.setCurrentUser(updatedUser);
+                    
+                    // Refresh display
+                    document.getElementById('userFullName').textContent = updatedUser.full_name;
+                    document.getElementById('userEmail').textContent = updatedUser.email;
+                } catch (error) {
+                    showNotification('Lỗi khi cập nhật: ' + error.message, 'error');
+                } finally {
+                    setLoading(updateBtn, false);
+                }
+            });
+        });
+
+        async function loadUserBookings(userId) {
+            try {
+                const bookings = await BookingAPI.getAllBookings();
+                
+                // Filter bookings for current user (in real app, backend should filter)
+                // For now, we'll show all bookings
+                const userBookings = bookings.filter(b => b.guest_name); // Simple filter
+                
+                updateBookingStats(userBookings);
+                displayRecentBookings(userBookings.slice(0, 5));
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        function updateBookingStats(bookings) {
+            const total = bookings.length;
+            const pending = bookings.filter(b => b.status === 'pending').length;
+            const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+            const cancelled = bookings.filter(b => b.status === 'cancelled').length;
+
+            document.getElementById('totalBookings').textContent = total;
+            document.getElementById('pendingBookings').textContent = pending;
+            document.getElementById('confirmedBookings').textContent = confirmed;
+            document.getElementById('cancelledBookings').textContent = cancelled;
+        }
+
+        function displayRecentBookings(bookings) {
+            const container = document.getElementById('recentBookings');
+            
+            if (bookings.length === 0) {
+                return; // Keep empty state
+            }
+
+            container.innerHTML = `
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Mã Đặt Phòng</th>
+                            <th>Loại Phòng</th>
+                            <th>Ngày Nhận</th>
+                            <th>Ngày Trả</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${bookings.map(booking => `
+                            <tr>
+                                <td>#${booking.id}</td>
+                                <td>${booking.room_type}</td>
+                                <td>${booking.check_in_date}</td>
+                                <td>${booking.check_out_date || 'N/A'}</td>
+                                <td>${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</td>
+                                <td><span class="status-badge status-${booking.status}">${getStatusText(booking.status)}</span></td>
+                                <td>
+                                    <button class="action-btn btn-view" onclick="viewBooking('${booking.id}')">Xem</button>
+                                    ${booking.status === 'pending' || booking.status === 'confirmed' ? 
+                                        `<button class="action-btn btn-cancel" onclick="cancelBooking('${booking.id}')">Hủy</button>` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px; text-align: center;">
+                    <a href="my-bookings.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Xem Tất Cả Đặt Phòng</a>
+                </div>
+            `;
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Chờ Xác Nhận',
+                'confirmed': 'Đã Xác Nhận',
+                'cancelled': 'Đã Hủy',
+                'checked_in': 'Đã Check-in',
+                'checked_out': 'Đã Check-out'
+            };
+            return statusMap[status] || status;
+        }
+
+        async function loadUserProfile(userId) {
+            try {
+                const user = await UserAPI.getUser(userId);
+                document.getElementById('profile_full_name').value = user.full_name || '';
+                document.getElementById('profile_email').value = user.email || '';
+                document.getElementById('profile_phone').value = user.phone || '';
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        function viewBooking(bookingId) {
+            window.location.href = `booking-detail.html?id=${bookingId}`;
+        }
+
+        async function cancelBooking(bookingId) {
+            if (!confirm('Bạn có chắc chắn muốn hủy đặt phòng này?')) {
+                return;
+            }
+
+            try {
+                await BookingAPI.cancelBooking(bookingId);
+                showNotification('Hủy đặt phòng thành công!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } catch (error) {
+                showNotification('Lỗi khi hủy đặt phòng: ' + error.message, 'error');
+            }
+        }
+
+        window.viewBooking = viewBooking;
+        window.cancelBooking = cancelBooking;
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+
