@@ -263,8 +263,7 @@ html {
     padding: 0 20px;
     flex-wrap: wrap;
 }
-    padding: 0 20px;
-}
+
 
 .form-group {
     flex: 1;
@@ -316,7 +315,7 @@ html {
 
 /* Welcome Section */
 .welcome-section {
-    padding: 100px 0;
+    padding: 60px 0;
     background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
 }
 
@@ -354,7 +353,7 @@ html {
 
 /* Room Types Section */
 .room-types-section {
-    padding: 100px 0;
+    padding: 20px 0;
     background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
 }
 
@@ -426,7 +425,7 @@ html {
 
 /* Services Section */
 .services-section {
-    padding: 100px 0;
+    padding: 40px 0;
     background: #fff;
 }
 
@@ -589,7 +588,7 @@ html {
 
 /* Customer Feedback Section */
 .feedback-section {
-    padding: 100px 0;
+    padding: 10px 0;
     background: linear-gradient(135deg, #f9f9f9 0%, #fff 100%);
 }
 
@@ -743,7 +742,7 @@ html {
 
 /* Gallery Section */
 .gallery-section {
-    padding: 100px 0;
+    padding: 10px 0;
     background: linear-gradient(135deg, #f9f9f9 0%, #fff 100%);
 }
 
