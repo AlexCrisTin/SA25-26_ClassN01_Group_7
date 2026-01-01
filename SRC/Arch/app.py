@@ -9,6 +9,7 @@ from controllers.coupon_controller import CouponController
 from controllers.checkin_controller import CheckInController
 from controllers.staff_controller import StaffController
 from controllers.report_controller import ReportController
+from middleware.auth import require_auth, require_admin, require_receptionist_or_admin, require_role, optional_auth
 
 app = Flask(__name__)
 # Enable CORS for all routes to allow frontend to call API
@@ -27,163 +28,201 @@ report_controller = ReportController()
 
 # ========== BOOKING ROUTES ==========
 @app.route('/api/bookings', methods=['POST'])
+@require_auth  # User phải đăng nhập để đặt phòng
 def create_booking():
     return booking_controller.create_booking()
 
 @app.route('/api/bookings', methods=['GET'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin xem được tất cả bookings
 def get_all_bookings():
     return booking_controller.get_all_bookings()
 
 @app.route('/api/bookings/<booking_id>', methods=['GET'])
+@require_auth  # User phải đăng nhập, nhưng có thể xem booking của mình
 def get_booking(booking_id):
     return booking_controller.get_booking(booking_id)
 
 @app.route('/api/bookings/<booking_id>', methods=['PUT'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới update booking
 def update_booking(booking_id):
     return booking_controller.update_booking(booking_id)
 
 @app.route('/api/bookings/<booking_id>', methods=['DELETE'])
+@require_auth  # User có thể hủy booking của mình
 def cancel_booking(booking_id):
     return booking_controller.cancel_booking(booking_id)
 
 # ========== ROOM ROUTES ==========
 @app.route('/api/rooms', methods=['GET'])
+@optional_auth  # Public: ai cũng xem được phòng
 def get_all_rooms():
     return room_controller.get_all_rooms()
 
 @app.route('/api/rooms', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được phòng
 def create_room():
     return room_controller.create_room()
 
 @app.route('/api/rooms/search', methods=['GET'])
+@optional_auth  # Public: ai cũng search được phòng
 def search_rooms():
     return room_controller.search_rooms()
 
 @app.route('/api/rooms/<room_id>', methods=['GET'])
+@optional_auth  # Public: ai cũng xem được thông tin phòng
 def get_room(room_id):
     return room_controller.get_room(room_id)
 
 @app.route('/api/rooms/assign', methods=['POST'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới gán phòng
 def assign_room():
     return room_controller.assign_room()
 
 @app.route('/api/rooms/<room_id>', methods=['PUT'])
+@require_admin  # Chỉ admin mới update được phòng
 def update_room(room_id):
     return room_controller.update_room(room_id)
 
 @app.route('/api/rooms/<room_id>', methods=['DELETE'])
+@require_admin  # Chỉ admin mới xóa được phòng
 def delete_room(room_id):
     return room_controller.delete_room(room_id)
 
 # ========== AUTH ROUTES ==========
 @app.route('/api/auth/login', methods=['POST'])
+# Public: không cần đăng nhập để login
 def login():
     return user_controller.login()
 
 # ========== USER ROUTES ==========
 @app.route('/api/users', methods=['POST'])
+# Public: đăng ký không cần đăng nhập
 def create_user():
     return user_controller.create_user()
 
 @app.route('/api/users/<user_id>', methods=['GET'])
+@require_auth  # Phải đăng nhập để xem thông tin user
 def get_user(user_id):
     return user_controller.get_user(user_id)
 
 @app.route('/api/users/<user_id>/profile', methods=['PUT'])
+@require_auth  # Phải đăng nhập để update profile (có thể thêm check user chỉ update được profile của mình)
 def update_profile(user_id):
     return user_controller.update_profile(user_id)
 
 # ========== SERVICE ROUTES ==========
 @app.route('/api/services', methods=['GET'])
+@optional_auth  # Public: ai cũng xem được dịch vụ
 def get_all_services():
     return service_controller.get_all_services()
 
 @app.route('/api/services', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được dịch vụ
 def create_service():
     return service_controller.create_service()
 
 @app.route('/api/services/<service_id>', methods=['GET'])
+@optional_auth  # Public: ai cũng xem được thông tin dịch vụ
 def get_service(service_id):
     return service_controller.get_service(service_id)
 
 @app.route('/api/services/request', methods=['POST'])
+@require_auth  # User phải đăng nhập để yêu cầu dịch vụ
 def request_service():
     return service_controller.request_service()
 
 # ========== PAYMENT ROUTES ==========
 @app.route('/api/payments', methods=['POST'])
+@require_auth  # User phải đăng nhập để thanh toán
 def process_payment():
     return payment_controller.process_payment()
 
 @app.route('/api/payments/<payment_id>', methods=['GET'])
+@require_auth  # Phải đăng nhập để xem payment
 def get_payment(payment_id):
     return payment_controller.get_payment(payment_id)
 
 @app.route('/api/bookings/<booking_id>/payments', methods=['GET'])
+@require_auth  # Phải đăng nhập để xem payments của booking
 def get_payments_by_booking(booking_id):
     return payment_controller.get_payments_by_booking(booking_id)
 
 # ========== COUPON ROUTES ==========
 @app.route('/api/coupons', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được coupon
 def create_coupon():
     return coupon_controller.create_coupon()
 
 @app.route('/api/coupons/<coupon_id>', methods=['GET'])
+@optional_auth  # Public: ai cũng xem được coupon
 def get_coupon(coupon_id):
     return coupon_controller.get_coupon(coupon_id)
 
 @app.route('/api/coupons/apply', methods=['POST'])
+@require_auth  # User phải đăng nhập để áp dụng coupon
 def apply_coupon():
     return coupon_controller.apply_coupon()
 
 # ========== CHECKIN/CHECKOUT ROUTES ==========
 @app.route('/api/checkins', methods=['POST'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới check-in được
 def process_checkin():
     return checkin_controller.process_checkin()
 
 @app.route('/api/checkouts', methods=['POST'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới check-out được
 def process_checkout():
     return checkin_controller.process_checkout()
 
 @app.route('/api/checkins/<checkin_id>', methods=['GET'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới xem được check-in
 def get_checkin(checkin_id):
     return checkin_controller.get_checkin(checkin_id)
 
 # ========== STAFF ROUTES ==========
 @app.route('/api/staff', methods=['GET'])
+@require_admin  # Chỉ admin mới xem được danh sách staff
 def get_all_staff():
     return staff_controller.get_all_staff()
 
 @app.route('/api/staff', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được staff
 def create_staff():
     return staff_controller.create_staff()
 
 @app.route('/api/staff/<staff_id>', methods=['GET'])
+@require_admin  # Chỉ admin mới xem được thông tin staff
 def get_staff(staff_id):
     return staff_controller.get_staff(staff_id)
 
 @app.route('/api/staff/<staff_id>', methods=['PUT'])
+@require_admin  # Chỉ admin mới update được staff
 def update_staff(staff_id):
     return staff_controller.update_staff(staff_id)
 
 # ========== REPORT ROUTES ==========
 @app.route('/api/reports/revenue', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được báo cáo doanh thu
 def generate_revenue_report():
     return report_controller.generate_revenue_report()
 
 @app.route('/api/reports/occupancy', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được báo cáo tỷ lệ lấp đầy
 def generate_occupancy_report():
     return report_controller.generate_occupancy_report()
 
 @app.route('/api/reports/booking', methods=['POST'])
+@require_admin  # Chỉ admin mới tạo được báo cáo booking
 def generate_booking_report():
     return report_controller.generate_booking_report()
 
 @app.route('/api/reports/<report_id>', methods=['GET'])
+@require_admin  # Chỉ admin mới xem được báo cáo
 def get_report(report_id):
     return report_controller.get_report(report_id)
 
 @app.route('/api/reports/type/<report_type>', methods=['GET'])
+@require_admin  # Chỉ admin mới xem được báo cáo theo type
 def get_reports_by_type(report_type):
     return report_controller.get_reports_by_type(report_type)
 

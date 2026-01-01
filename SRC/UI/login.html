@@ -57,7 +57,7 @@
 
             // Redirect if already logged in
             if (AuthManager.isLoggedIn()) {
-                window.location.href = 'dashboard.html';
+                window.location.href = AuthManager.getRedirectUrl();
                 return;
             }
 
@@ -81,7 +81,8 @@
                 if (result.success) {
                     showNotification('Đăng nhập thành công!', 'success');
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        // Redirect based on user role
+                        window.location.href = AuthManager.getRedirectUrl();
                     }, 1000);
                 } else {
                     showNotification(result.error || 'Đăng nhập thất bại', 'error');

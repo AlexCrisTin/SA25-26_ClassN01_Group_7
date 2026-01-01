@@ -45,15 +45,23 @@ class UserService:
         if not user:
             raise ValueError(f"User with ID {user_id} not found.")
         
-        if full_name:
-            user.full_name = full_name
-        if phone:
-            user.phone = phone
-        if email:
-            if self.repo.find_by_email(email) and self.repo.find_by_email(email).id != user_id:
+        # Check if email already exists (if changing email)
+        if email and email != user.email:
+            existing_user = self.repo.find_by_email(email)
+            if existing_user and existing_user.id != user_id:
                 raise ValueError(f"Email {email} already exists.")
-            user.email = email
         
+        # Update using repository
+        update_data = {}
+        if full_name:
+            update_data['full_name'] = full_name
+        if phone:
+            update_data['phone'] = phone
+        if email:
+            update_data['email'] = email
+        
+        if update_data:
+            return self.repo.update(user_id, **update_data)
         return user
     
     def authenticate_user(self, username, password):

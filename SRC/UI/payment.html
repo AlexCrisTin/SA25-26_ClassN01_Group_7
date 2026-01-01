@@ -179,6 +179,15 @@
         let finalAmount = 0;
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Block admin from accessing payment page
+            if (!AuthManager.requireAuth()) {
+                return;
+            }
+            if (AuthManager.isAdmin()) {
+                AuthManager.blockAdminAccess();
+                return;
+            }
+            
             // Get booking ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const bookingId = urlParams.get('bookingId');

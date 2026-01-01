@@ -1,26 +1,103 @@
 from models.payment import Payment
-
-# Giả lập Database trong bộ nhớ
-payment_db = {}
-next_payment_id = 1
+from db_config import db_config
+from mysql.connector import Error
 
 class PaymentRepository:
-    #Repository: Thực hiện CRUD trực tiếp lên kho dữ liệu Payment.
+    #Repository: Thực hiện CRUD trực tiếp lên MySQL database cho Payment.
     
-    def save(self, booking_id, amount, payment_method, status, transaction_id=None):
-        global next_payment_id
-        payment_id = str(next_payment_id)
-        new_payment = Payment(payment_id, booking_id, amount, payment_method, status, transaction_id)
-        payment_db[payment_id] = new_payment
-        next_payment_id += 1
-        return new_payment
+    def save(self, booking_id, amount, payment_method, status, transaction_id=None, payment_date=None):
+        """Lưu payment mới vào database"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+            
+            query = """
+                INSERT INTO payments (booking_id, amount, payment_method, status, transaction_id, payment_date)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            values = (booking_id, float(amount), payment_method, status, transaction_id, payment_date)
+            cursor.execute(query, values)
+            connection.commit()
+            
+            payment_id = cursor.lastrowid
+            return Payment(str(payment_id), booking_id, amount, payment_method, status, transaction_id)
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error saving payment: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
 
     def find_by_id(self, payment_id):
-        return payment_db.get(payment_id)
+        """Tìm payment theo ID"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            
+            query = "SELECT * FROM payments WHERE id = %s"
+            cursor.execute(query, (payment_id,))
+            row = cursor.fetchone()
+            
+            if row:
+                return self._row_to_payment(row)
+            return None
+        except Error as e:
+            raise ValueError(f"Error finding payment: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
     
     def find_by_booking_id(self, booking_id):
-        return [payment for payment in payment_db.values() if payment.booking_id == booking_id]
+        """Tìm payments theo booking_id"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            
+            query = "SELECT * FROM payments WHERE booking_id = %s ORDER BY created_at DESC"
+            cursor.execute(query, (booking_id,))
+            rows = cursor.fetchall()
+            
+            return [self._row_to_payment(row) for row in rows]
+        except Error as e:
+            raise ValueError(f"Error finding payments: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
 
     def find_all(self):
-        return list(payment_db.values())
+        """Lấy tất cả payments"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            
+            query = "SELECT * FROM payments ORDER BY created_at DESC"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            
+            return [self._row_to_payment(row) for row in rows]
+        except Error as e:
+            raise ValueError(f"Error finding payments: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
+    def _row_to_payment(self, row):
+        """Chuyển đổi database row thành Payment object"""
+        return Payment(
+            str(row['id']),
+            row['booking_id'],
+            float(row['amount']),
+            row['payment_method'],
+            row['status'],
+            row['transaction_id']
+        )
 

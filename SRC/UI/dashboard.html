@@ -18,6 +18,7 @@
             <ul class="nav-menu">
                 <li><a href="index.html">TRANG CHỦ</a></li>
                 <li><a href="dashboard.html">DASHBOARD</a></li>
+                <li id="adminNavItem" style="display: none;"><a href="admin.html">ADMIN PANEL</a></li>
                 <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
                 <li><a href="index.html#rooms">PHÒNG NGHỈ</a></li>
                 <li><a href="index.html#contact">LIÊN HỆ</a></li>
@@ -100,8 +101,19 @@
             if (!AuthManager.requireAuth()) {
                 return;
             }
+            
+            // Block admin from accessing dashboard
+            if (AuthManager.isAdmin()) {
+                AuthManager.blockAdminAccess();
+                return;
+            }
 
             const user = AuthManager.getCurrentUser();
+            
+            // Show admin panel link if user is admin
+            if (AuthManager.isAdmin()) {
+                document.getElementById('adminNavItem').style.display = 'block';
+            }
             
             // Display user info
             document.getElementById('userName').textContent = user.username || user.full_name || 'User';

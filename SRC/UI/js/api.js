@@ -1,14 +1,36 @@
 // API Service - Centralized API calls for Hotel Management System
 const API_BASE_URL = 'http://localhost:5000/api';
 
+// Helper function to get current user ID from localStorage
+function getCurrentUserId() {
+    try {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return user.id || user.user?.id;
+        }
+    } catch (e) {
+        console.error('Error getting current user:', e);
+    }
+    return null;
+}
+
 // Helper function for API calls
-async function apiCall(endpoint, method = 'GET', data = null) {
+async function apiCall(endpoint, method = 'GET', data = null, requireAuth = false) {
     const options = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
         }
     };
+
+    // Add X-User-Id header if user is logged in
+    const userId = getCurrentUserId();
+    if (userId) {
+        options.headers['X-User-Id'] = userId;
+    } else if (requireAuth) {
+        throw new Error('Authentication required. Please login first.');
+    }
 
     if (data && (method === 'POST' || method === 'PUT')) {
         options.body = JSON.stringify(data);
@@ -19,6 +41,14 @@ async function apiCall(endpoint, method = 'GET', data = null) {
         const result = await response.json();
         
         if (!response.ok) {
+            // Handle authentication/authorization errors
+            if (response.status === 401) {
+                // Clear user data if unauthorized
+                localStorage.removeItem('currentUser');
+                throw new Error('Session expired. Please login again.');
+            } else if (response.status === 403) {
+                throw new Error(result.error || 'Access denied. You do not have permission to perform this action.');
+            }
             throw new Error(result.error || `HTTP error! status: ${response.status}`);
         }
         
@@ -54,12 +84,7 @@ const RoomAPI = {
 
     // Create room (Admin only)
     createRoom: async (roomData) => {
-        return await apiCall('/rooms', 'POST', roomData);
-    },
-
-    // Create room (Admin only)
-    createRoom: async (roomData) => {
-        return await apiCall('/rooms', 'POST', roomData);
+        return await apiCall('/rooms', 'POST', roomData, true);
     },
 
     // Update room (Admin only)

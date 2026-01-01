@@ -72,7 +72,7 @@
 
             // Redirect if already logged in
             if (AuthManager.isLoggedIn()) {
-                window.location.href = 'dashboard.html';
+                window.location.href = AuthManager.getRedirectUrl();
                 return;
             }
 
@@ -119,7 +119,8 @@
                 if (result.success) {
                     showNotification('Đăng ký thành công! Đang chuyển hướng...', 'success');
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        // New users always go to dashboard (they have role 'user')
+                        window.location.href = AuthManager.getRedirectUrl();
                     }, 1000);
                 } else {
                     showNotification(result.error || 'Đăng ký thất bại', 'error');

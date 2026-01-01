@@ -25,11 +25,13 @@
             </ul>
             <div class="user-menu" id="userMenu" style="display: none;">
                 <span id="userNameNav" class="user-name"></span>
-                <a href="dashboard.html" class="book-now-btn" style="text-decoration: none; margin-right: 10px;">DASHBOARD</a>
+                <a href="admin.html" id="adminLink" class="book-now-btn" style="text-decoration: none; margin-right: 10px; display: none;">ADMIN PANEL</a>
+                <a href="dashboard.html" id="dashboardLink" class="book-now-btn" style="text-decoration: none; margin-right: 10px; display: none;">DASHBOARD</a>
                 <button class="logout-btn" onclick="AuthManager.logout()" style="padding: 8px 15px;">Đăng Xuất</button>
             </div>
             <div id="guestMenu">
                 <a href="login.html" class="book-now-btn" style="text-decoration: none; margin-right: 10px; background-color: #666;">Đăng Nhập</a>
+                <a href="booking.html" id="guestBookingBtn"><button class="book-now-btn">ĐẶT PHÒNG NGAY</button></a>
             </div>
         </div>
     </nav>
@@ -41,7 +43,7 @@
                 <div class="hero-content">
                     <p class="hero-subtitle">Thuộc quần thể biệt thự cao cấp</p>    
                     <h1 class="hero-title">Sang trọng & đẳng cấp</h1>
-                    <a href="booking.html" style="text-decoration: none;"><button class="explore-btn">ĐẶT PHÒNG NGAY</button></a>
+                    <a href="booking.html" id="heroBookingBtn" style="text-decoration: none;"><button class="explore-btn">ĐẶT PHÒNG NGAY</button></a>
                 </div>
             </div>
         </div>
@@ -307,12 +309,25 @@
         document.addEventListener('DOMContentLoaded', function() {
             const userMenu = document.getElementById('userMenu');
             const guestMenu = document.getElementById('guestMenu');
+            const heroBookingBtn = document.getElementById('heroBookingBtn');
+            const guestBookingBtn = document.getElementById('guestBookingBtn');
             
             if (AuthManager.isLoggedIn()) {
                 const user = AuthManager.getCurrentUser();
                 userMenu.style.display = 'flex';
                 guestMenu.style.display = 'none';
                 document.getElementById('userNameNav').textContent = user.username || user.full_name || 'User';
+                
+                // Show appropriate link based on role
+                if (AuthManager.isAdmin()) {
+                    document.getElementById('adminLink').style.display = 'inline-block';
+                    document.getElementById('dashboardLink').style.display = 'none';
+                    // Hide booking buttons for admin
+                    if (heroBookingBtn) heroBookingBtn.style.display = 'none';
+                } else {
+                    document.getElementById('adminLink').style.display = 'none';
+                    document.getElementById('dashboardLink').style.display = 'inline-block';
+                }
             } else {
                 userMenu.style.display = 'none';
                 guestMenu.style.display = 'flex';

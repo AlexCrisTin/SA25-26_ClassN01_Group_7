@@ -47,6 +47,22 @@ const AuthManager = {
         }
     },
 
+    // Get redirect URL based on user role
+    getRedirectUrl: () => {
+        const user = AuthManager.getCurrentUser();
+        if (!user) {
+            return 'login.html';
+        }
+        
+        // Admin redirects to admin panel
+        if (user.role === 'administrator') {
+            return 'admin.html';
+        }
+        
+        // Other users go to dashboard
+        return 'dashboard.html';
+    },
+
     // Register function
     register: async (userData) => {
         try {
@@ -72,6 +88,18 @@ const AuthManager = {
     requireAuth: (redirectTo = 'login.html') => {
         if (!AuthManager.isLoggedIn()) {
             window.location.href = redirectTo;
+            return false;
+        }
+        return true;
+    },
+
+    // Block admin from accessing user pages (booking, dashboard, etc.)
+    blockAdminAccess: (redirectTo = 'admin.html') => {
+        if (AuthManager.isAdmin()) {
+            showNotification('Admin không có quyền truy cập trang này', 'error');
+            setTimeout(() => {
+                window.location.href = redirectTo;
+            }, 1500);
             return false;
         }
         return true;

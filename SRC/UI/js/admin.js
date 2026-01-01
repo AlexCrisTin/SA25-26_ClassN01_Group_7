@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!AuthManager.isAdmin()) {
         showNotification('Bạn không có quyền truy cập trang này', 'error');
         setTimeout(() => {
-            window.location.href = 'dashboard.html';
+            window.location.href = AuthManager.getRedirectUrl();
         }, 2000);
         return;
     }
