@@ -5,25 +5,117 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+
+### Added
+- Enhanced booking page UI with dynamic room loading from API
+- Room carousel on homepage displaying 3 rooms at a time with navigation
+- User-specific bookings endpoint (`/api/bookings/my`) for viewing personal bookings
+- Image upload functionality for room management (admin panel)
+- Image preview and management in room add/edit forms
+
+### Changed
+- Booking page now loads rooms dynamically from database instead of hardcoded data
+- Room selection dropdown shows available rooms with count and pricing
+- My bookings page now uses user-specific endpoint instead of admin endpoint
+- Improved UI/UX for booking flow with modal displays and room selection
+
+### Fixed
+- Fixed "Access denied" error in my-bookings.html by implementing user-specific bookings endpoint
+- Fixed room image display issues in carousel and booking pages
+- Fixed admin room editing functionality (modal display and data binding)
+- Fixed room capacity handling (null values) in database operations
+
+## [0.3.0] - 2026-01-02
+
+### Added
+- Role-Based Access Control (RBAC) system with middleware decorators
+  - `require_auth` - Requires user authentication
+  - `require_admin` - Requires administrator role
+  - `require_receptionist_or_admin` - Requires receptionist or administrator role
+  - `require_role` - Custom role-based access
+  - `optional_auth` - Optional authentication
+- Admin access restrictions - Admins cannot access user booking pages
+- User role-based redirects after login/registration
+- Frontend authentication middleware with automatic header injection
+- Admin panel access control and navigation restrictions
+
+### Changed
+- Updated all API routes with appropriate authentication/authorization decorators
+- Frontend API calls now automatically include `X-User-Id` header
+- Login/registration redirects users based on their role (admin → admin.html, user → dashboard.html)
+- Navigation menus adapt based on user role
+
+### Fixed
+- Admin users can no longer access user-specific pages (dashboard, booking, my-bookings, payment)
+- Proper error handling for 401 (Unauthorized) and 403 (Forbidden) responses
+- Session management improvements
+
+## [0.2.0] - 2025-12-31
+
+### Added
+- MySQL database integration replacing in-memory storage
+  - Database configuration module (`db_config.py`) with environment variable support
+  - Connection pooling and error handling
+  - Migration from in-memory dictionaries to MySQL tables
+- Environment variable configuration (`.env` file) for database credentials
+- Database schema implementation with all tables:
+  - users, staff, rooms, bookings, payments, services, coupons, checkins, checkouts, reports
+- Repository layer refactored for MySQL:
+  - All CRUD operations now use MySQL queries
+  - Transaction management with rollback support
+  - Proper data type conversions and null handling
+- Database connection testing script
+
+### Changed
+- All repository classes migrated from in-memory storage to MySQL
+- Data persistence across application restarts
+- Improved error handling for database operations
+
+### Security
+- Database credentials moved to environment variables (`.env` file)
+- Connection strings no longer hardcoded in source code
+
+## [0.1.0] - 2025-12-06
 
 ### Added
 - Initial project setup
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-
-## [0.1.0] - 06-12-2025
-
-### Added
-- Project initialization
+- Project structure with layered architecture (Models, Views, Controllers, Services, Repositories)
+- Flask backend API with RESTful endpoints
+- Frontend UI with HTML, CSS, and JavaScript
+- Basic authentication system (login/registration)
+- Room management functionality
+- Booking system
+- Payment processing
+- Service management
+- Staff management
+- Report generation
 - README.md
 - Changelog
 
+### Added - Core Features
+- User registration and login
+- Room CRUD operations
+- Booking creation and management
+- Payment processing
+- Service catalog
+- Staff management
+- Report generation
+- Dashboard for users
+- Admin panel for administrators
+
+### Added - Frontend Pages
+- Homepage (index.html)
+- Login page (login.html)
+- Registration page (register.html)
+- Dashboard (dashboard.html)
+- Booking page (booking.html)
+- My Bookings (my-bookings.html)
+- Admin Panel (admin.html)
+- Payment page (payment.html)
+
+### Added - Backend Architecture
+- Models: User, Room, Booking, Payment, Service, Staff, Coupon, CheckIn, Report
+- Controllers: UserController, RoomController, BookingController, PaymentController, etc.
+- Services: Business logic layer for all entities
+- Repositories: Data access layer (initially in-memory, later migrated to MySQL)
+- Views: Response formatting layer
