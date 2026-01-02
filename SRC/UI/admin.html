@@ -256,6 +256,14 @@
                     <label>Sức Chứa</label>
                     <input type="number" id="room_capacity" min="1">
                 </div>
+                <div class="form-group">
+                    <label>Ảnh Phòng</label>
+                    <input type="file" id="room_image" accept="image/*" onchange="previewRoomImage(event)">
+                    <div id="room_image_preview" class="image-preview" style="display: none; margin-top: 10px;">
+                        <img id="room_image_preview_img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
+                        <button type="button" onclick="removeRoomImage()" class="btn-remove-image" style="margin-top: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Xóa ảnh</button>
+                    </div>
+                </div>
                 <button type="submit" class="btn-primary">Thêm Phòng</button>
             </form>
         </div>
@@ -292,6 +300,15 @@
                 <div class="form-group">
                     <label>Sức Chứa</label>
                     <input type="number" id="edit_room_capacity" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Ảnh Phòng</label>
+                    <input type="file" id="edit_room_image" accept="image/*" onchange="previewEditRoomImage(event)">
+                    <div id="edit_room_image_preview" class="image-preview" style="display: none; margin-top: 10px;">
+                        <img id="edit_room_image_preview_img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
+                        <button type="button" onclick="removeEditRoomImage()" class="btn-remove-image" style="margin-top: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Xóa ảnh</button>
+                    </div>
+                    <div id="edit_room_current_image" class="current-image" style="margin-top: 10px;"></div>
                 </div>
                 <button type="submit" class="btn-primary">Cập Nhật</button>
             </form>

@@ -5,7 +5,7 @@ from mysql.connector import Error
 class RoomRepository:
     #Repository: Thực hiện CRUD trực tiếp lên MySQL database cho Room.
     
-    def save(self, room_number, room_type, price, status, capacity=None):
+    def save(self, room_number, room_type, price, status, capacity=None, image_url=None):
         """Lưu room mới vào database"""
         connection = None
         try:
@@ -13,15 +13,15 @@ class RoomRepository:
             cursor = connection.cursor()
             
             query = """
-                INSERT INTO rooms (room_number, room_type, price, status, capacity)
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO rooms (room_number, room_type, price, status, capacity, image_url)
+                VALUES (%s, %s, %s, %s, %s, %s)
             """
-            values = (room_number, room_type, float(price), status, capacity)
+            values = (room_number, room_type, float(price), status, capacity, image_url)
             cursor.execute(query, values)
             connection.commit()
             
             room_id = cursor.lastrowid
-            return Room(str(room_id), room_number, room_type, price, status, capacity)
+            return Room(str(room_id), room_number, room_type, price, status, capacity, image_url)
         except Error as e:
             if connection:
                 connection.rollback()
@@ -130,7 +130,7 @@ class RoomRepository:
                 cursor.close()
                 connection.close()
     
-    def update(self, room_id, room_number=None, room_type=None, price=None, status=None, capacity=None):
+    def update(self, room_id, room_number=None, room_type=None, price=None, status=None, capacity=None, image_url=None):
         """Cập nhật thông tin phòng"""
         connection = None
         try:
@@ -155,6 +155,9 @@ class RoomRepository:
             if capacity is not None:
                 set_clauses.append("capacity = %s")
                 values.append(capacity)
+            if image_url is not None:
+                set_clauses.append("image_url = %s")
+                values.append(image_url)
             
             if not set_clauses:
                 return self.find_by_id(room_id)
@@ -203,6 +206,7 @@ class RoomRepository:
             row['room_type'],
             float(row['price']),
             row['status'],
-            row['capacity']
+            row['capacity'],
+            row.get('image_url')  # Get image_url if exists, None otherwise
         )
 

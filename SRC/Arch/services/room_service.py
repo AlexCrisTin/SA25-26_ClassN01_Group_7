@@ -1,4 +1,5 @@
 from repository.room_repository import RoomRepository
+from utils.image_handler import save_image_from_base64, delete_image
 
 class RoomService:
     #Service: Xử lý logic nghiệp vụ cho Room.
@@ -6,7 +7,7 @@ class RoomService:
     def __init__(self):
         self.repo = RoomRepository()
 
-    def create_room(self, room_number, room_type, price, status, capacity=None):
+    def create_room(self, room_number, room_type, price, status, capacity=None, image_base64=None, image_filename=None):
         #Tạo phòng mới với validation
         if price <= 0:
             raise ValueError("Invalid Data: Price must be positive.")
@@ -28,7 +29,15 @@ class RoomService:
             if room.room_number == room_number:
                 raise ValueError(f"Invalid Data: Room number {room_number} already exists.")
         
-        return self.repo.save(room_number, room_type, price, status, capacity)
+        # Handle image upload
+        image_url = None
+        if image_base64:
+            try:
+                image_url = save_image_from_base64(image_base64, image_filename)
+            except Exception as e:
+                raise ValueError(f"Invalid Data: Error saving image - {str(e)}")
+        
+        return self.repo.save(room_number, room_type, price, status, capacity, image_url)
 
     def get_room_details(self, room_id):
         #Lấy thông tin phòng theo ID
@@ -70,7 +79,7 @@ class RoomService:
         room.status = 'reserved'  # Reserve room when assigned to booking
         return room
     
-    def update_room(self, room_id, room_number=None, room_type=None, price=None, status=None, capacity=None):
+    def update_room(self, room_id, room_number=None, room_type=None, price=None, status=None, capacity=None, image_base64=None, image_filename=None):
         #Cập nhật thông tin phòng với validation
         room = self.repo.find_by_id(room_id)
         if not room:
@@ -101,7 +110,19 @@ class RoomService:
                 if existing_room.room_number == room_number and existing_room.id != room_id:
                     raise ValueError(f"Invalid Data: Room number {room_number} already exists.")
         
-        return self.repo.update(room_id, room_number, room_type, price, status, capacity)
+        # Handle image upload
+        image_url = None
+        if image_base64:
+            # Delete old image if exists
+            if room.image_url:
+                delete_image(room.image_url)
+            
+            try:
+                image_url = save_image_from_base64(image_base64, image_filename)
+            except Exception as e:
+                raise ValueError(f"Invalid Data: Error saving image - {str(e)}")
+        
+        return self.repo.update(room_id, room_number, room_type, price, status, capacity, image_url)
     
     def delete_room(self, room_id):
         #Xóa phòng với validation

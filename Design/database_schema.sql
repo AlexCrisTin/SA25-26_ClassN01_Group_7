@@ -1,18 +1,9 @@
--- =====================================================
--- Hotel Management System - Database Schema
--- =====================================================
--- Database: hotel_management
--- Version: 1.0
--- Description: Schema cho hệ thống quản lý khách sạn
--- =====================================================
-
 -- Tạo database
 CREATE DATABASE IF NOT EXISTS hotel_management;
 USE hotel_management;
 
--- =====================================================
 -- 1. BẢNG USERS (Người dùng - Khách hàng & Nhân viên)
--- =====================================================
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -28,9 +19,9 @@ CREATE TABLE users (
     INDEX idx_role (role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 2. BẢNG STAFF (Nhân viên - có thể tích hợp vào users)
--- =====================================================
+
 CREATE TABLE staff (
     id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
@@ -49,9 +40,9 @@ CREATE TABLE staff (
     INDEX idx_is_active (is_active)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 3. BẢNG ROOMS (Phòng khách sạn)
--- =====================================================
+
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_number VARCHAR(20) UNIQUE NOT NULL,
@@ -59,6 +50,7 @@ CREATE TABLE rooms (
     price DECIMAL(10, 2) NOT NULL CHECK (price > 0),
     status ENUM('available', 'occupied', 'maintenance', 'reserved') DEFAULT 'available',
     capacity INT CHECK (capacity > 0),
+    image_url VARCHAR(500), -- URL path to room image
     description TEXT,
     amenities TEXT, -- JSON hoặc text mô tả tiện nghi
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -69,9 +61,8 @@ CREATE TABLE rooms (
     INDEX idx_room_type_status (room_type, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
 -- 4. BẢNG BOOKINGS (Đặt phòng)
--- =====================================================
+
 CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT, -- Khách hàng đặt phòng (có thể NULL nếu đặt không cần tài khoản)
@@ -97,9 +88,9 @@ CREATE TABLE bookings (
     CONSTRAINT chk_checkout_after_checkin CHECK (check_out_date IS NULL OR check_out_date > check_in_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 5. BẢNG PAYMENTS (Thanh toán)
--- =====================================================
+
 CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
@@ -118,9 +109,9 @@ CREATE TABLE payments (
     INDEX idx_transaction_id (transaction_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 6. BẢNG SERVICES (Dịch vụ khách sạn)
--- =====================================================
+
 CREATE TABLE services (
     id INT AUTO_INCREMENT PRIMARY KEY,
     service_name VARCHAR(100) NOT NULL,
@@ -134,9 +125,9 @@ CREATE TABLE services (
     INDEX idx_is_available (is_available)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 7. BẢNG SERVICE_REQUESTS (Yêu cầu dịch vụ)
--- =====================================================
+
 CREATE TABLE service_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
@@ -155,9 +146,9 @@ CREATE TABLE service_requests (
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 8. BẢNG COUPONS (Mã giảm giá)
--- =====================================================
+
 CREATE TABLE coupons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
@@ -181,9 +172,9 @@ CREATE TABLE coupons (
     )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 9. BẢNG COUPON_USAGES (Lịch sử sử dụng coupon)
--- =====================================================
+
 CREATE TABLE coupon_usages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     coupon_id INT NOT NULL,
@@ -197,9 +188,9 @@ CREATE TABLE coupon_usages (
     INDEX idx_used_at (used_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 10. BẢNG CHECKINS (Nhận phòng)
--- =====================================================
+
 CREATE TABLE checkins (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL UNIQUE, -- Một booking chỉ có một check-in
@@ -217,9 +208,9 @@ CREATE TABLE checkins (
     INDEX idx_checkin_time (checkin_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 11. BẢNG CHECKOUTS (Trả phòng)
--- =====================================================
+
 CREATE TABLE checkouts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL UNIQUE, -- Một booking chỉ có một check-out
@@ -237,9 +228,9 @@ CREATE TABLE checkouts (
     INDEX idx_checkout_time (checkout_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
+
 -- 12. BẢNG REPORTS (Báo cáo)
--- =====================================================
+
 CREATE TABLE reports (
     id INT AUTO_INCREMENT PRIMARY KEY,
     report_type ENUM('revenue', 'occupancy', 'booking', 'service', 'customer') NOT NULL,
@@ -256,9 +247,6 @@ CREATE TABLE reports (
     CONSTRAINT chk_report_period CHECK (period_end IS NULL OR period_end >= period_start)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================
--- TRIGGERS
--- =====================================================
 
 -- Trigger: Cập nhật số lần sử dụng coupon
 DELIMITER //
@@ -301,10 +289,8 @@ BEGIN
     UPDATE bookings SET status = 'checked_out' WHERE id = NEW.booking_id;
 END//
 DELIMITER ;
-
--- =====================================================
+    
 -- VIEWS (Các view hữu ích)
--- =====================================================
 
 -- View: Thông tin booking đầy đủ
 CREATE VIEW v_booking_details AS
@@ -352,9 +338,6 @@ FROM rooms r
 LEFT JOIN bookings b ON r.id = b.room_id AND b.status IN ('confirmed', 'checked_in', 'checked_out')
 GROUP BY r.id, r.room_number, r.room_type;
 
--- =====================================================
--- STORED PROCEDURES (Các thủ tục hữu ích)
--- =====================================================
 
 -- Procedure: Tìm phòng trống trong khoảng thời gian
 DELIMITER //
@@ -383,10 +366,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- =====================================================
--- DỮ LIỆU MẪU (Sample Data - Optional)
--- =====================================================
-
 -- Insert sample users
 INSERT INTO users (username, email, password, full_name, phone, role) VALUES
 ('admin', 'admin@hotel.com', 'admin', 'Administrator', '0123456789', 'administrator');
@@ -414,9 +393,5 @@ INSERT INTO coupons (code, discount_type, discount_value, valid_from, valid_to, 
 ('WELCOME10', 'percentage', 10.00, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), TRUE, 100),
 ('SUMMER2024', 'fixed_amount', 200000.00, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 6 MONTH), TRUE, 50),
 ('VIP50', 'percentage', 50.00, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH), TRUE, 10);
-
--- =====================================================
--- END OF SCHEMA
--- =====================================================
 
 

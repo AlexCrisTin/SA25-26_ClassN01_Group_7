@@ -1,13 +1,14 @@
 class Room:
     #Model: Định nghĩa cấu trúc dữ liệu Room
     
-    def __init__(self, room_id, room_number, room_type, price, status, capacity=None):
+    def __init__(self, room_id, room_number, room_type, price, status, capacity=None, image_url=None):
         self.id = room_id
         self.room_number = room_number
         self.room_type = room_type  # single, double, suite, etc.
         self.price = price
         self.status = status  # available, occupied, maintenance, reserved
         self.capacity = capacity
+        self.image_url = image_url
         
         # Validation
         if price <= 0:
@@ -28,6 +29,7 @@ class Room:
             "room_type": self.room_type,
             "price": self.price,
             "status": self.status,
-            "capacity": self.capacity
+            "capacity": self.capacity,
+            "image_url": self.image_url
         }
 

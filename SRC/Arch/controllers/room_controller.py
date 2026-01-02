@@ -45,7 +45,9 @@ class RoomController:
                 data.get('room_type'),
                 data.get('price'),
                 data.get('status', 'available'),
-                data.get('capacity')
+                data.get('capacity'),
+                data.get('image_base64'),
+                data.get('image_filename')
             )
             return self.view.room_created(room)
         except ValueError as e:
@@ -73,7 +75,9 @@ class RoomController:
                 data.get('room_type'),
                 data.get('price'),
                 data.get('status'),
-                data.get('capacity')
+                data.get('capacity'),
+                data.get('image_base64'),
+                data.get('image_filename')
             )
             return self.view.room_updated(room)
         except ValueError as e:

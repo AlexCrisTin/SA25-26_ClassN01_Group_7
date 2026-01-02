@@ -69,7 +69,13 @@ function displayRooms(rooms) {
     tbody.innerHTML = rooms.map(room => `
         <tr>
             <td>${room.id}</td>
-            <td>${room.room_number}</td>
+            <td>
+                ${room.image_url ? 
+                    `<img src="${room.image_url}" alt="Room ${room.room_number}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 10px; vertical-align: middle;">` 
+                    : '<span style="color: #999;">No image</span>'
+                }
+                ${room.room_number}
+            </td>
             <td>${room.room_type}</td>
             <td>${room.price ? room.price.toLocaleString('vi-VN') : 'N/A'} VNĐ</td>
             <td><span class="status-badge status-${room.status}">${getRoomStatusText(room.status)}</span></td>
@@ -113,7 +119,52 @@ function getRoomStatusText(status) {
 
 function showAddRoomModal() {
     document.getElementById('addRoomForm').reset();
+    document.getElementById('room_image_preview').style.display = 'none';
+    document.getElementById('room_image_preview_img').src = '';
     document.getElementById('addRoomModal').style.display = 'block';
+}
+
+// Image preview functions
+function previewRoomImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('room_image_preview_img').src = e.target.result;
+            document.getElementById('room_image_preview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function removeRoomImage() {
+    document.getElementById('room_image').value = '';
+    document.getElementById('room_image_preview').style.display = 'none';
+    document.getElementById('room_image_preview_img').src = '';
+}
+
+function previewEditRoomImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('edit_room_image_preview_img').src = e.target.result;
+            document.getElementById('edit_room_image_preview').style.display = 'block';
+            document.getElementById('edit_room_current_image').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function removeEditRoomImage() {
+    document.getElementById('edit_room_image').value = '';
+    document.getElementById('edit_room_image_preview').style.display = 'none';
+    document.getElementById('edit_room_image_preview_img').src = '';
+    // Show current image again if exists
+    const currentImageDiv = document.getElementById('edit_room_current_image');
+    if (currentImageDiv.innerHTML) {
+        currentImageDiv.style.display = 'block';
+    }
 }
 
 function closeModal(modalId) {
@@ -131,6 +182,24 @@ async function editRoom(roomId) {
     document.getElementById('edit_room_price').value = room.price;
     document.getElementById('edit_room_status').value = room.status;
     document.getElementById('edit_room_capacity').value = room.capacity || '';
+    
+    // Reset image previews
+    document.getElementById('edit_room_image').value = '';
+    document.getElementById('edit_room_image_preview').style.display = 'none';
+    document.getElementById('edit_room_image_preview_img').src = '';
+    
+    // Show current image if exists
+    const currentImageDiv = document.getElementById('edit_room_current_image');
+    if (room.image_url) {
+        currentImageDiv.innerHTML = `
+            <p style="margin-bottom: 5px; font-size: 12px; color: #666;">Ảnh hiện tại:</p>
+            <img src="${room.image_url}" alt="Current room image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
+        `;
+        currentImageDiv.style.display = 'block';
+    } else {
+        currentImageDiv.innerHTML = '';
+        currentImageDiv.style.display = 'none';
+    }
 
     document.getElementById('editRoomModal').style.display = 'block';
 }
@@ -436,13 +505,34 @@ function setupFormHandlers() {
             capacity: parseInt(document.getElementById('room_capacity').value) || null
         };
 
-        try {
-            await RoomAPI.createRoom(roomData);
-            showNotification('Thêm phòng thành công!', 'success');
-            closeModal('addRoomModal');
-            loadRooms();
-        } catch (error) {
-            showNotification('Lỗi khi thêm phòng: ' + error.message, 'error');
+        // Handle image upload
+        const imageFile = document.getElementById('room_image').files[0];
+        if (imageFile) {
+            // Convert image to base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                roomData.image_base64 = e.target.result;
+                roomData.image_filename = imageFile.name;
+                
+                try {
+                    await RoomAPI.createRoom(roomData);
+                    showNotification('Thêm phòng thành công!', 'success');
+                    closeModal('addRoomModal');
+                    loadRooms();
+                } catch (error) {
+                    showNotification('Lỗi khi thêm phòng: ' + error.message, 'error');
+                }
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            try {
+                await RoomAPI.createRoom(roomData);
+                showNotification('Thêm phòng thành công!', 'success');
+                closeModal('addRoomModal');
+                loadRooms();
+            } catch (error) {
+                showNotification('Lỗi khi thêm phòng: ' + error.message, 'error');
+            }
         }
     });
 
@@ -459,13 +549,34 @@ function setupFormHandlers() {
             capacity: parseInt(document.getElementById('edit_room_capacity').value) || null
         };
 
-        try {
-            await RoomAPI.updateRoom(roomId, roomData);
-            showNotification('Cập nhật phòng thành công!', 'success');
-            closeModal('editRoomModal');
-            loadRooms();
-        } catch (error) {
-            showNotification('Lỗi khi cập nhật phòng: ' + error.message, 'error');
+        // Handle image upload
+        const imageFile = document.getElementById('edit_room_image').files[0];
+        if (imageFile) {
+            // Convert image to base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                roomData.image_base64 = e.target.result;
+                roomData.image_filename = imageFile.name;
+                
+                try {
+                    await RoomAPI.updateRoom(roomId, roomData);
+                    showNotification('Cập nhật phòng thành công!', 'success');
+                    closeModal('editRoomModal');
+                    loadRooms();
+                } catch (error) {
+                    showNotification('Lỗi khi cập nhật phòng: ' + error.message, 'error');
+                }
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            try {
+                await RoomAPI.updateRoom(roomId, roomData);
+                showNotification('Cập nhật phòng thành công!', 'success');
+                closeModal('editRoomModal');
+                loadRooms();
+            } catch (error) {
+                showNotification('Lỗi khi cập nhật phòng: ' + error.message, 'error');
+            }
         }
     });
 
@@ -541,4 +652,8 @@ window.viewService = viewService;
 window.generateRevenueReport = generateRevenueReport;
 window.generateOccupancyReport = generateOccupancyReport;
 window.generateBookingReport = generateBookingReport;
+window.previewRoomImage = previewRoomImage;
+window.removeRoomImage = removeRoomImage;
+window.previewEditRoomImage = previewEditRoomImage;
+window.removeEditRoomImage = removeEditRoomImage;
 

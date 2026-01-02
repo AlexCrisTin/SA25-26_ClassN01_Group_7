@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
+from pathlib import Path
 from controllers.booking_controller import BookingController
 from controllers.room_controller import RoomController
 from controllers.user_controller import UserController
@@ -14,6 +15,15 @@ from middleware.auth import require_auth, require_admin, require_receptionist_or
 app = Flask(__name__)
 # Enable CORS for all routes to allow frontend to call API
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+# Serve uploaded images
+UPLOAD_FOLDER = Path(__file__).parent.parent / 'uploads'
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    """Serve uploaded images"""
+    return send_from_directory(str(UPLOAD_FOLDER), filename)
 
 # Initialize controllers
 booking_controller = BookingController()
