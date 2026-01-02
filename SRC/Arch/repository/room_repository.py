@@ -152,6 +152,9 @@ class RoomRepository:
             if status is not None:
                 set_clauses.append("status = %s")
                 values.append(status)
+            # Handle capacity: update if provided (including None to set to NULL)
+            # We'll use a sentinel approach - but for now, only update if not None
+            # Frontend should send capacity only when it wants to change it
             if capacity is not None:
                 set_clauses.append("capacity = %s")
                 values.append(capacity)

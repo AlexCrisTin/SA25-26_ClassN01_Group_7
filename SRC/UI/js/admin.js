@@ -172,36 +172,61 @@ function closeModal(modalId) {
 }
 
 async function editRoom(roomId) {
-    const room = allRooms.find(r => r.id === roomId);
-    if (!room) return;
-
-    currentEditingRoomId = roomId;
-    document.getElementById('edit_room_id').value = room.id;
-    document.getElementById('edit_room_number').value = room.room_number;
-    document.getElementById('edit_room_type').value = room.room_type;
-    document.getElementById('edit_room_price').value = room.price;
-    document.getElementById('edit_room_status').value = room.status;
-    document.getElementById('edit_room_capacity').value = room.capacity || '';
+    console.log('editRoom called with roomId:', roomId, 'type:', typeof roomId);
+    console.log('allRooms:', allRooms);
     
-    // Reset image previews
-    document.getElementById('edit_room_image').value = '';
-    document.getElementById('edit_room_image_preview').style.display = 'none';
-    document.getElementById('edit_room_image_preview_img').src = '';
+    // Convert roomId to string for comparison (room.id is usually string from API)
+    const roomIdStr = String(roomId);
+    const room = allRooms.find(r => String(r.id) === roomIdStr);
     
-    // Show current image if exists
-    const currentImageDiv = document.getElementById('edit_room_current_image');
-    if (room.image_url) {
-        currentImageDiv.innerHTML = `
-            <p style="margin-bottom: 5px; font-size: 12px; color: #666;">Ảnh hiện tại:</p>
-            <img src="${room.image_url}" alt="Current room image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
-        `;
-        currentImageDiv.style.display = 'block';
-    } else {
-        currentImageDiv.innerHTML = '';
-        currentImageDiv.style.display = 'none';
+    console.log('Found room:', room);
+    
+    if (!room) {
+        console.error('Room not found with id:', roomId);
+        showNotification('Không tìm thấy thông tin phòng', 'error');
+        return;
     }
 
-    document.getElementById('editRoomModal').style.display = 'block';
+    try {
+        currentEditingRoomId = roomId;
+        document.getElementById('edit_room_id').value = room.id;
+        document.getElementById('edit_room_number').value = room.room_number || '';
+        document.getElementById('edit_room_type').value = room.room_type || '';
+        document.getElementById('edit_room_price').value = room.price || '';
+        document.getElementById('edit_room_status').value = room.status || 'available';
+        document.getElementById('edit_room_capacity').value = room.capacity || '';
+        
+        // Reset image previews
+        document.getElementById('edit_room_image').value = '';
+        document.getElementById('edit_room_image_preview').style.display = 'none';
+        document.getElementById('edit_room_image_preview_img').src = '';
+        
+        // Show current image if exists
+        const currentImageDiv = document.getElementById('edit_room_current_image');
+        if (room.image_url) {
+            currentImageDiv.innerHTML = `
+                <p style="margin-bottom: 5px; font-size: 12px; color: #666;">Ảnh hiện tại:</p>
+                <img src="${room.image_url}" alt="Current room image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
+            `;
+            currentImageDiv.style.display = 'block';
+        } else {
+            currentImageDiv.innerHTML = '';
+            currentImageDiv.style.display = 'none';
+        }
+
+        // Show modal
+        const modal = document.getElementById('editRoomModal');
+        if (modal) {
+            modal.style.display = 'block';
+            console.log('Modal displayed');
+        } else {
+            console.error('Modal element not found!');
+            showNotification('Lỗi: Không tìm thấy form sửa phòng', 'error');
+        }
+    } catch (error) {
+        console.error('Error in editRoom:', error);
+        showNotification('Lỗi khi mở form sửa phòng: ' + error.message, 'error');
+    }
 }
 
 async function deleteRoom(roomId) {
@@ -541,12 +566,14 @@ function setupFormHandlers() {
         e.preventDefault();
         
         const roomId = document.getElementById('edit_room_id').value;
+        const capacityValue = document.getElementById('edit_room_capacity').value;
+        
         const roomData = {
             room_number: document.getElementById('edit_room_number').value,
             room_type: document.getElementById('edit_room_type').value,
             price: parseFloat(document.getElementById('edit_room_price').value),
             status: document.getElementById('edit_room_status').value,
-            capacity: parseInt(document.getElementById('edit_room_capacity').value) || null
+            capacity: capacityValue && capacityValue.trim() !== '' ? parseInt(capacityValue) : null
         };
 
         // Handle image upload
@@ -559,22 +586,26 @@ function setupFormHandlers() {
                 roomData.image_filename = imageFile.name;
                 
                 try {
+                    console.log('Updating room with image:', roomId, roomData);
                     await RoomAPI.updateRoom(roomId, roomData);
                     showNotification('Cập nhật phòng thành công!', 'success');
                     closeModal('editRoomModal');
                     loadRooms();
                 } catch (error) {
+                    console.error('Error updating room:', error);
                     showNotification('Lỗi khi cập nhật phòng: ' + error.message, 'error');
                 }
             };
             reader.readAsDataURL(imageFile);
         } else {
             try {
+                console.log('Updating room without image:', roomId, roomData);
                 await RoomAPI.updateRoom(roomId, roomData);
                 showNotification('Cập nhật phòng thành công!', 'success');
                 closeModal('editRoomModal');
                 loadRooms();
             } catch (error) {
+                console.error('Error updating room:', error);
                 showNotification('Lỗi khi cập nhật phòng: ' + error.message, 'error');
             }
         }
