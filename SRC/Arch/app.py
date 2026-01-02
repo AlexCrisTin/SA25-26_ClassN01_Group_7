@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 from pathlib import Path
 from controllers.booking_controller import BookingController
@@ -14,7 +14,10 @@ from middleware.auth import require_auth, require_admin, require_receptionist_or
 
 app = Flask(__name__)
 # Enable CORS for all routes to allow frontend to call API
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={
+    r"/api/*": {"origins": "*"},
+    r"/uploads/*": {"origins": "*"}  # Allow CORS for image serving
+})
 
 # Serve uploaded images
 UPLOAD_FOLDER = Path(__file__).parent.parent / 'uploads'
@@ -22,8 +25,40 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
-    """Serve uploaded images"""
-    return send_from_directory(str(UPLOAD_FOLDER), filename)
+    """Serve uploaded images - handles paths like 'rooms/image.jpg'"""
+    try:
+        # filename can be like "rooms/image.jpg" or just "image.jpg"
+        file_path = UPLOAD_FOLDER / filename
+        
+        if file_path.exists() and file_path.is_file():
+            # If it's a direct file path like "rooms/image.jpg"
+            # We need to serve from the parent directory with the full path
+            parent_dir = file_path.parent
+            file_name = file_path.name
+            return send_from_directory(str(parent_dir), file_name)
+        else:
+            # Try to find the file in subdirectories
+            # If filename is "rooms/image.jpg", split it
+            parts = filename.split('/')
+            if len(parts) > 1:
+                # Has subdirectory like "rooms/image.jpg"
+                subdir_name = parts[0]
+                file_name = '/'.join(parts[1:])
+                subdir_path = UPLOAD_FOLDER / subdir_name
+                if subdir_path.exists() and subdir_path.is_dir():
+                    file_path = subdir_path / file_name
+                    if file_path.exists():
+                        return send_from_directory(str(subdir_path), file_name)
+            
+            # Try direct filename in uploads folder
+            direct_path = UPLOAD_FOLDER / filename.split('/')[-1]
+            if direct_path.exists():
+                return send_from_directory(str(UPLOAD_FOLDER), filename.split('/')[-1])
+            
+            return "File not found", 404
+    except Exception as e:
+        print(f"Error serving file {filename}: {str(e)}")
+        return f"Error serving file: {str(e)}", 500
 
 # Initialize controllers
 booking_controller = BookingController()
@@ -46,6 +81,14 @@ def create_booking():
 @require_receptionist_or_admin  # Chỉ receptionist và admin xem được tất cả bookings
 def get_all_bookings():
     return booking_controller.get_all_bookings()
+
+@app.route('/api/bookings/my', methods=['GET'])
+@require_auth  # User phải đăng nhập để xem bookings của mình
+def get_my_bookings():
+    user = getattr(request, 'current_user', None)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return booking_controller.get_user_bookings(user.id)
 
 @app.route('/api/bookings/<booking_id>', methods=['GET'])
 @require_auth  # User phải đăng nhập, nhưng có thể xem booking của mình

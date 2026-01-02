@@ -60,7 +60,7 @@ class BookingService:
             total_price = room_price * nights
         
         # Create the booking
-        booking = self.repo.save(guest_name, room_type, check_in_date, total_price, check_out_date, status='pending')
+        booking = self.repo.save(guest_name, room_type, check_in_date, total_price, check_out_date, status='pending', user_id=user_id)
         
         # Business Logic: Process payment via PaymentService if payment information provided
         if payment_method and payment_amount:
@@ -90,6 +90,12 @@ class BookingService:
     def get_all_bookings(self):
         #Lấy tất cả bookings
         return self.repo.find_all()
+    
+    def get_user_bookings(self, user_id):
+        #Lấy bookings của user cụ thể
+        if not user_id:
+            raise ValueError("User ID is required.")
+        return self.repo.find_by_user_id(user_id)
     
     def cancel_booking(self, booking_id):
         #Hủy booking với validation

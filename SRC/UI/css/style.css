@@ -388,6 +388,91 @@ html {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    transition: transform 0.5s ease;
+}
+
+/* Room Carousel Styles */
+.room-carousel-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.room-carousel-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(30, 58, 95, 0.9);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.carousel-btn:hover {
+    background: rgba(30, 58, 95, 1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn-prev {
+    left: 10px;
+}
+
+.carousel-btn-next {
+    right: 10px;
+}
+
+.carousel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.carousel-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+    background: #d4a574;
+    width: 30px;
+    border-radius: 6px;
+}
+
+.loading-placeholder {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .room-card {
@@ -930,6 +1015,23 @@ button:disabled {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+    .room-carousel-wrapper {
+        padding: 0 50px;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+    
+    .carousel-btn-prev {
+        left: 5px;
+    }
+    
+    .carousel-btn-next {
+        right: 5px;
+    }
     .room-types-grid,
     .services-grid,
     .articles-grid,
@@ -956,7 +1058,21 @@ button:disabled {
         flex-direction: column;
     }
     
-    .room-types-grid,
+    .room-carousel-wrapper {
+        padding: 0 40px;
+    }
+    
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+    
+    .room-types-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
     .services-grid,
     .articles-grid,
     .feedback-grid,

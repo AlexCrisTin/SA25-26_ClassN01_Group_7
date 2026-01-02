@@ -110,9 +110,14 @@ const BookingAPI = {
         return await apiCall('/bookings', 'POST', bookingData);
     },
 
-    // Get all bookings
+    // Get all bookings (Admin/Receptionist only)
     getAllBookings: async () => {
         return await apiCall('/bookings', 'GET');
+    },
+
+    // Get my bookings (Current user)
+    getMyBookings: async () => {
+        return await apiCall('/bookings/my', 'GET');
     },
 
     // Get booking by ID

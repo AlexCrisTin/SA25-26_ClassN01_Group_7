@@ -71,23 +71,41 @@
                 <span class="section-tag">KHÁM PHÁ</span>
                 <h2 class="section-title">Các Hạng Phòng</h2>
             </div>
-            <div class="room-types-grid">
-                <div class="room-card">
-                    <img src="images/room-triple.jpg" alt="Phòng Triple">
-                    <h3>Phòng Triple</h3>
-                    <p class="room-price">Chỉ từ 1.500.000 VNĐ/Đêm</p>
+            <div class="room-carousel-wrapper">
+                <button class="carousel-btn carousel-btn-prev" onclick="moveRoomCarousel(-1)" aria-label="Previous">
+                    <span>‹</span>
+                </button>
+                <div class="room-carousel-container">
+                    <div class="room-types-grid" id="roomCarousel">
+                        <!-- Rooms will be loaded dynamically -->
+                        <div class="room-card loading-placeholder">
+                            <div class="loading-skeleton" style="height: 250px; background: #f0f0f0; border-radius: 8px 8px 0 0;"></div>
+                            <div style="padding: 20px;">
+                                <div class="loading-skeleton" style="height: 24px; width: 60%; background: #f0f0f0; margin-bottom: 10px; border-radius: 4px;"></div>
+                                <div class="loading-skeleton" style="height: 20px; width: 80%; background: #f0f0f0; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div class="room-card loading-placeholder">
+                            <div class="loading-skeleton" style="height: 250px; background: #f0f0f0; border-radius: 8px 8px 0 0;"></div>
+                            <div style="padding: 20px;">
+                                <div class="loading-skeleton" style="height: 24px; width: 60%; background: #f0f0f0; margin-bottom: 10px; border-radius: 4px;"></div>
+                                <div class="loading-skeleton" style="height: 20px; width: 80%; background: #f0f0f0; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div class="room-card loading-placeholder">
+                            <div class="loading-skeleton" style="height: 250px; background: #f0f0f0; border-radius: 8px 8px 0 0;"></div>
+                            <div style="padding: 20px;">
+                                <div class="loading-skeleton" style="height: 24px; width: 60%; background: #f0f0f0; margin-bottom: 10px; border-radius: 4px;"></div>
+                                <div class="loading-skeleton" style="height: 20px; width: 80%; background: #f0f0f0; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="room-card">
-                    <img src="images/room-senior.jpg" alt="Phòng Senior">
-                    <h3>Phòng Senior</h3>
-                    <p class="room-price">Chỉ từ 1.100.000 VNĐ/Đêm</p>
-                </div>
-                <div class="room-card">
-                    <img src="images/room-connecting.jpg" alt="Phòng Connecting">
-                    <h3>Phòng Connecting</h3>
-                    <p class="room-price">Chỉ từ 1.650.000 VNĐ/Đêm</p>
-                </div>
+                <button class="carousel-btn carousel-btn-next" onclick="moveRoomCarousel(1)" aria-label="Next">
+                    <span>›</span>
+                </button>
             </div>
+            <div class="carousel-indicators" id="roomCarouselIndicators"></div>
         </div>
     </section>
 

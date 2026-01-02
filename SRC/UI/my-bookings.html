@@ -85,12 +85,9 @@
         async function loadBookings() {
             try {
                 showNotification('Đang tải danh sách đặt phòng...', 'info');
-                allBookings = await BookingAPI.getAllBookings();
+                allBookings = await BookingAPI.getMyBookings();
                 
-                // In a real app, backend should filter by user_id
-                // For now, we'll show all bookings
-                
-                if (allBookings.length > 0) {
+                if (allBookings && allBookings.length > 0) {
                     displayBookings(allBookings);
                 } else {
                     showEmptyState();
