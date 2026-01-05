@@ -434,6 +434,78 @@
         </div>
     </div>
 
+    <!-- View Service Modal -->
+    <div id="viewServiceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('viewServiceModal')">&times;</span>
+            <h2>Thông Tin Dịch Vụ</h2>
+            <div id="viewServiceContent" class="view-content">
+                <div class="info-group">
+                    <label>ID:</label>
+                    <span id="view_service_id"></span>
+                </div>
+                <div class="info-group">
+                    <label>Tên Dịch Vụ:</label>
+                    <span id="view_service_name"></span>
+                </div>
+                <div class="info-group">
+                    <label>Mô Tả:</label>
+                    <span id="view_service_description"></span>
+                </div>
+                <div class="info-group">
+                    <label>Giá:</label>
+                    <span id="view_service_price"></span>
+                </div>
+                <div class="info-group">
+                    <label>Danh Mục:</label>
+                    <span id="view_service_category"></span>
+                </div>
+                <div class="info-group">
+                    <label>Trạng Thái:</label>
+                    <span id="view_service_status"></span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('viewServiceModal')">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Service Modal -->
+    <div id="editServiceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editServiceModal')">&times;</span>
+            <h2>Sửa Thông Tin Dịch Vụ</h2>
+            <form id="editServiceForm">
+                <input type="hidden" id="edit_service_id">
+                <div class="form-group">
+                    <label>Tên Dịch Vụ *</label>
+                    <input type="text" id="edit_service_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Mô Tả</label>
+                    <textarea id="edit_service_description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Giá (VNĐ) *</label>
+                    <input type="number" id="edit_service_price" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Danh Mục</label>
+                    <input type="text" id="edit_service_category" placeholder="e.g., Spa, Dining, Transport">
+                </div>
+                <div class="form-group">
+                    <label>Trạng Thái</label>
+                    <select id="edit_service_is_available">
+                        <option value="true">Có Sẵn</option>
+                        <option value="false">Không Có Sẵn</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Cập Nhật</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Add Service Modal -->
     <div id="addServiceModal" class="modal">
         <div class="modal-content">

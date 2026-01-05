@@ -200,6 +200,16 @@ const ServiceAPI = {
     // Request service
     requestService: async (serviceData) => {
         return await apiCall('/services/request', 'POST', serviceData);
+    },
+
+    // Update service (Admin only)
+    updateService: async (serviceId, serviceData) => {
+        return await apiCall(`/services/${serviceId}`, 'PUT', serviceData);
+    },
+
+    // Delete service (Admin only)
+    deleteService: async (serviceId) => {
+        return await apiCall(`/services/${serviceId}`, 'DELETE');
     }
 };
 

@@ -21,7 +21,7 @@ class ServiceRepository:
             connection.commit()
             
             service_id = cursor.lastrowid
-            return Service(str(service_id), service_name, description, price, category)
+            return Service(str(service_id), service_name, description, price, category, is_available)
         except Error as e:
             if connection:
                 connection.rollback()
@@ -90,6 +90,60 @@ class ServiceRepository:
                 cursor.close()
                 connection.close()
     
+    def update(self, service_id, **kwargs):
+        """Cập nhật thông tin service"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+            
+            # Build dynamic update query
+            set_clauses = []
+            values = []
+            for key, value in kwargs.items():
+                if value is not None:
+                    set_clauses.append(f"{key} = %s")
+                    values.append(value)
+            
+            if not set_clauses:
+                return self.find_by_id(service_id)
+            
+            values.append(service_id)
+            query = f"UPDATE services SET {', '.join(set_clauses)}, updated_at = CURRENT_TIMESTAMP WHERE id = %s"
+            cursor.execute(query, values)
+            connection.commit()
+            
+            return self.find_by_id(service_id)
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error updating service: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
+    def delete(self, service_id):
+        """Xóa service khỏi database"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+            
+            query = "DELETE FROM services WHERE id = %s"
+            cursor.execute(query, (service_id,))
+            connection.commit()
+            
+            return cursor.rowcount > 0
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error deleting service: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
     def _row_to_service(self, row):
         """Chuyển đổi database row thành Service object"""
         return Service(
@@ -97,6 +151,7 @@ class ServiceRepository:
             row['service_name'],
             row['description'],
             float(row['price']),
-            row['category']
+            row['category'],
+            bool(row.get('is_available', True))
         )
 

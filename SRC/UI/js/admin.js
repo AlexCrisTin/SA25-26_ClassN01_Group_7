@@ -454,6 +454,8 @@ function displayServices(services) {
             <td>
                 <div class="action-buttons">
                     <button class="btn-view" onclick="viewService(${service.id})">Xem</button>
+                    <button class="btn-edit" onclick="editService(${service.id})">Sửa</button>
+                    <button class="btn-delete" onclick="deleteService(${service.id})">Xóa</button>
                 </div>
             </td>
         </tr>
@@ -465,8 +467,50 @@ function showAddServiceModal() {
     document.getElementById('addServiceModal').style.display = 'block';
 }
 
-function viewService(serviceId) {
-    showNotification('Đang mở thông tin dịch vụ #' + serviceId, 'info');
+async function viewService(serviceId) {
+    try {
+        const service = await ServiceAPI.getService(serviceId);
+        // Populate view modal
+        document.getElementById('view_service_id').textContent = service.id || 'N/A';
+        document.getElementById('view_service_name').textContent = service.service_name || service.name || 'N/A';
+        document.getElementById('view_service_description').textContent = service.description || 'N/A';
+        document.getElementById('view_service_price').textContent = service.price ? service.price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A';
+        document.getElementById('view_service_category').textContent = service.category || 'N/A';
+        document.getElementById('view_service_status').textContent = service.is_available !== false ? 'Có Sẵn' : 'Không Có Sẵn';
+        document.getElementById('viewServiceModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin dịch vụ: ' + error.message, 'error');
+    }
+}
+
+async function editService(serviceId) {
+    try {
+        const service = await ServiceAPI.getService(serviceId);
+        // Populate edit form
+        document.getElementById('edit_service_id').value = service.id;
+        document.getElementById('edit_service_name').value = service.service_name || service.name || '';
+        document.getElementById('edit_service_description').value = service.description || '';
+        document.getElementById('edit_service_price').value = service.price || '';
+        document.getElementById('edit_service_category').value = service.category || '';
+        document.getElementById('edit_service_is_available').value = service.is_available !== false ? 'true' : 'false';
+        document.getElementById('editServiceModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin dịch vụ: ' + error.message, 'error');
+    }
+}
+
+async function deleteService(serviceId) {
+    if (!confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?')) {
+        return;
+    }
+    
+    try {
+        await ServiceAPI.deleteService(serviceId);
+        showNotification('Xóa dịch vụ thành công!', 'success');
+        loadServices();
+    } catch (error) {
+        showNotification('Lỗi khi xóa dịch vụ: ' + error.message, 'error');
+    }
 }
 
 // ========== REPORTS ==========
@@ -725,6 +769,29 @@ function setupFormHandlers() {
             showNotification('Lỗi khi thêm dịch vụ: ' + error.message, 'error');
         }
     });
+
+    // Edit Service Form
+    document.getElementById('editServiceForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const serviceId = document.getElementById('edit_service_id').value;
+        const serviceData = {
+            service_name: document.getElementById('edit_service_name').value,
+            description: document.getElementById('edit_service_description').value,
+            price: parseFloat(document.getElementById('edit_service_price').value),
+            category: document.getElementById('edit_service_category').value || null,
+            is_available: document.getElementById('edit_service_is_available').value === 'true'
+        };
+
+        try {
+            await ServiceAPI.updateService(serviceId, serviceData);
+            showNotification('Cập nhật dịch vụ thành công!', 'success');
+            closeModal('editServiceModal');
+            loadServices();
+        } catch (error) {
+            showNotification('Lỗi khi cập nhật dịch vụ: ' + error.message, 'error');
+        }
+    });
 }
 
 // Close modal when clicking outside
@@ -753,6 +820,8 @@ window.editStaff = editStaff;
 window.deleteStaff = deleteStaff;
 window.showAddServiceModal = showAddServiceModal;
 window.viewService = viewService;
+window.editService = editService;
+window.deleteService = deleteService;
 window.generateRevenueReport = generateRevenueReport;
 window.generateOccupancyReport = generateOccupancyReport;
 window.generateBookingReport = generateBookingReport;

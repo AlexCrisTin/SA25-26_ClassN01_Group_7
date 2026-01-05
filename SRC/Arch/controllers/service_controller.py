@@ -48,4 +48,28 @@ class ServiceController:
             return self.view.service_requested(service)
         except ValueError as e:
             return self.view.error_response(str(e), 400)
+    
+    def update_service(self, service_id):
+        #Xử lý PUT /api/services/<service_id>
+        data = request.json
+        try:
+            service = self.service.update_service(
+                service_id,
+                data.get('service_name'),
+                data.get('description'),
+                data.get('price'),
+                data.get('category'),
+                data.get('is_available')
+            )
+            return self.view.service_updated(service)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+    
+    def delete_service(self, service_id):
+        #Xử lý DELETE /api/services/<service_id>
+        try:
+            self.service.delete_service(service_id)
+            return self.view.service_deleted()
+        except ValueError as e:
+            return self.view.error_response(str(e), 404)
 

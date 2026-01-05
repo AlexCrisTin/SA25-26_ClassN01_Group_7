@@ -24,6 +24,16 @@ class ServiceView:
         return jsonify({"message": "Service requested successfully", "service": service.to_dict()}), 200
     
     @staticmethod
+    def service_updated(service):
+        #Response khi cập nhật service thành công
+        return jsonify({"message": "Service updated successfully", "service": service.to_dict()}), 200
+    
+    @staticmethod
+    def service_deleted():
+        #Response khi xóa service thành công
+        return jsonify({"message": "Service deleted successfully"}), 200
+    
+    @staticmethod
     def error_response(message, status_code=400):
             #Format response lỗi
         return jsonify({"error": message}), status_code

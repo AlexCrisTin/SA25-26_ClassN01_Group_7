@@ -184,6 +184,16 @@ def get_service(service_id):
 def request_service():
     return service_controller.request_service()
 
+@app.route('/api/services/<service_id>', methods=['PUT'])
+@require_admin  # Chỉ admin mới update được dịch vụ
+def update_service(service_id):
+    return service_controller.update_service(service_id)
+
+@app.route('/api/services/<service_id>', methods=['DELETE'])
+@require_admin  # Chỉ admin mới xóa được dịch vụ
+def delete_service(service_id):
+    return service_controller.delete_service(service_id)
+
 # ========== PAYMENT ROUTES ==========
 @app.route('/api/payments', methods=['POST'])
 @require_auth  # User phải đăng nhập để thanh toán
