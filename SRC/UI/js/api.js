@@ -223,6 +223,11 @@ const StaffAPI = {
     // Update staff (Admin only)
     updateStaff: async (staffId, staffData) => {
         return await apiCall(`/staff/${staffId}`, 'PUT', staffData);
+    },
+
+    // Delete staff (Admin only)
+    deleteStaff: async (staffId) => {
+        return await apiCall(`/staff/${staffId}`, 'DELETE');
     }
 };
 

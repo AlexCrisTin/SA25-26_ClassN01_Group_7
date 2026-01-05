@@ -52,9 +52,18 @@ class StaffController:
                 data.get('email'),
                 data.get('phone'),
                 data.get('position'),
+                data.get('department'),
                 data.get('is_active')
             )
             return self.view.staff_updated(staff)
         except ValueError as e:
             return self.view.error_response(str(e), 400)
+    
+    def delete_staff(self, staff_id):
+        #Xử lý DELETE /api/staff/<staff_id>
+        try:
+            self.service.delete_staff(staff_id)
+            return self.view.staff_deleted()
+        except ValueError as e:
+            return self.view.error_response(str(e), 404)
 

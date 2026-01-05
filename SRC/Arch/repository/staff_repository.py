@@ -143,6 +143,27 @@ class StaffRepository:
                 cursor.close()
                 connection.close()
     
+    def delete(self, staff_id):
+        """Xóa staff khỏi database"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+            
+            query = "DELETE FROM staff WHERE id = %s"
+            cursor.execute(query, (staff_id,))
+            connection.commit()
+            
+            return cursor.rowcount > 0
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error deleting staff: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
     def _row_to_staff(self, row):
         """Chuyển đổi database row thành Staff object"""
         hire_date = row['hire_date']

@@ -24,6 +24,11 @@ class StaffView:
         return jsonify({"message": "Staff updated successfully", "staff": staff.to_dict()}), 200
     
     @staticmethod
+    def staff_deleted():
+        #Response khi xóa staff thành công
+        return jsonify({"message": "Staff deleted successfully"}), 200
+    
+    @staticmethod
     def error_response(message, status_code=400):
         #Format response lỗi
         return jsonify({"error": message}), status_code

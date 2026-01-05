@@ -253,6 +253,11 @@ def get_staff(staff_id):
 def update_staff(staff_id):
     return staff_controller.update_staff(staff_id)
 
+@app.route('/api/staff/<staff_id>', methods=['DELETE'])
+@require_admin  # Chỉ admin mới xóa được staff
+def delete_staff(staff_id):
+    return staff_controller.delete_staff(staff_id)
+
 # ========== REPORT ROUTES ==========
 @app.route('/api/reports/revenue', methods=['POST'])
 @require_admin  # Chỉ admin mới tạo được báo cáo doanh thu

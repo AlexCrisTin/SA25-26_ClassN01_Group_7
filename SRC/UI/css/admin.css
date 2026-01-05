@@ -297,6 +297,62 @@
 
 .modal-content textarea {
     resize: vertical;
+}
+
+/* View Content Styles */
+.view-content {
+    margin-bottom: 20px;
+}
+
+.info-group {
+    display: flex;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.info-group label {
+    font-weight: 600;
+    color: #1e3a5f;
+    min-width: 150px;
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+
+.info-group span {
+    color: #333;
+    flex: 1;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
     min-height: 80px;
 }
 

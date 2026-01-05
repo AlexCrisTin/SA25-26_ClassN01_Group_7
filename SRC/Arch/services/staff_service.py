@@ -34,21 +34,33 @@ class StaffService:
         #Lấy staff theo department
         return self.repo.find_by_department(department)
     
-    def update_staff(self, staff_id, full_name=None, email=None, phone=None, position=None, is_active=None):
-            #Cập nhật thông tin staff
+    def update_staff(self, staff_id, full_name=None, email=None, phone=None, position=None, department=None, is_active=None):
+        #Cập nhật thông tin staff
         staff = self.repo.find_by_id(staff_id)
         if not staff:
             raise ValueError(f"Staff with ID {staff_id} not found.")
         
+        # Build update data
+        update_data = {}
         if full_name:
-            staff.full_name = full_name
+            update_data['full_name'] = full_name
         if email:
-            staff.email = email
+            update_data['email'] = email
         if phone:
-            staff.phone = phone
+            update_data['phone'] = phone
         if position:
-            staff.position = position
+            update_data['position'] = position
+        if department:
+            update_data['department'] = department
         if is_active is not None:
-            staff.is_active = is_active
+            update_data['is_active'] = is_active
         
-        return staff
+        return self.repo.update(staff_id, **update_data)
+    
+    def delete_staff(self, staff_id):
+        #Xóa staff
+        staff = self.repo.find_by_id(staff_id)
+        if not staff:
+            raise ValueError(f"Staff with ID {staff_id} not found.")
+        
+        return self.repo.delete(staff_id)

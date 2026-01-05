@@ -359,10 +359,12 @@ function displayStaff(staff) {
             <td>${s.phone || 'N/A'}</td>
             <td>${s.position || s.role || 'N/A'}</td>
             <td>${s.department || 'N/A'}</td>
-            <td><span class="status-badge status-available">Hoạt Động</span></td>
+            <td><span class="status-badge ${s.is_active ? 'status-available' : 'status-maintenance'}">${s.is_active ? 'Hoạt Động' : 'Không Hoạt Động'}</span></td>
             <td>
                 <div class="action-buttons">
                     <button class="btn-view" onclick="viewStaff(${s.id})">Xem</button>
+                    <button class="btn-edit" onclick="editStaff(${s.id})">Sửa</button>
+                    <button class="btn-delete" onclick="deleteStaff(${s.id})">Xóa</button>
                 </div>
             </td>
         </tr>
@@ -374,8 +376,53 @@ function showAddStaffModal() {
     document.getElementById('addStaffModal').style.display = 'block';
 }
 
-function viewStaff(staffId) {
-    showNotification('Đang mở thông tin nhân viên #' + staffId, 'info');
+async function viewStaff(staffId) {
+    try {
+        const staff = await StaffAPI.getStaff(staffId);
+        // Populate view modal
+        document.getElementById('view_staff_id').textContent = staff.id || 'N/A';
+        document.getElementById('view_staff_full_name').textContent = staff.full_name || 'N/A';
+        document.getElementById('view_staff_email').textContent = staff.email || 'N/A';
+        document.getElementById('view_staff_phone').textContent = staff.phone || 'N/A';
+        document.getElementById('view_staff_position').textContent = staff.position || 'N/A';
+        document.getElementById('view_staff_department').textContent = staff.department || 'N/A';
+        document.getElementById('view_staff_hire_date').textContent = staff.hire_date || 'N/A';
+        document.getElementById('view_staff_status').textContent = staff.is_active ? 'Hoạt Động' : 'Không Hoạt Động';
+        document.getElementById('viewStaffModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin nhân viên: ' + error.message, 'error');
+    }
+}
+
+async function editStaff(staffId) {
+    try {
+        const staff = await StaffAPI.getStaff(staffId);
+        // Populate edit form
+        document.getElementById('edit_staff_id').value = staff.id;
+        document.getElementById('edit_staff_full_name').value = staff.full_name || '';
+        document.getElementById('edit_staff_email').value = staff.email || '';
+        document.getElementById('edit_staff_phone').value = staff.phone || '';
+        document.getElementById('edit_staff_position').value = staff.position || '';
+        document.getElementById('edit_staff_department').value = staff.department || '';
+        document.getElementById('edit_staff_is_active').value = staff.is_active ? 'true' : 'false';
+        document.getElementById('editStaffModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin nhân viên: ' + error.message, 'error');
+    }
+}
+
+async function deleteStaff(staffId) {
+    if (!confirm('Bạn có chắc chắn muốn xóa nhân viên này không?')) {
+        return;
+    }
+    
+    try {
+        await StaffAPI.deleteStaff(staffId);
+        showNotification('Xóa nhân viên thành công!', 'success');
+        loadStaff();
+    } catch (error) {
+        showNotification('Lỗi khi xóa nhân viên: ' + error.message, 'error');
+    }
 }
 
 // ========== SERVICE MANAGEMENT ==========
@@ -634,6 +681,30 @@ function setupFormHandlers() {
         }
     });
 
+    // Edit Staff Form
+    document.getElementById('editStaffForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const staffId = document.getElementById('edit_staff_id').value;
+        const staffData = {
+            full_name: document.getElementById('edit_staff_full_name').value,
+            email: document.getElementById('edit_staff_email').value,
+            phone: document.getElementById('edit_staff_phone').value,
+            position: document.getElementById('edit_staff_position').value,
+            department: document.getElementById('edit_staff_department').value,
+            is_active: document.getElementById('edit_staff_is_active').value === 'true'
+        };
+
+        try {
+            await StaffAPI.updateStaff(staffId, staffData);
+            showNotification('Cập nhật nhân viên thành công!', 'success');
+            closeModal('editStaffModal');
+            loadStaff();
+        } catch (error) {
+            showNotification('Lỗi khi cập nhật nhân viên: ' + error.message, 'error');
+        }
+    });
+
     // Add Service Form
     document.getElementById('addServiceForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -678,6 +749,8 @@ window.updateBookingStatus = updateBookingStatus;
 window.viewBookingDetail = viewBookingDetail;
 window.showAddStaffModal = showAddStaffModal;
 window.viewStaff = viewStaff;
+window.editStaff = editStaff;
+window.deleteStaff = deleteStaff;
 window.showAddServiceModal = showAddServiceModal;
 window.viewService = viewService;
 window.generateRevenueReport = generateRevenueReport;
