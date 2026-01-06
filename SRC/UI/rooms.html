@@ -118,7 +118,7 @@
                                     statusLabel === 'reserved' ? 'status-reserved' : 'status-occupied';
 
                 return `
-                    <div class="room-card">
+                    <div class="room-card" onclick="goToRoomDetail(${room.id})" style="cursor: pointer;">
                         <div class="room-image">
                             ${imageUrl ? `<img src="${imageUrl}" alt="Room ${room.room_number}" onerror="this.src='images/room-connecting.jpg';">` : '<div class="no-image">No Image</div>'}
                             <span class="status-badge ${statusClass}">${statusLabel}</span>
@@ -128,13 +128,18 @@
                             <p class="muted">${room.room_type || 'Loại phòng'}</p>
                             <p class="price">${room.price ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm' : 'Liên hệ'}</p>
                             <p class="muted">Sức chứa: ${room.capacity || 'N/A'}</p>
-                            <div class="card-actions">
-                                <a href="booking.html" class="auth-btn" style="text-decoration: none;">Đặt phòng</a>
+                            <div class="card-actions" onclick="event.stopPropagation();">
+                                <a href="room-detail.html?id=${room.id}" class="auth-btn" style="text-decoration: none; margin-right: 8px;">Xem chi tiết</a>
+                                <a href="booking.html" class="outline-btn" style="text-decoration: none;">Đặt phòng</a>
                             </div>
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        function goToRoomDetail(roomId) {
+            window.location.href = 'room-detail.html?id=' + encodeURIComponent(roomId);
         }
     </script>
 </body>

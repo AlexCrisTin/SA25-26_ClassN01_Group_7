@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Phòng - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="css/room-detail.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a href="dashboard.html">DASHBOARD</a></li>
+                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" class="active">PHÒNG NGHỈ</a></li>
+                <li><a href="index.html#contact">LIÊN HỆ</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="userName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="room-detail-wrapper">
+        <div id="roomNotFound" class="empty-state" style="display:none;">
+            <div class="empty-state-icon">🛏️</div>
+            <h3>Không tìm thấy phòng</h3>
+            <p>Phòng bạn yêu cầu không tồn tại hoặc đã bị xóa.</p>
+            <a href="rooms.html" class="auth-btn" style="width:auto; text-decoration:none; padding: 10px 24px;">Quay lại danh sách phòng</a>
+        </div>
+
+        <div id="roomDetail" style="display:none;">
+            <div class="room-detail-layout">
+                <!-- Left: Main content -->
+                <div>
+                    <div class="room-gallery" id="roomGallery">
+                        <div class="room-gallery-main">
+                            <img id="roomMainImage" src="images/room-connecting.jpg" alt="Room Image">
+                        </div>
+                        <div class="room-gallery-thumb">
+                            <img id="roomThumb1" src="images/room-triple.jpg" alt="Room Image">
+                        </div>
+                        <div class="room-gallery-thumb">
+                            <img id="roomThumb2" src="images/room-senior.jpg" alt="Room Image">
+                        </div>
+                        <div class="room-gallery-more">
+                            + <span id="roomMorePhotos">2</span> ảnh khác
+                        </div>
+                    </div>
+
+                    <div class="room-main-info">
+                        <h1 id="roomTitle">Phòng Nghỉ</h1>
+                        <div class="room-main-meta">
+                            <span id="roomAddress">Luxe Hotel, Sapa</span>
+                            <span>•</span>
+                            <span id="roomType">Loại phòng</span>
+                            <span>•</span>
+                            <span id="roomCapacity">Sức chứa</span>
+                        </div>
+                        <div class="room-main-actions">
+                            <span class="info-pill"><strong id="roomShortPrice">Giá linh hoạt</strong></span>
+                            <div class="icon-circle">♡</div>
+                            <div class="icon-circle">⤴</div>
+                        </div>
+                    </div>
+
+                    <div class="room-highlights">
+                        <div class="highlight-card">
+                            <div class="highlight-title" id="hlBedrooms">Phòng ngủ</div>
+                            <div class="highlight-sub">Tiện nghi và ấm cúng</div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="highlight-title" id="hlBathrooms">Phòng tắm</div>
+                            <div class="highlight-sub">Sạch sẽ, hiện đại</div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="highlight-title" id="hlCapacity">Sức chứa</div>
+                            <div class="highlight-sub">Phù hợp gia đình/nhóm</div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="highlight-title" id="hlPets">Chính sách</div>
+                            <div class="highlight-sub">Thông tin vật nuôi, hút thuốc</div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>Mô Tả Căn Phòng</h2>
+                        <p id="roomDescription">
+                            Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.
+                        </p>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>Tiện Nghi Nổi Bật</h2>
+                        <div id="roomAmenities" class="amenities-grid">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>An Toàn & Vệ Sinh</h2>
+                        <div class="amenities-grid">
+                            <div><span class="badge-dot"></span>Dọn phòng hàng ngày</div>
+                            <div><span class="badge-dot"></span>Bình chữa cháy</div>
+                            <div><span class="badge-dot"></span>Báo khói</div>
+                            <div><span class="badge-dot"></span>Khử khuẩn định kỳ</div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h2>Đánh Giá</h2>
+                        <div class="reviews-summary">
+                            <strong>5.0</strong>
+                            <span>•</span>
+                            <span>Đánh giá tuyệt vời từ khách hàng</span>
+                        </div>
+                        <div class="reviews-grid">
+                            <div class="review-card">
+                                <div class="review-author">Khách Ẩn Danh</div>
+                                <div class="review-date">Tháng 12, 2025</div>
+                                <p>Phòng sạch sẽ, nhân viên thân thiện, vị trí trung tâm thuận tiện di chuyển.</p>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-author">Gia Đình Trẻ</div>
+                                <div class="review-date">Tháng 11, 2025</div>
+                                <p>Phù hợp cho gia đình, phòng rộng, view đẹp, bữa sáng ngon.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Sidebar -->
+                <aside>
+                    <div class="sidebar-card">
+                        <div class="sidebar-price" id="sidebarPrice">—</div>
+                        <div class="sidebar-sub">Giá mỗi đêm (đã bao gồm thuế và phí cơ bản)</div>
+                        <div class="sidebar-meta">
+                            Trạng thái: <strong id="sidebarStatus">Đang cập nhật...</strong>
+                        </div>
+                        <button class="sidebar-btn" id="reserveBtn">Đặt phòng ngay</button>
+                        <a href="index.html#contact" class="sidebar-link">Liên hệ tư vấn</a>
+                        <a href="rooms.html" class="sidebar-link">Xem thêm phòng khác</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let currentRoomId = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const params = new URLSearchParams(window.location.search);
+            currentRoomId = params.get('id');
+
+            // Optional auth display
+            const user = AuthManager.getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.username || user.full_name || 'User';
+            } else {
+                const userMenu = document.querySelector('.user-menu');
+                if (userMenu) userMenu.style.display = 'none';
+            }
+
+            if (!currentRoomId) {
+                document.getElementById('roomNotFound').style.display = 'block';
+                return;
+            }
+
+            try {
+                const room = await RoomAPI.getRoom(currentRoomId);
+                renderRoomDetail(room);
+            } catch (error) {
+                console.error('Error loading room detail:', error);
+                document.getElementById('roomNotFound').style.display = 'block';
+            }
+        });
+
+        function renderRoomDetail(room) {
+            if (!room) {
+                document.getElementById('roomNotFound').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('roomDetail').style.display = 'block';
+
+            const title = `Phòng ${room.room_number || ''} - ${room.room_type || 'Phòng Nghỉ'}`;
+            document.title = title + ' - Luxe Hotel';
+            document.getElementById('roomTitle').textContent = title;
+
+            document.getElementById('roomType').textContent = room.room_type || 'Loại phòng';
+            document.getElementById('roomCapacity').textContent = `Sức chứa tối đa ${room.capacity || 'N/A'} người`;
+
+            const priceText = room.price ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm' : 'Liên hệ để biết giá';
+            document.getElementById('roomShortPrice').textContent = priceText;
+            document.getElementById('sidebarPrice').textContent = priceText;
+
+            const statusLabel = room.status || 'available';
+            const statusMap = {
+                available: 'Còn phòng',
+                occupied: 'Đang có khách',
+                maintenance: 'Đang bảo trì',
+                reserved: 'Đã đặt trước'
+            };
+            document.getElementById('sidebarStatus').textContent = statusMap[statusLabel] || statusLabel;
+
+            // Description
+            document.getElementById('roomDescription').textContent =
+                room.description || 'Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.';
+
+            // Highlights
+            document.getElementById('hlBedrooms').textContent = room.room_type || 'Phòng ngủ';
+            document.getElementById('hlBathrooms').textContent = 'Phòng tắm riêng';
+            document.getElementById('hlCapacity').textContent = `Sức chứa ${room.capacity || 'N/A'} người`;
+            document.getElementById('hlPets').textContent = 'Chính sách linh hoạt';
+
+            // Images
+            const imageUrl = room.image_url ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`) : 'images/room-connecting.jpg';
+            document.getElementById('roomMainImage').src = imageUrl;
+            document.getElementById('roomThumb1').src = imageUrl;
+            document.getElementById('roomThumb2').src = imageUrl;
+
+            // Amenities
+            const amenitiesContainer = document.getElementById('roomAmenities');
+            amenitiesContainer.innerHTML = '';
+            let amenities = [];
+            if (room.amenities) {
+                try {
+                    // Cho phép lưu dưới dạng JSON array hoặc chuỗi phân tách bằng dấu phẩy
+                    if (typeof room.amenities === 'string') {
+                        const trimmed = room.amenities.trim();
+                        if (trimmed.startsWith('[')) {
+                            amenities = JSON.parse(trimmed);
+                        } else {
+                            amenities = trimmed.split(',').map(a => a.trim()).filter(Boolean);
+                        }
+                    } else if (Array.isArray(room.amenities)) {
+                        amenities = room.amenities;
+                    }
+                } catch (e) {
+                    console.warn('Cannot parse amenities, fallback to raw text', e);
+                }
+            }
+
+            if (!amenities.length && room.amenities) {
+                amenities = [room.amenities];
+            }
+
+            if (!amenities.length) {
+                amenities = ['Wi-Fi miễn phí', 'Điều hòa không khí', 'TV màn hình phẳng', 'Bữa sáng miễn phí'];
+            }
+
+            amenities.forEach(item => {
+                const div = document.createElement('div');
+                div.innerHTML = '<span class="badge-dot"></span>' + item;
+                amenitiesContainer.appendChild(div);
+            });
+
+            // Reserve button
+            const reserveBtn = document.getElementById('reserveBtn');
+            reserveBtn.addEventListener('click', function() {
+                window.location.href = 'booking.html?roomId=' + encodeURIComponent(room.id);
+            });
+        }
+    </script>
+</body>
+</html>
+
+
