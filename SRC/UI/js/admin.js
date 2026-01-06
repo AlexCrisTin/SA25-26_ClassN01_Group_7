@@ -336,11 +336,46 @@ function viewBookingDetail(bookingId) {
 async function loadStaff() {
     try {
         allStaff = await StaffAPI.getAllStaff();
-        displayStaff(allStaff);
+        filterStaff();
     } catch (error) {
         showNotification('Lỗi khi tải danh sách nhân viên: ' + error.message, 'error');
         document.getElementById('staffTableBody').innerHTML = '<tr><td colspan="8" class="loading">Lỗi khi tải dữ liệu</td></tr>';
     }
+}
+
+function filterStaff() {
+    const searchInput = document.getElementById('staffSearch');
+    if (!searchInput) {
+        displayStaff(allStaff || []);
+        return;
+    }
+
+    const query = searchInput.value.trim().toLowerCase();
+    if (!allStaff || allStaff.length === 0) {
+        displayStaff([]);
+        return;
+    }
+
+    if (!query) {
+        displayStaff(allStaff);
+        return;
+    }
+
+    const filtered = allStaff.filter(s => {
+        const fields = [
+            s.full_name,
+            s.name,
+            s.email,
+            s.phone,
+            s.position,
+            s.role,
+            s.department,
+            s.id
+        ];
+        return fields.some(f => f && String(f).toLowerCase().includes(query));
+    });
+
+    displayStaff(filtered);
 }
 
 function displayStaff(staff) {

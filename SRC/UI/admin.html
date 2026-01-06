@@ -86,7 +86,11 @@
         <div id="staff-tab" class="tab-content">
             <div class="section-header">
                 <h2>Quản Lý Nhân Viên</h2>
-                <button class="btn-primary" onclick="showAddStaffModal()">+ Thêm Nhân Viên</button>
+                
+                <div class="search-bar" style="margin-left: auto;">
+                    <button class="btn-primary" onclick="showAddStaffModal()">+ Thêm Nhân Viên</button>
+                    <input type="text" id="staffSearch" placeholder="Tìm theo tên, email, chức vụ, phòng ban" onkeyup="filterStaff()">
+                </div>
             </div>
 
             <div id="staffTableContainer">
