@@ -42,7 +42,7 @@
                 <div class="hero-content">
                     <p class="hero-subtitle">Thuộc quần thể biệt thự cao cấp</p>    
                     <h1 class="hero-title">Sang trọng & đẳng cấp</h1>
-                    <a href="booking.html" id="heroBookingBtn" style="text-decoration: none;"><button class="explore-btn">ĐẶT PHÒNG NGAY</button></a>
+                    <a href="login.html" id="heroBookingBtn" style="text-decoration: none;"><button class="explore-btn">ĐẶT PHÒNG NGAY</button></a>
                 </div>
             </div>
         </div>
@@ -344,10 +344,26 @@
                 } else {
                     document.getElementById('adminLink').style.display = 'none';
                     document.getElementById('dashboardLink').style.display = 'inline-block';
+                    // Với khách đã đăng nhập (không phải admin), nút Đặt phòng dẫn đến trang rooms
+                    if (heroBookingBtn) heroBookingBtn.setAttribute('href', 'rooms.html');
                 }
             } else {
                 userMenu.style.display = 'none';
                 guestMenu.style.display = 'flex';
+                // Khách chưa đăng nhập: nút Đặt phòng đưa đến trang login
+                if (heroBookingBtn) heroBookingBtn.setAttribute('href', 'login.html');
+            }
+
+            // Đảm bảo khi click nút ĐẶT PHÒNG NGAY sẽ điều hướng đúng theo trạng thái đăng nhập
+            if (heroBookingBtn) {
+                heroBookingBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (AuthManager.isLoggedIn() && !AuthManager.isAdmin()) {
+                        window.location.href = 'rooms.html';
+                    } else {
+                        window.location.href = 'login.html';
+                    }
+                });
             }
         });
     </script>

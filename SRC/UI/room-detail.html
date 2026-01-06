@@ -285,10 +285,10 @@
                 amenitiesContainer.appendChild(div);
             });
 
-            // Reserve button
+            // Reserve button -> luôn yêu cầu đăng nhập trước
             const reserveBtn = document.getElementById('reserveBtn');
             reserveBtn.addEventListener('click', function() {
-                window.location.href = 'booking.html?roomId=' + encodeURIComponent(room.id);
+                window.location.href = 'login.html';
             });
         }
     </script>
