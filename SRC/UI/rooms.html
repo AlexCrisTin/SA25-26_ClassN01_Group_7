@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng Nghỉ - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a href="dashboard.html">DASHBOARD</a></li>
+                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" class="active">PHÒNG NGHỈ</a></li>
+                <li><a href="index.html#contact">LIÊN HỆ</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="userName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero booking-hero">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>Khám Phá Phòng Nghỉ</h1>
+            <p>Danh sách đầy đủ các loại phòng và mức giá hiện có</p>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 40px 20px;">
+        <div class="section-header" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div>
+                <h2 style="margin: 0;">Danh Sách Phòng</h2>
+                <p style="color: #666;">Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.</p>
+            </div>
+            <div class="search-bar" style="min-width: 280px;">
+                <input type="text" id="roomSearch" placeholder="Tìm số phòng, loại phòng, trạng thái..." onkeyup="filterRoomsList()">
+            </div>
+        </div>
+
+        <div id="roomsGrid" class="rooms-grid">
+            <div class="loading">Đang tải danh sách phòng...</div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let allRooms = [];
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Auth optional: nếu có user, hiển thị tên và logout; nếu chưa login, ẩn nút logout
+            const user = AuthManager.getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.username || user.full_name || 'User';
+            } else {
+                const userMenu = document.querySelector('.user-menu');
+                if (userMenu) userMenu.style.display = 'none';
+            }
+
+            await loadRoomsList();
+        });
+
+        async function loadRoomsList() {
+            const grid = document.getElementById('roomsGrid');
+            grid.innerHTML = '<div class="loading">Đang tải danh sách phòng...</div>';
+            try {
+                allRooms = await RoomAPI.getAllRooms();
+                filterRoomsList();
+            } catch (error) {
+                grid.innerHTML = '<div class="loading">Lỗi khi tải dữ liệu phòng: ' + (error.message || error) + '</div>';
+            }
+        }
+
+        function filterRoomsList() {
+            const queryInput = document.getElementById('roomSearch');
+            const query = queryInput ? queryInput.value.trim().toLowerCase() : '';
+
+            let filtered = allRooms || [];
+            if (query) {
+                filtered = filtered.filter(room => {
+                    const fields = [
+                        room.room_number,
+                        room.room_type,
+                        room.status,
+                        room.price,
+                        room.capacity
+                    ];
+                    return fields.some(f => f && String(f).toLowerCase().includes(query));
+                });
+            }
+
+            renderRoomsGrid(filtered);
+        }
+
+        function renderRoomsGrid(rooms) {
+            const grid = document.getElementById('roomsGrid');
+            if (!rooms || rooms.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🛏️</div><h3>Hiện chưa có phòng nào</h3><p>Vui lòng quay lại sau hoặc thử tìm kiếm khác.</p></div>';
+                return;
+            }
+
+            grid.innerHTML = rooms.map(room => {
+                const imageUrl = room.image_url ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`) : null;
+                const statusLabel = room.status || 'available';
+                const statusClass = statusLabel === 'available' ? 'status-available' :
+                                    statusLabel === 'maintenance' ? 'status-maintenance' :
+                                    statusLabel === 'reserved' ? 'status-reserved' : 'status-occupied';
+
+                return `
+                    <div class="room-card">
+                        <div class="room-image">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="Room ${room.room_number}" onerror="this.src='images/room-connecting.jpg';">` : '<div class="no-image">No Image</div>'}
+                            <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="room-info">
+                            <h3>Phòng ${room.room_number || 'N/A'}</h3>
+                            <p class="muted">${room.room_type || 'Loại phòng'}</p>
+                            <p class="price">${room.price ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm' : 'Liên hệ'}</p>
+                            <p class="muted">Sức chứa: ${room.capacity || 'N/A'}</p>
+                            <div class="card-actions">
+                                <a href="booking.html" class="auth-btn" style="text-decoration: none;">Đặt phòng</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
+
