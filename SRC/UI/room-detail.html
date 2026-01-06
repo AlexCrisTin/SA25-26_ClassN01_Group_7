@@ -155,10 +155,43 @@
         </div>
     </div>
 
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="booking-modal">
+        <div class="booking-modal-content">
+            <div class="booking-modal-header">
+                <h2>Đặt Phòng Nhanh</h2>
+                <button class="booking-close" onclick="closeBookingModal()">×</button>
+            </div>
+            <form id="bookingForm">
+                <div class="booking-form-group">
+                    <label for="checkInDate">Ngày nhận phòng</label>
+                    <input type="date" id="checkInDate" required>
+                </div>
+                <div class="booking-form-group">
+                    <label for="checkOutDate">Ngày trả phòng</label>
+                    <input type="date" id="checkOutDate" required>
+                </div>
+                <div class="booking-form-group">
+                    <label for="guestCount">Số lượng khách</label>
+                    <input type="number" id="guestCount" min="1" value="1" required>
+                </div>
+                <div class="booking-form-group">
+                    <label for="specialRequests">Ghi chú đặc biệt (tuỳ chọn)</label>
+                    <textarea id="specialRequests" placeholder="Ví dụ: yêu cầu giường phụ, tầng cao, view đẹp..."></textarea>
+                </div>
+                <div class="booking-modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeBookingModal()">Hủy</button>
+                    <button type="submit" class="sidebar-btn" style="width:auto; padding:9px 22px;">Xác nhận đặt phòng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
         let currentRoomId = null;
+        let currentRoom = null;
 
         document.addEventListener('DOMContentLoaded', async function() {
             const params = new URLSearchParams(window.location.search);
@@ -180,7 +213,13 @@
 
             try {
                 const room = await RoomAPI.getRoom(currentRoomId);
+                currentRoom = room;
                 renderRoomDetail(room);
+
+                const bookingForm = document.getElementById('bookingForm');
+                if (bookingForm) {
+                    bookingForm.addEventListener('submit', handleBookingSubmit);
+                }
             } catch (error) {
                 console.error('Error loading room detail:', error);
                 document.getElementById('roomNotFound').style.display = 'block';
@@ -285,11 +324,90 @@
                 amenitiesContainer.appendChild(div);
             });
 
-            // Reserve button -> luôn yêu cầu đăng nhập trước
+            // Reserve button: nếu chưa đăng nhập thì chuyển tới login, nếu đã đăng nhập thì mở form đặt phòng
             const reserveBtn = document.getElementById('reserveBtn');
             reserveBtn.addEventListener('click', function() {
-                window.location.href = 'login.html';
+                if (!AuthManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                openBookingModal();
             });
+        }
+
+        function openBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            if (!modal) return;
+
+            // Gợi ý ngày nhận/trả phòng mặc định
+            const today = new Date();
+            const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+            const toISO = d => d.toISOString().split('T')[0];
+
+            const checkInInput = document.getElementById('checkInDate');
+            const checkOutInput = document.getElementById('checkOutDate');
+
+            if (checkInInput && !checkInInput.value) {
+                checkInInput.value = toISO(today);
+            }
+            if (checkOutInput && !checkOutInput.value) {
+                checkOutInput.value = toISO(tomorrow);
+            }
+
+            modal.classList.add('open');
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        async function handleBookingSubmit(e) {
+            e.preventDefault();
+
+            if (!AuthManager.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (!currentRoom) {
+                alert('Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
+                return;
+            }
+
+            const checkInDate = document.getElementById('checkInDate').value;
+            const checkOutDate = document.getElementById('checkOutDate').value;
+            const guestCount = parseInt(document.getElementById('guestCount').value || '1', 10);
+            const specialRequests = document.getElementById('specialRequests').value || null;
+
+            if (!checkInDate || !checkOutDate) {
+                alert('Vui lòng chọn ngày nhận và trả phòng.');
+                return;
+            }
+
+            if (new Date(checkOutDate) <= new Date(checkInDate)) {
+                alert('Ngày trả phòng phải sau ngày nhận phòng.');
+                return;
+            }
+
+            const bookingData = {
+                room_id: currentRoom.id,
+                check_in_date: checkInDate,
+                check_out_date: checkOutDate,
+                guests: guestCount,
+                special_requests: specialRequests
+            };
+
+            try {
+                await BookingAPI.createBooking(bookingData);
+                alert('Đặt phòng thành công! Bạn có thể xem lại trong trang Đặt Phòng Của Tôi.');
+                closeBookingModal();
+                window.location.href = 'my-bookings.html';
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                alert('Có lỗi xảy ra khi đặt phòng: ' + (error.message || error));
+            }
         }
     </script>
 </body>
