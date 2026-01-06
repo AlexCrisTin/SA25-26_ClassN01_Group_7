@@ -226,10 +226,28 @@
             document.getElementById('hlPets').textContent = 'Chính sách linh hoạt';
 
             // Images
-            const imageUrl = room.image_url ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`) : 'images/room-connecting.jpg';
-            document.getElementById('roomMainImage').src = imageUrl;
-            document.getElementById('roomThumb1').src = imageUrl;
-            document.getElementById('roomThumb2').src = imageUrl;
+            // Images: dùng ảnh admin upload; nếu chưa có, fallback ảnh mẫu
+            const imageUrl = room.image_url
+                ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`)
+                : 'images/room-connecting.jpg';
+
+            const mainImg = document.getElementById('roomMainImage');
+            const thumb1 = document.getElementById('roomThumb1');
+            const thumb2 = document.getElementById('roomThumb2');
+            const moreEl = document.getElementById('roomMorePhotos');
+
+            mainImg.src = imageUrl;
+            thumb1.src = imageUrl;
+            thumb2.src = imageUrl;
+            mainImg.alt = `Room ${room.room_number || ''}`;
+            thumb1.alt = `Room ${room.room_number || ''}`;
+            thumb2.alt = `Room ${room.room_number || ''}`;
+
+            // Nếu chỉ có 1 ảnh, ẩn phần “+x ảnh khác”
+            if (moreEl && room.image_url) {
+                moreEl.textContent = '0';
+                moreEl.parentElement.style.display = 'none';
+            }
 
             // Amenities
             const amenitiesContainer = document.getElementById('roomAmenities');
