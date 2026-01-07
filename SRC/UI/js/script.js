@@ -298,15 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
    
     
-    // Detail Buttons Handler (Articles)
-    const detailButtons = document.querySelectorAll('.detail-btn');
-    detailButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const articleTitle = this.closest('.article-card').querySelector('h3').textContent;
-            // In a real application, this would navigate to article detail page
-            alert(`Đang mở bài viết: ${articleTitle}`);
-        });
-    });
+
     
     // Contact Button Handler (Spa Section)
     const contactBtn = document.querySelector('.contact-btn');
