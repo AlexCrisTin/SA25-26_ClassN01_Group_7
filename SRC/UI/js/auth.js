@@ -53,13 +53,18 @@ const AuthManager = {
         if (!user) {
             return 'login.html';
         }
-        
+
         // Admin redirects to admin panel
         if (user.role === 'administrator') {
             return 'admin.html';
         }
-        
-        // Other users go to dashboard
+
+        // Receptionist redirects to receptionist panel
+        if (user.role === 'receptionist') {
+            return 'receptionist.html';
+        }
+
+        // Normal users go to dashboard
         return 'dashboard.html';
     },
 

@@ -17,6 +17,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     const user = AuthManager.getCurrentUser();
     document.getElementById('receptionUserName').textContent = user.username || user.full_name || 'Receptionist';
 
+    // Ẩn link ADMIN PANEL nếu không phải admin (chỉ receptionist)
+    if (!AuthManager.isAdmin()) {
+        const adminNav = document.getElementById('navAdmin');
+        if (adminNav) {
+            adminNav.style.display = 'none';
+        }
+    }
+
     await loadBookings();
 });
 
