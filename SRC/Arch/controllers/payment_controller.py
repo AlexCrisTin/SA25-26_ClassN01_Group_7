@@ -13,11 +13,14 @@ class PaymentController:
         #Xử lý POST /api/payments
         data = request.json
         try:
+            user = getattr(request, 'current_user', None)
+            user_id = user.id if user else None
             payment = self.service.process_payment(
                 data.get('booking_id'),
                 data.get('amount'),
                 data.get('payment_method'),
-                data.get('transaction_id')
+                data.get('transaction_id'),
+                user_id
             )
             return self.view.payment_processed(payment)
         except ValueError as e:

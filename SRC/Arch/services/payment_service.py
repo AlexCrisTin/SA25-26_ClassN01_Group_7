@@ -1,5 +1,6 @@
 from repository.payment_repository import PaymentRepository
 from repository.booking_repository import BookingRepository
+from services.wallet_service import WalletService
 
 class PaymentService:
     #Service: Xử lý logic nghiệp vụ cho Payment.
@@ -7,8 +8,9 @@ class PaymentService:
     def __init__(self):
         self.repo = PaymentRepository()
         self.booking_repo = BookingRepository()
+        self.wallet_service = WalletService()
 
-    def process_payment(self, booking_id, amount, payment_method, transaction_id=None):
+    def process_payment(self, booking_id, amount, payment_method, transaction_id=None, user_id=None):
         #Xử lý thanh toán với validation
         if amount <= 0:
             raise ValueError("Invalid Data: Amount must be positive.")
@@ -32,13 +34,33 @@ class PaymentService:
         # Check total payment amount
         existing_payments = self.repo.find_by_booking_id(booking_id)
         total_paid = sum(p.amount for p in existing_payments if p.status == 'completed')
-        if total_paid + amount > booking.total_price:
-            raise ValueError(f"Invalid Data: Payment amount exceeds booking total. Remaining: {booking.total_price - total_paid}")
-        
+        remaining = booking.total_price - total_paid
+        if remaining <= 0:
+            raise ValueError("Invalid Data: Booking has already been fully paid.")
+        if amount > remaining:
+            # Chỉ cho phép thanh toán tối đa bằng phần còn lại
+            amount = remaining
+
+        # Nếu dùng ví (cash trong hệ thống demo này), trừ tiền trong ví trước
+        if payment_method == 'cash' and user_id is not None:
+            # Nếu ví không đủ, báo lỗi rõ ràng
+            wallet = self.wallet_service.get_wallet(user_id)
+            if wallet.balance < amount:
+                raise ValueError("Insufficient wallet balance to complete payment.")
+            # Trừ ví
+            self.wallet_service.deduct(user_id, amount)
+
         # Process payment (giả lập)
         status = 'completed'  # Trong thực tế sẽ gọi payment gateway
-        
-        return self.repo.save(booking_id, amount, payment_method, status, transaction_id)
+
+        payment = self.repo.save(booking_id, amount, payment_method, status, transaction_id)
+
+        # Nếu đã thanh toán đủ sau giao dịch này, tự động chuyển booking sang confirmed
+        new_total_paid = total_paid + amount
+        if new_total_paid >= booking.total_price:
+            self.booking_repo.update(booking_id, status='confirmed')
+
+        return payment
 
     def get_payment_details(self, payment_id):
         #Lấy thông tin payment theo ID

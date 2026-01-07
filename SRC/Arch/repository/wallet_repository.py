@@ -101,6 +101,44 @@ class WalletRepository:
                 cursor.close()
                 connection.close()
 
+    def decrease_balance(self, user_id, amount):
+        """
+        Giảm số dư ví cho user. Đảm bảo không âm.
+        """
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+
+            # Khóa hàng ví để tránh race condition
+            cursor.execute("SELECT balance FROM wallets WHERE user_id = %s FOR UPDATE", (user_id,))
+            row = cursor.fetchone()
+            if not row:
+                raise ValueError("Wallet not found for user.")
+
+            current_balance = float(row[0])
+            amount_value = float(amount)
+            if amount_value <= 0:
+                raise ValueError("Amount must be greater than 0.")
+            if current_balance < amount_value:
+                raise ValueError("Insufficient wallet balance.")
+
+            new_balance = current_balance - amount_value
+            cursor.execute(
+                "UPDATE wallets SET balance = %s WHERE user_id = %s",
+                (new_balance, user_id),
+            )
+            connection.commit()
+            return self.get_by_user_id(user_id)
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error decreasing balance: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+
     def _row_to_wallet(self, row):
         return Wallet(
             row["id"],

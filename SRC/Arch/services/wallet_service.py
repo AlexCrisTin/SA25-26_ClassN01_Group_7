@@ -32,3 +32,16 @@ class WalletService:
         wallet = self.repo.increase_balance(user_id, amount_value)
         return wallet
 
+    def deduct(self, user_id, amount):
+        if not user_id:
+            raise ValueError("User ID is required.")
+        try:
+            amount_value = float(amount)
+        except (TypeError, ValueError):
+            raise ValueError("Amount must be a number.")
+        if amount_value <= 0:
+            raise ValueError("Amount must be greater than 0.")
+
+        wallet = self.repo.decrease_balance(user_id, amount_value)
+        return wallet
+
