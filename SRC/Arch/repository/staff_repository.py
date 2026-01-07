@@ -110,6 +110,27 @@ class StaffRepository:
                 cursor.close()
                 connection.close()
     
+    def find_by_user_id(self, user_id):
+        """Tìm staff theo user_id"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            
+            query = "SELECT * FROM staff WHERE user_id = %s AND is_active = TRUE"
+            cursor.execute(query, (user_id,))
+            row = cursor.fetchone()
+            
+            if row:
+                return self._row_to_staff(row)
+            return None
+        except Error as e:
+            raise ValueError(f"Error finding staff: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
     def update(self, staff_id, **kwargs):
         """Cập nhật thông tin staff"""
         connection = None

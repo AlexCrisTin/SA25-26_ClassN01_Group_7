@@ -206,6 +206,7 @@ class BookingRepository:
             check_in_date,
             float(row['total_price']),
             check_out_date,
-            row['status']
+            row['status'],
+            str(row['room_id']) if row.get('room_id') else None
         )
 
