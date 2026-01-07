@@ -15,7 +15,9 @@ class BookingService:
         self.room_service = RoomService()
         self.payment_service = PaymentService()
 
-    def create_booking(self, guest_name, room_type, check_in_date, total_price=None, check_out_date=None, payment_method=None, payment_amount=None):
+    def create_booking(self, guest_name, room_type, check_in_date, total_price=None,
+                       check_out_date=None, payment_method=None, payment_amount=None,
+                       user_id=None):
         #Tạo booking mới với validation
         #Coordinates reservation: checks room availability, calculates costs, processes payment
         
@@ -60,7 +62,15 @@ class BookingService:
             total_price = room_price * nights
         
         # Create the booking
-        booking = self.repo.save(guest_name, room_type, check_in_date, total_price, check_out_date, status='pending', user_id=user_id)
+        booking = self.repo.save(
+            guest_name,
+            room_type,
+            check_in_date,
+            total_price,
+            check_out_date,
+            status='pending',
+            user_id=user_id
+        )
         
         # Business Logic: Process payment via PaymentService if payment information provided
         if payment_method and payment_amount:

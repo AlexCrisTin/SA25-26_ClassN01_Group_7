@@ -179,7 +179,7 @@
                 </div>
                 <div class="booking-modal-footer">
                     <button type="button" class="btn-secondary" onclick="closeBookingModal()">Hủy</button>
-                    <button type="submit" class="sidebar-btn" style="width:auto; padding:9px 22px;">Xác nhận đặt phòng</button>
+                    <button type="submit" class="sidebar-btn" style="width:auto; padding:9px 22px;">Xác nhận đặt phòng và thanh toán</button>
                 </div>
             </form>
         </div>
@@ -389,19 +389,44 @@
                 return;
             }
 
+            // Lấy tên khách từ user hiện tại
+            const user = AuthManager.getCurrentUser();
+            const guestName = user && (user.full_name || user.username) ? (user.full_name || user.username) : 'Khách';
+
+            // Tính số đêm và tổng tiền (nếu có giá phòng)
+            const checkIn = new Date(checkInDate);
+            const checkOut = new Date(checkOutDate);
+            const nights = Math.max(1, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
+            let totalPrice = null;
+            if (currentRoom.price) {
+                totalPrice = currentRoom.price * nights;
+            }
+
             const bookingData = {
-                room_id: currentRoom.id,
+                // Các field service/backend yêu cầu
+                guest_name: guestName,
+                room_type: currentRoom.room_type || 'standard',
                 check_in_date: checkInDate,
                 check_out_date: checkOutDate,
+                total_price: totalPrice,
+
+                // Thông tin bổ sung (backend hiện tại có thể bỏ qua)
+                room_id: currentRoom.id,
                 guests: guestCount,
                 special_requests: specialRequests
             };
 
             try {
-                await BookingAPI.createBooking(bookingData);
-                alert('Đặt phòng thành công! Bạn có thể xem lại trong trang Đặt Phòng Của Tôi.');
+                // Tạo đặt phòng và chuyển sang trang thanh toán
+                const booking = await BookingAPI.createBooking(bookingData);
+                alert('Đặt phòng thành công! Vui lòng tiếp tục thanh toán để hoàn tất.');
                 closeBookingModal();
-                window.location.href = 'my-bookings.html';
+                if (booking && booking.id) {
+                    window.location.href = `payment.html?bookingId=${booking.id}`;
+                } else {
+                    // Nếu không lấy được mã đặt phòng, quay lại trang Đặt phòng của tôi
+                    window.location.href = 'my-bookings.html';
+                }
             } catch (error) {
                 console.error('Error creating booking:', error);
                 alert('Có lỗi xảy ra khi đặt phòng: ' + (error.message || error));
