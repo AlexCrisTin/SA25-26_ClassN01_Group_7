@@ -380,7 +380,8 @@ DELIMITER ;
 
 -- Insert sample users
 INSERT INTO users (username, email, password, full_name, phone, role) VALUES
-('admin', 'admin@hotel.com', 'admin', 'Administrator', '0123456789', 'administrator');
+('admin', 'admin@hotel.com', 'admin', 'Administrator', '0123456789', 'administrator'),
+('reception', 'reception@hotel.com', 'reception', 'Receptionist', '0987654321', 'receptionist');
 
 -- Insert sample rooms
 INSERT INTO rooms (room_number, room_type, price, status, capacity) VALUES

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load initial data
     loadRooms();
-    loadBookings();
+    // Tab quản lý đặt phòng đã được chuyển sang Receptionist Panel
     loadStaff();
     loadServices();
 

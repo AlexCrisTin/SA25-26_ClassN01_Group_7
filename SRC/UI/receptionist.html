@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist Panel - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="admin.html" class="active">ADMIN PANEL</a></li>
+                <li><a href="receptionist.html">RECEPTIONIST PANEL</a></li>
+                <li><a href="admin-messages.html">CONTACT</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="receptionUserName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Receptionist Panel</h1>
+            <p>Quản lý đặt phòng, check-in, check-out</p>
+        </div>
+
+        <!-- Receptionist Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchReceptionTab('bookings')">Quản Lý Đặt Phòng</button>
+            <button class="tab-btn" onclick="switchReceptionTab('checkin')">Check-in</button>
+            <button class="tab-btn" onclick="switchReceptionTab('checkout')">Check-out</button>
+        </div>
+
+        <!-- Bookings Management Tab (reuse admin bookings UI) -->
+        <div id="reception-bookings-tab" class="tab-content active">
+            <div class="section-header">
+                <h2>Quản Lý Đặt Phòng</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="bookingSearch" placeholder="Tìm kiếm đặt phòng..." onkeyup="filterBookings()">
+                <select id="bookingStatusFilter" onchange="filterBookings()">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="pending">Chờ Xác Nhận</option>
+                    <option value="confirmed">Đã Xác Nhận</option>
+                    <option value="checked_in">Đã Check-in</option>
+                    <option value="checked_out">Đã Check-out</option>
+                    <option value="cancelled">Đã Hủy</option>
+                </select>
+            </div>
+
+            <div id="bookingsTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Khách</th>
+                            <th>Loại Phòng</th>
+                            <th>Ngày Nhận</th>
+                            <th>Ngày Trả</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Check-in Tab -->
+        <div id="reception-checkin-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Xử Lý Check-in</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="checkinBookingSearch" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
+                <button class="btn-primary" onclick="searchCheckinBooking()">Tìm kiếm</button>
+            </div>
+
+            <div id="checkinBookingResult"></div>
+        </div>
+
+        <!-- Check-out Tab -->
+        <div id="reception-checkout-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Xử Lý Check-out</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="checkoutBookingSearch" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
+                <button class="btn-primary" onclick="searchCheckoutBooking()">Tìm kiếm</button>
+            </div>
+
+            <div id="checkoutBookingResult"></div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/receptionist.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+
+

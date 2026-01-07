@@ -17,9 +17,9 @@
                 <span class="logo-text">Luxe</span>
             </div>
             <ul class="nav-menu">
-
                 <li><a href="admin.html" class="active">ADMIN PANEL</a></li>
-                <li><a href="admin-messages.html">Liên hệ khách hàng</a></li>
+                <li><a href="receptionist.html">RECEPTIONIST PANEL</a></li>
+                <li><a href="admin-messages.html">CONTACT</a></li>
             </ul>
             <div class="user-menu">
                 <span id="adminUserName" class="user-name"></span>
@@ -39,7 +39,6 @@
             <button class="tab-btn active" onclick="switchTab('rooms')">Quản Lý Phòng</button>
             <button class="tab-btn" onclick="switchTab('staff')">Quản Lý Nhân Viên</button>
             <button class="tab-btn" onclick="switchTab('services')">Quản Lý Dịch Vụ</button>
-            <button class="tab-btn" onclick="switchTab('bookings')">Quản Lý Đặt Phòng</button>
             <button class="tab-btn" onclick="switchTab('reports')">Báo Cáo & Thống Kê</button>
         </div>
 
@@ -145,46 +144,7 @@
             </div>
         </div>
 
-        <!-- Bookings Management Tab -->
-        <div id="bookings-tab" class="tab-content">
-            <div class="section-header">
-                <h2>Quản Lý Đặt Phòng</h2>
-            </div>
-
-            <div class="search-bar">
-                <input type="text" id="bookingSearch" placeholder="Tìm kiếm đặt phòng..." onkeyup="filterBookings()">
-                <select id="bookingStatusFilter" onchange="filterBookings()">
-                    <option value="all">Tất cả trạng thái</option>
-                    <option value="pending">Chờ Xác Nhận</option>
-                    <option value="confirmed">Đã Xác Nhận</option>
-                    <option value="checked_in">Đã Check-in</option>
-                    <option value="checked_out">Đã Check-out</option>
-                    <option value="cancelled">Đã Hủy</option>
-                </select>
-            </div>
-
-            <div id="bookingsTableContainer">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên Khách</th>
-                            <th>Loại Phòng</th>
-                            <th>Ngày Nhận</th>
-                            <th>Ngày Trả</th>
-                            <th>Tổng Tiền</th>
-                            <th>Trạng Thái</th>
-                            <th>Thao Tác</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookingsTableBody">
-                        <tr>
-                            <td colspan="8" class="loading">Đang tải dữ liệu...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <!-- (Tab quản lý đặt phòng đã chuyển sang Receptionist Panel) -->
 
         <!-- Reports Tab -->
         <div id="reports-tab" class="tab-content">
