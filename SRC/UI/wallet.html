@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ví Của Tôi - Luxe Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">Luxe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">TRANG CHỦ</a></li>
+                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" class="active">VÍ</a></li>
+            </ul>
+            <div class="user-menu">
+                <span id="userName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box" style="max-width: 540px;">
+            <div class="auth-header">
+                <h2>Ví Của Tôi</h2>
+                <p>Quản lý số dư ví để thanh toán nhanh chóng</p>
+            </div>
+
+            <div class="payment-summary" style="margin-bottom: 20px;">
+                <div class="summary-item total">
+                    <span>Số dư hiện tại:</span>
+                    <strong id="walletBalance">—</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Cập nhật lúc:</span>
+                    <strong id="walletUpdatedAt">—</strong>
+                </div>
+            </div>
+
+            <form id="topUpForm" class="auth-form">
+                <div class="form-group">
+                    <label for="topupAmount">Nhập số tiền muốn nạp (VNĐ)</label>
+                    <input type="number" id="topupAmount" min="10000" step="1000" placeholder="Ví dụ: 500000" required>
+                </div>
+                <button type="submit" class="auth-btn" id="topupBtn">Nạp ví</button>
+            </form>
+
+            <div class="info-box" style="margin-top: 20px; background: #f5f7fb; padding: 14px; border-radius: 6px; color: #1e3a5f;">
+                Lưu ý: Đây là ví nội bộ để bạn thanh toán nhanh. Số tiền nạp không liên kết ngân hàng thật trong bản demo.
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!AuthManager.requireAuth()) return;
+
+            const user = AuthManager.getCurrentUser();
+            document.getElementById('userName').textContent = user.username || user.full_name || 'User';
+
+            await loadWallet();
+
+            const topUpForm = document.getElementById('topUpForm');
+            topUpForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const amount = parseFloat(document.getElementById('topupAmount').value);
+                const btn = document.getElementById('topupBtn');
+                if (!amount || amount <= 0) {
+                    showNotification('Số tiền phải lớn hơn 0', 'error');
+                    return;
+                }
+                setLoading(btn, true);
+                try {
+                    await WalletAPI.topUp(amount);
+                    showNotification('Nạp ví thành công!', 'success');
+                    document.getElementById('topUpForm').reset();
+                    await loadWallet();
+                } catch (err) {
+                    showNotification('Lỗi nạp ví: ' + err.message, 'error');
+                } finally {
+                    setLoading(btn, false);
+                }
+            });
+        });
+
+        async function loadWallet() {
+            try {
+                const wallet = await WalletAPI.getMyWallet();
+                document.getElementById('walletBalance').textContent =
+                    wallet.balance.toLocaleString('vi-VN') + ' VNĐ';
+                document.getElementById('walletUpdatedAt').textContent =
+                    wallet.updated_at ? new Date(wallet.updated_at).toLocaleString('vi-VN') : '—';
+            } catch (err) {
+                showNotification('Không tải được ví: ' + err.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -54,6 +54,10 @@
                         <span>Ngày Trả:</span>
                         <strong id="checkOutDate">-</strong>
                     </div>
+                    <div class="summary-item">
+                        <span>Số dư ví của bạn:</span>
+                        <strong id="walletBalance">—</strong>
+                    </div>
                     <div class="summary-item total">
                         <span>Tổng Tiền:</span>
                         <strong id="totalAmount">-</strong>
@@ -177,6 +181,7 @@
         let currentBooking = null;
         let appliedCoupon = null;
         let finalAmount = 0;
+        let currentWallet = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             // Block admin from accessing payment page
@@ -199,6 +204,7 @@
             }
 
             loadBookingDetails(bookingId);
+            loadWalletBalance();
             setupPaymentForm();
         });
 
@@ -370,6 +376,17 @@
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
             return date.toLocaleDateString('vi-VN');
+        }
+
+        async function loadWalletBalance() {
+            try {
+                currentWallet = await WalletAPI.getMyWallet();
+                const balanceText = currentWallet.balance.toLocaleString('vi-VN') + ' VNĐ';
+                document.getElementById('walletBalance').textContent = balanceText;
+            } catch (error) {
+                console.error('Error loading wallet:', error);
+                document.getElementById('walletBalance').textContent = '—';
+            }
         }
 
         window.applyCoupon = applyCoupon;

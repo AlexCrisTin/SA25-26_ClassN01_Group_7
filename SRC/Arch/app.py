@@ -10,6 +10,7 @@ from controllers.coupon_controller import CouponController
 from controllers.checkin_controller import CheckInController
 from controllers.staff_controller import StaffController
 from controllers.report_controller import ReportController
+from controllers.wallet_controller import WalletController
 from middleware.auth import require_auth, require_admin, require_receptionist_or_admin, require_role, optional_auth
 
 app = Flask(__name__)
@@ -70,6 +71,7 @@ coupon_controller = CouponController()
 checkin_controller = CheckInController()
 staff_controller = StaffController()
 report_controller = ReportController()
+wallet_controller = WalletController()
 
 # ========== BOOKING ROUTES ==========
 @app.route('/api/bookings', methods=['POST'])
@@ -293,6 +295,23 @@ def get_report(report_id):
 @require_admin  # Chỉ admin mới xem được báo cáo theo type
 def get_reports_by_type(report_type):
     return report_controller.get_reports_by_type(report_type)
+
+# ========== WALLET ROUTES ==========
+@app.route('/api/wallet', methods=['GET'])
+@require_auth  # User phải đăng nhập để xem ví
+def get_wallet():
+    user = getattr(request, 'current_user', None)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return wallet_controller.get_my_wallet(user.id)
+
+@app.route('/api/wallet/topup', methods=['POST'])
+@require_auth  # User phải đăng nhập để nạp ví
+def top_up_wallet():
+    user = getattr(request, 'current_user', None)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return wallet_controller.top_up(user.id)
 
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=5000)

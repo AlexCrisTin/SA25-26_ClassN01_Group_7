@@ -300,6 +300,16 @@ const CheckInAPI = {
     }
 };
 
+// ========== WALLET API ==========
+const WalletAPI = {
+    getMyWallet: async () => {
+        return await apiCall('/wallet', 'GET', null, true);
+    },
+    topUp: async (amount) => {
+        return await apiCall('/wallet/topup', 'POST', { amount }, true);
+    }
+};
+
 // Export API objects
 window.AuthAPI = AuthAPI;
 window.RoomAPI = RoomAPI;
@@ -311,4 +321,5 @@ window.StaffAPI = StaffAPI;
 window.ReportAPI = ReportAPI;
 window.CouponAPI = CouponAPI;
 window.CheckInAPI = CheckInAPI;
+window.WalletAPI = WalletAPI;
 

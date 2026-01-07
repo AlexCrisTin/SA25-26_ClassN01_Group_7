@@ -248,6 +248,18 @@ CREATE TABLE reports (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- 13. BẢNG WALLETS (Ví người dùng)
+
+CREATE TABLE wallets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL UNIQUE, -- Khóa logic tới users.id hoặc định danh người dùng
+    balance DECIMAL(15, 2) NOT NULL DEFAULT 0 CHECK (balance >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_wallet_user_id (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- Trigger: Cập nhật số lần sử dụng coupon
 DELIMITER //
 CREATE TRIGGER after_coupon_usage_insert
