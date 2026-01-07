@@ -296,14 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // View More Button Handler (Gallery)
-    const viewMoreBtn = document.querySelector('.view-more-btn');
-    if (viewMoreBtn) {
-        viewMoreBtn.addEventListener('click', function() {
-            // In a real application, this would load more images
-            alert('Đang tải thêm hình ảnh...');
-        });
-    }
+   
     
     // Detail Buttons Handler (Articles)
     const detailButtons = document.querySelectorAll('.detail-btn');

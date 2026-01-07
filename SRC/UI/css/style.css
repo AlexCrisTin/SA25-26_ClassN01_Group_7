@@ -862,18 +862,6 @@ html {
     transform: scale(1.08);
 }
 
-.view-more-btn {
-    display: block;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #d4a574 0%, #c89560 100%);
-    color: #fff;
-    border: none;
-    padding: 15px 40px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
 
 .view-more-btn:hover {
     transform: translateY(-2px);
