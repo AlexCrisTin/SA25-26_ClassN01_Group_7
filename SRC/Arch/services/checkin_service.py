@@ -10,7 +10,7 @@ class CheckInService:
         self.room_repo = RoomRepository()
         self.booking_repo = BookingRepository()
 
-    def process_checkin(self, booking_id, room_id, checkin_time, receptionist_id):
+    def process_checkin(self, booking_id, room_id, checkin_time=None, receptionist_id=None, guest_count=1, notes=None):
         #Xử lý check-in với validation
         # Check if booking exists
         booking = self.booking_repo.find_by_id(booking_id)
@@ -40,15 +40,15 @@ class CheckInService:
         if room.room_type != booking.room_type:
             raise ValueError(f"Room type mismatch: Room is {room.room_type}, but booking requires {booking.room_type}.")
         
-        # Update room status
-        room.status = 'occupied'
+        # Update room status to occupied
+        self.room_repo.update(room_id, status='occupied')
         
-        # Update booking status
-        booking.status = 'checked_in'
+        # Update booking status to checked_in and assign room_id
+        self.booking_repo.update(booking_id, status='checked_in', room_id=room_id)
         
-        return self.checkin_repo.save_checkin(booking_id, room_id, checkin_time, receptionist_id)
+        return self.checkin_repo.save_checkin(booking_id, room_id, receptionist_id, guest_count, notes)
 
-    def process_checkout(self, booking_id, checkout_time, total_amount, receptionist_id):
+    def process_checkout(self, booking_id, checkout_time=None, total_amount=None, receptionist_id=None, additional_charges=0, refund_amount=0, notes=None):
         #Xử lý check-out với validation
         # Check if booking exists
         booking = self.booking_repo.find_by_id(booking_id)
@@ -66,15 +66,19 @@ class CheckInService:
         if existing_checkout:
             raise ValueError(f"Booking {booking_id} has already been checked out.")
         
+        # Use booking total_price if total_amount not provided
+        if total_amount is None:
+            total_amount = booking.total_price or 0
+        
         # Update room status to available
         room = self.room_repo.find_by_id(checkin.room_id)
         if room:
-            room.status = 'available'
+            self.room_repo.update(checkin.room_id, status='available')
         
-        # Update booking status
-        booking.status = 'checked_out'
+        # Update booking status to checked_out
+        self.booking_repo.update(booking_id, status='checked_out')
         
-        return self.checkin_repo.save_checkout(booking_id, checkout_time, total_amount, receptionist_id)
+        return self.checkin_repo.save_checkout(booking_id, total_amount, receptionist_id, additional_charges, refund_amount, 'completed', notes)
 
     def get_checkin_details(self, checkin_id):
         #Lấy thông tin check-in theo ID

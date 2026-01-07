@@ -73,16 +73,17 @@ class BookingService:
         )
         
         # Business Logic: Process payment via PaymentService if payment information provided
+        # Note: Payment được xử lý riêng, booking giữ nguyên status 'pending'
+        # Receptionist sẽ xác nhận booking sau khi kiểm tra thanh toán
         if payment_method and payment_amount:
             try:
                 payment = self.payment_service.process_payment(
                     booking.id,
                     payment_amount,
-                    payment_method
+                    payment_method,
+                    user_id=user_id
                 )
-                # Update booking status to confirmed if payment successful
-                if payment and payment.status == 'completed':
-                    booking.status = 'confirmed'
+                # Không tự động confirm - để receptionist xác nhận
             except ValueError as e:
                 # Payment failed, but booking is still created (pending status)
                 # In production, you might want to rollback the booking

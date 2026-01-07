@@ -1,4 +1,5 @@
 from flask import request
+from datetime import datetime
 from services.checkin_service import CheckInService
 from views.checkin_view import CheckInView
 
@@ -16,8 +17,10 @@ class CheckInController:
             checkin = self.service.process_checkin(
                 data.get('booking_id'),
                 data.get('room_id'),
-                data.get('checkin_time'),
-                data.get('receptionist_id')
+                data.get('checkin_time'),  # Optional, repository sẽ tự động lấy timestamp
+                data.get('receptionist_id'),
+                data.get('guest_count', 1),
+                data.get('notes')
             )
             return self.view.checkin_processed(checkin)
         except ValueError as e:
@@ -29,9 +32,12 @@ class CheckInController:
         try:
             checkout = self.service.process_checkout(
                 data.get('booking_id'),
-                data.get('checkout_time'),
+                data.get('checkout_time'),  # Optional, repository sẽ tự động lấy timestamp
                 data.get('total_amount'),
-                data.get('receptionist_id')
+                data.get('receptionist_id'),
+                data.get('additional_charges', 0),
+                data.get('refund_amount', 0),
+                data.get('notes')
             )
             return self.view.checkout_processed(checkout)
         except ValueError as e:

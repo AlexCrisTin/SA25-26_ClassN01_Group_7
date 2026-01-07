@@ -55,10 +55,9 @@ class PaymentService:
 
         payment = self.repo.save(booking_id, amount, payment_method, status, transaction_id)
 
-        # Nếu đã thanh toán đủ sau giao dịch này, tự động chuyển booking sang confirmed
-        new_total_paid = total_paid + amount
-        if new_total_paid >= booking.total_price:
-            self.booking_repo.update(booking_id, status='confirmed')
+        # Không tự động chuyển booking sang confirmed - để receptionist xác nhận
+        # Booking sẽ giữ nguyên trạng thái hiện tại (thường là 'pending')
+        # Receptionist sẽ xác nhận booking sau khi kiểm tra thanh toán
 
         return payment
 
