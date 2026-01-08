@@ -86,66 +86,28 @@
         <div id="reception-checkin-tab" class="tab-content">
             <div class="section-header">
                 <h2>Xử Lý Check-in</h2>
-                <p style="color: #666; font-size: 14px; margin-top: 5px;">Danh sách đặt phòng đã xác nhận, chờ check-in</p>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="checkinBookingSearch" placeholder="Tìm kiếm theo ID, tên khách, loại phòng..." onkeyup="filterCheckinBookings()" />
+                <input type="text" id="checkinBookingSearch" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
+                <button class="btn-primary" onclick="searchCheckinBooking()">Tìm kiếm</button>
             </div>
 
-            <div id="checkinBookingResult">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên Khách</th>
-                            <th>Loại Phòng</th>
-                            <th>Ngày Nhận</th>
-                            <th>Ngày Trả</th>
-                            <th>Tổng Tiền</th>
-                            <th>Thao Tác</th>
-                        </tr>
-                    </thead>
-                    <tbody id="checkinBookingsTableBody">
-                        <tr>
-                            <td colspan="7" class="loading">Đang tải dữ liệu...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <div id="checkinBookingResult"></div>
         </div>
 
         <!-- Check-out Tab -->
         <div id="reception-checkout-tab" class="tab-content">
             <div class="section-header">
                 <h2>Xử Lý Check-out</h2>
-                <p style="color: #666; font-size: 14px; margin-top: 5px;">Danh sách đặt phòng đã check-in, chờ check-out</p>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="checkoutBookingSearch" placeholder="Tìm kiếm theo ID, tên khách, loại phòng..." onkeyup="filterCheckoutBookings()" />
+                <input type="text" id="checkoutBookingSearch" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
+                <button class="btn-primary" onclick="searchCheckoutBooking()">Tìm kiếm</button>
             </div>
 
-            <div id="checkoutBookingResult">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên Khách</th>
-                            <th>Loại Phòng</th>
-                            <th>Ngày Nhận</th>
-                            <th>Ngày Trả</th>
-                            <th>Tổng Tiền</th>
-                            <th>Thao Tác</th>
-                        </tr>
-                    </thead>
-                    <tbody id="checkoutBookingsTableBody">
-                        <tr>
-                            <td colspan="7" class="loading">Đang tải dữ liệu...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <div id="checkoutBookingResult"></div>
         </div>
     </div>
 
