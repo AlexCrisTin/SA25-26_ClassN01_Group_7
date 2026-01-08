@@ -73,6 +73,7 @@ class BookingService:
         )
         
         # Business Logic: Process payment via PaymentService if payment information provided
+        # Note: Payment does NOT automatically confirm booking - receptionist must confirm manually
         if payment_method and payment_amount:
             try:
                 payment = self.payment_service.process_payment(
@@ -80,9 +81,8 @@ class BookingService:
                     payment_amount,
                     payment_method
                 )
-                # Update booking status to confirmed if payment successful
-                if payment and payment.status == 'completed':
-                    booking.status = 'confirmed'
+                # Payment is processed but booking remains 'pending' until receptionist confirms
+                # This allows receptionist to verify booking before confirming
             except ValueError as e:
                 # Payment failed, but booking is still created (pending status)
                 # In production, you might want to rollback the booking
