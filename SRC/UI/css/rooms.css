@@ -1,0 +1,211 @@
+ .rooms-page {
+     padding: 40px 0 60px;
+ }
+
+ .rooms-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+     gap: 24px;
+ }
+
+ .room-list-card {
+     background: #ffffff;
+     border-radius: 18px;
+     box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+     cursor: pointer;
+     transition: transform 0.18s ease, box-shadow 0.18s ease;
+ }
+
+ .room-list-card:hover {
+     transform: translateY(-4px);
+     box-shadow: 0 16px 45px rgba(15, 23, 42, 0.12);
+ }
+
+ .room-card-header {
+     position: relative;
+     background: #e5e7eb;
+     height: 220px;
+ }
+
+ .room-card-header img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     display: block;
+ }
+
+ .room-card-favorite {
+     position: absolute;
+     top: 16px;
+     right: 18px;
+     width: 32px;
+     height: 32px;
+     border-radius: 50%;
+     background: rgba(255, 255, 255, 0.8);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 18px;
+     color: #9ca3af;
+     backdrop-filter: blur(6px);
+ }
+
+ .room-card-favorite span {
+     transform: translateY(-1px);
+ }
+
+ .room-card-dots {
+     position: absolute;
+     bottom: 18px;
+     right: 22px;
+     display: flex;
+     gap: 6px;
+ }
+
+ .room-card-dot {
+     width: 6px;
+     height: 6px;
+     border-radius: 999px;
+     background: #e5e7eb;
+ }
+
+ .room-card-dot.active {
+     width: 14px;
+     background: #9ca3af;
+ }
+
+ .room-card-body {
+     padding: 18px 22px 16px;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 16px;
+ }
+
+ .room-card-main {
+     flex: 1;
+     min-width: 0;
+ }
+
+ .room-card-title {
+     font-size: 16px;
+     font-weight: 600;
+     color: #111827;
+     margin-bottom: 2px;
+ }
+
+ .room-card-subtitle {
+     font-size: 12px;
+     color: #6b7280;
+     white-space: nowrap;
+     text-overflow: ellipsis;
+     overflow: hidden;
+ }
+
+ .room-card-meta {
+     display: flex;
+     align-items: center;
+     gap: 16px;
+     margin-top: 10px;
+     font-size: 12px;
+     color: #4b5563;
+ }
+
+ .room-card-meta-item {
+     display: inline-flex;
+     align-items: center;
+     gap: 4px;
+ }
+
+ .room-card-meta-item span {
+     font-size: 13px;
+ }
+
+ .room-card-footer {
+     padding: 10px 22px 16px;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 12px;
+     border-top: 1px solid #f3f4f6;
+     font-size: 12px;
+     color: #6b7280;
+ }
+
+ .room-card-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 10px;
+ }
+
+ .room-card-tag {
+     padding-right: 10px;
+     border-right: 1px solid #e5e7eb;
+ }
+
+ .room-card-tag:last-child {
+     border-right: none;
+ }
+
+ .room-card-price {
+     font-size: 14px;
+     font-weight: 600;
+     color: #111827;
+     white-space: nowrap;
+ }
+
+ .room-card-arrow {
+     width: 48px;
+     height: 48px;
+     border-radius: 999px;
+     background: #e5e7eb;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin-left: 12px;
+     flex-shrink: 0;
+ }
+
+ .room-card-arrow span {
+     font-size: 20px;
+     transform: translateX(1px);
+ }
+
+ .room-status-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 2px 8px;
+     border-radius: 999px;
+     font-size: 11px;
+     font-weight: 500;
+ }
+
+ .room-status-available {
+     background: #ecfdf3;
+     color: #15803d;
+ }
+
+ .room-status-occupied {
+     background: #fef3c7;
+     color: #92400e;
+ }
+
+ .room-status-maintenance {
+     background: #fef2f2;
+     color: #b91c1c;
+ }
+
+ .room-status-reserved {
+     background: #eff6ff;
+     color: #1d4ed8;
+ }
+
+ @media (max-width: 768px) {
+     .rooms-grid {
+         grid-template-columns: 1fr;
+     }
+ }
+

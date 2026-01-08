@@ -6,6 +6,7 @@
     <title>Phòng Nghỉ - Luxe Hotel</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="css/rooms.css">
 </head>
 <body>
     <!-- Main Navigation -->
@@ -37,7 +38,7 @@
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 20px;">
+    <main class="container rooms-page">
         <div class="section-header" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <div>
                 <h2 style="margin: 0;">Danh Sách Phòng</h2>
@@ -111,29 +112,77 @@
             }
 
             grid.innerHTML = rooms.map(room => {
-                const imageUrl = room.image_url ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`) : null;
-                const statusLabel = room.status || 'available';
-                const statusClass = statusLabel === 'available' ? 'status-available' :
-                                    statusLabel === 'maintenance' ? 'status-maintenance' :
-                                    statusLabel === 'reserved' ? 'status-reserved' : 'status-occupied';
+                const imageUrl = room.image_url
+                    ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`)
+                    : 'images/room-default.jpg';
+
+                const statusLabel = (room.status || 'available').toLowerCase();
+                const statusClass =
+                    statusLabel === 'available' ? 'room-status-available' :
+                    statusLabel === 'maintenance' ? 'room-status-maintenance' :
+                    statusLabel === 'reserved' ? 'room-status-reserved' : 'room-status-occupied';
+
+                const priceText = room.price
+                    ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm'
+                    : 'Liên hệ';
+
+                const capacity = room.capacity || 0;
+                const roomType = room.room_type || 'Loại phòng';
 
                 return `
-                    <div class="room-card" onclick="goToRoomDetail(${room.id})" style="cursor: pointer;">
-                        <div class="room-image">
-                            ${imageUrl ? `<img src="${imageUrl}" alt="Room ${room.room_number}" onerror="this.src='images/room-connecting.jpg';">` : '<div class="no-image">No Image</div>'}
-                            <span class="status-badge ${statusClass}">${statusLabel}</span>
-                        </div>
-                        <div class="room-info">
-                            <h3>Phòng ${room.room_number || 'N/A'}</h3>
-                            <p class="muted">${room.room_type || 'Loại phòng'}</p>
-                            <p class="price">${room.price ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm' : 'Liên hệ'}</p>
-                            <p class="muted">Sức chứa: ${room.capacity || 'N/A'}</p>
-                            <div class="card-actions" onclick="event.stopPropagation();">
-                                <a href="room-detail.html?id=${room.id}" class="auth-btn" style="text-decoration: none; margin-right: 8px;">Xem chi tiết</a>
-                                <a href="login.html" class="outline-btn" style="text-decoration: none;">Đặt phòng</a>
+                    <article class="room-list-card" onclick="goToRoomDetail(${room.id})">
+                        <div class="room-card-header">
+                            <img src="${imageUrl}" alt="Phòng ${room.room_number || ''} ${roomType}"
+                                 onerror="this.src='images/room-connecting.jpg';">
+                            <button class="room-card-favorite" type="button" onclick="event.stopPropagation();">
+                                <span>♡</span>
+                            </button>
+                            <div class="room-card-dots">
+                                <div class="room-card-dot active"></div>
+                                <div class="room-card-dot"></div>
+                                <div class="room-card-dot"></div>
+                                <div class="room-card-dot"></div>
                             </div>
                         </div>
-                    </div>
+                        <div class="room-card-body">
+                            <div class="room-card-main">
+                                <div class="room-card-title">
+                                    Phòng ${room.room_number || 'N/A'} · ${roomType}
+                                </div>
+                                <div class="room-card-subtitle">
+                                    Luxe Hotel · Sapa, Việt Nam
+                                </div>
+                                <div class="room-card-meta">
+                                    <div class="room-card-meta-item">
+                                        <span>🛏️</span>${capacity} khách
+                                    </div>
+                                    <div class="room-card-meta-item">
+                                        <span>📶</span>Wifi miễn phí
+                                    </div>
+                                    <div class="room-card-meta-item">
+                                        <span class="room-status-pill ${statusClass}">${statusLabel}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
+                                <div class="room-card-price">
+                                    ${priceText}
+                                </div>
+                                <div class="room-card-arrow" onclick="event.stopPropagation(); goToRoomDetail(${room.id});">
+                                    <span>➜</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="room-card-footer" onclick="event.stopPropagation();">
+                            <div class="room-card-tags">
+                                <span class="room-card-tag">Phòng cho thuê</span>
+                                <span class="room-card-tag">Thời gian lưu trú linh hoạt</span>
+                            </div>
+                            <a href="${AuthManager.isLoggedIn() ? 'booking.html' : 'login.html'}" class="room-card-price" style="text-decoration:none;">
+                                Đặt phòng
+                            </a>
+                        </div>
+                    </article>
                 `;
             }).join('');
         }
