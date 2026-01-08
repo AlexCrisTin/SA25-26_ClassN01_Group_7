@@ -134,9 +134,6 @@
                         <div class="room-card-header">
                             <img src="${imageUrl}" alt="Phòng ${room.room_number || ''} ${roomType}"
                                  onerror="this.src='images/room-connecting.jpg';">
-                            <button class="room-card-favorite" type="button" onclick="event.stopPropagation();">
-                                <span>♡</span>
-                            </button>
                             <div class="room-card-dots">
                                 <div class="room-card-dot active"></div>
                                 <div class="room-card-dot"></div>
@@ -148,9 +145,6 @@
                             <div class="room-card-main">
                                 <div class="room-card-title">
                                     Phòng ${room.room_number || 'N/A'} · ${roomType}
-                                </div>
-                                <div class="room-card-subtitle">
-                                    Luxe Hotel · Sapa, Việt Nam
                                 </div>
                                 <div class="room-card-meta">
                                     <div class="room-card-meta-item">
