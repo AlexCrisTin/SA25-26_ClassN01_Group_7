@@ -218,14 +218,106 @@ async function processCheckin(bookingId) {
     }
 }
 
-// Placeholder cho check-out (có thể triển khai tương tự sau)
-function searchCheckoutBooking() {
+let currentCheckoutBooking = null;
+
+// Check-out search & processing
+async function searchCheckoutBooking() {
     const keyword = document.getElementById('checkoutBookingSearch').value.trim();
+    const resultDiv = document.getElementById('checkoutBookingResult');
+
     if (!keyword) {
         showNotification('Vui lòng nhập ID đặt phòng hoặc tên khách', 'error');
         return;
     }
-    showNotification('Tính năng check-out chi tiết có thể được bổ sung sau (demo).', 'info');
+
+    resultDiv.innerHTML = '<p class="loading">Đang tìm kiếm đặt phòng...</p>';
+
+    try {
+        const bookings = allBookings && allBookings.length > 0
+            ? allBookings
+            : await BookingAPI.getAllBookings();
+
+        const lower = keyword.toLowerCase();
+        const booking = bookings.find(b =>
+            b.id.toString() === keyword ||
+            (b.guest_name && b.guest_name.toLowerCase().includes(lower))
+        );
+
+        if (!booking) {
+            resultDiv.innerHTML = '<p class="loading">Không tìm thấy đặt phòng phù hợp.</p>';
+            return;
+        }
+
+        if (booking.status !== 'checked_in') {
+            resultDiv.innerHTML = `
+                <p class="loading">
+                    Đặt phòng #${booking.id} hiện đang ở trạng thái 
+                    "<strong>${getBookingStatusText(booking.status)}</strong>".<br>
+                    Chỉ những đặt phòng <strong>Đã Check-in</strong> mới có thể check-out.
+                </p>
+            `;
+            return;
+        }
+
+        currentCheckoutBooking = booking;
+
+        const amount = booking.total_price || 0;
+
+        resultDiv.innerHTML = `
+            <div class="report-card">
+                <h3>Check-out cho đặt phòng #${booking.id} - ${booking.guest_name}</h3>
+                <p>Loại phòng: <strong>${booking.room_type}</strong></p>
+                <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
+                <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
+                <p>Tổng tiền trong hệ thống: <strong>${amount.toLocaleString('vi-VN')} VNĐ</strong></p>
+                <p style="color:#666; font-size:13px; margin-top:8px;">
+                    Hệ thống sẽ dùng số tiền trên làm tổng tiền thanh toán khi check-out.
+                </p>
+                <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px;">
+                    <button class="btn-primary" onclick="processCheckout()">
+                        Thực Hiện Check-out
+                    </button>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error(error);
+        showNotification('Lỗi khi tìm kiếm đặt phòng: ' + error.message, 'error');
+        resultDiv.innerHTML = '<p class="loading">Đã xảy ra lỗi khi tìm kiếm.</p>';
+    }
+}
+
+async function processCheckout() {
+    const resultDiv = document.getElementById('checkoutBookingResult');
+
+    if (!currentCheckoutBooking) {
+        showNotification('Không tìm thấy thông tin đặt phòng để check-out.', 'error');
+        return;
+    }
+
+    const currentUser = AuthManager.getCurrentUser();
+    if (!currentUser) {
+        showNotification('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', 'error');
+        return;
+    }
+
+    resultDiv.innerHTML = '<p class="loading">Đang xử lý check-out...</p>';
+
+    try {
+        await CheckInAPI.processCheckOut({
+            booking_id: currentCheckoutBooking.id,
+            total_amount: currentCheckoutBooking.total_price || 0,
+            receptionist_id: currentUser.id
+        });
+
+        showNotification('Check-out thành công!', 'success');
+        currentCheckoutBooking = null;
+        resultDiv.innerHTML = '';
+        await loadBookings();
+    } catch (error) {
+        showNotification('Lỗi khi check-out: ' + error.message, 'error');
+        resultDiv.innerHTML = '<p class="loading">Đã xảy ra lỗi khi check-out.</p>';
+    }
 }
 
 // Export
@@ -235,5 +327,6 @@ window.updateBookingStatus = updateBookingStatus;
 window.searchCheckinBooking = searchCheckinBooking;
 window.searchCheckoutBooking = searchCheckoutBooking;
 window.processCheckin = processCheckin;
+window.processCheckout = processCheckout;
 
 

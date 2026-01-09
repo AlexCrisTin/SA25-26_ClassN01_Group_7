@@ -96,15 +96,26 @@ class CheckInService:
         if existing_checkout:
             raise ValueError(f"Booking {booking_id} has already been checked out.")
         
-        # Update room status to available
+        # Update room status to available trong database
         room = self.room_repo.find_by_id(checkin.room_id)
         if room:
-            room.status = 'available'
+            self.room_repo.update(room.id, status='available')
         
-        # Update booking status
-        booking.status = 'checked_out'
-        
-        return self.checkin_repo.save_checkout(booking_id, checkout_time, total_amount, receptionist_id)
+        # Update booking status trong database
+        self.booking_repo.update(booking_id, status='checked_out')
+
+        # Đảm bảo receptionist_id hợp lệ với bảng staff (FK constraint)
+        valid_receptionist_id = None
+        if receptionist_id:
+            try:
+                staff = self.staff_repo.find_by_id(receptionist_id)
+                if staff:
+                    valid_receptionist_id = staff.id
+            except Exception:
+                valid_receptionist_id = None
+
+        # Lưu bản ghi checkout; checkout_time do DB tự sinh, total_amount là tổng tiền cuối cùng
+        return self.checkin_repo.save_checkout(booking_id, total_amount, valid_receptionist_id)
 
     def get_checkin_details(self, checkin_id):
         #Lấy thông tin check-in theo ID
