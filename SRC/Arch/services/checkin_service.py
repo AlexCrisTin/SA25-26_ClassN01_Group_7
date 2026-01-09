@@ -1,6 +1,7 @@
 from repository.checkin_repository import CheckInRepository
 from repository.room_repository import RoomRepository
 from repository.booking_repository import BookingRepository
+from repository.staff_repository import StaffRepository
 
 class CheckInService:
     #Service: Xử lý logic nghiệp vụ cho CheckIn/CheckOut.
@@ -9,6 +10,7 @@ class CheckInService:
         self.checkin_repo = CheckInRepository()
         self.room_repo = RoomRepository()
         self.booking_repo = BookingRepository()
+        self.staff_repo = StaffRepository()
     
     def process_checkin(self, booking_id, receptionist_id, room_id=None):
         """
@@ -60,9 +62,21 @@ class CheckInService:
         
         # Update booking status + gán room_id cho booking trong database
         self.booking_repo.update(booking_id, status='checked_in', room_id=room_id)
+
+        # Đảm bảo receptionist_id hợp lệ với bảng staff (FK constraint)
+        valid_receptionist_id = None
+        if receptionist_id:
+            try:
+                # receptionist_id từ frontend là user.id; nếu không khớp staff.id,
+                # ta không gán để tránh lỗi FK (sẽ lưu NULL)
+                staff = self.staff_repo.find_by_id(receptionist_id)
+                if staff:
+                    valid_receptionist_id = staff.id
+            except Exception:
+                valid_receptionist_id = None
         
         # Lưu bản ghi check-in (thời gian checkin do DB tự sinh)
-        return self.checkin_repo.save_checkin(booking_id, room_id, receptionist_id)
+        return self.checkin_repo.save_checkin(booking_id, room_id, valid_receptionist_id)
 
     def process_checkout(self, booking_id, checkout_time, total_amount, receptionist_id):
         #Xử lý check-out với validation
