@@ -9,9 +9,13 @@ class CheckInService:
         self.checkin_repo = CheckInRepository()
         self.room_repo = RoomRepository()
         self.booking_repo = BookingRepository()
-
-    def process_checkin(self, booking_id, room_id, checkin_time, receptionist_id):
-        #Xử lý check-in với validation
+    
+    def process_checkin(self, booking_id, receptionist_id, room_id=None):
+        """
+        Xử lý check-in với validation.
+        Nếu không truyền room_id, hệ thống sẽ tự động chọn một phòng trống phù hợp
+        với loại phòng đã đặt (booking.room_type).
+        """
         # Check if booking exists
         booking = self.booking_repo.find_by_id(booking_id)
         if not booking:
@@ -26,10 +30,21 @@ class CheckInService:
         if existing_checkin:
             raise ValueError(f"Booking {booking_id} has already been checked in.")
         
-        # Check if room is available
-        room = self.room_repo.find_by_id(room_id)
-        if not room:
-            raise ValueError(f"Room with ID {room_id} not found.")
+        # Tự động chọn phòng trống nếu room_id không được truyền lên
+        if room_id is None:
+            rooms_by_type = self.room_repo.find_by_type(booking.room_type)
+            available_rooms = [r for r in rooms_by_type if r.status in ['available', 'reserved']]
+            
+            if not available_rooms:
+                raise ValueError(f"No available rooms of type '{booking.room_type}' for check-in.")
+            
+            # Chọn phòng đầu tiên phù hợp
+            room = available_rooms[0]
+            room_id = room.id
+        else:
+            room = self.room_repo.find_by_id(room_id)
+            if not room:
+                raise ValueError(f"Room with ID {room_id} not found.")
         
         # Validate room status
         valid_statuses = ['available', 'reserved']
@@ -40,13 +55,14 @@ class CheckInService:
         if room.room_type != booking.room_type:
             raise ValueError(f"Room type mismatch: Room is {room.room_type}, but booking requires {booking.room_type}.")
         
-        # Update room status
-        room.status = 'occupied'
+        # Update room status trong database
+        self.room_repo.update(room_id, status='occupied')
         
-        # Update booking status
-        booking.status = 'checked_in'
+        # Update booking status + gán room_id cho booking trong database
+        self.booking_repo.update(booking_id, status='checked_in', room_id=room_id)
         
-        return self.checkin_repo.save_checkin(booking_id, room_id, checkin_time, receptionist_id)
+        # Lưu bản ghi check-in (thời gian checkin do DB tự sinh)
+        return self.checkin_repo.save_checkin(booking_id, room_id, receptionist_id)
 
     def process_checkout(self, booking_id, checkout_time, total_amount, receptionist_id):
         #Xử lý check-out với validation

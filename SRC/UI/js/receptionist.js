@@ -124,7 +124,7 @@ async function updateBookingStatus(bookingId, status) {
     }
 }
 
-// Check-in search & processing
+// Check-in search & processing (auto-assign room)
 async function searchCheckinBooking() {
     const keyword = document.getElementById('checkinBookingSearch').value.trim();
     const resultDiv = document.getElementById('checkinBookingResult');
@@ -164,7 +164,7 @@ async function searchCheckinBooking() {
             return;
         }
 
-        // Hiển thị thẻ thông tin booking kèm form nhập room_id để check-in
+        // Hiển thị thẻ thông tin booking với nút check-in tự động (không cần nhập room_id)
         resultDiv.innerHTML = `
             <div class="report-card">
                 <h3>Đặt phòng #${booking.id} - ${booking.guest_name}</h3>
@@ -172,20 +172,12 @@ async function searchCheckinBooking() {
                 <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
                 <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
                 <p>Tổng tiền: <strong>${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</strong></p>
+                <p style="color: #666; font-size: 13px; margin-top: 10px;">
+                    Hệ thống sẽ tự động chọn một phòng trống phù hợp với loại phòng 
+                    <strong>${booking.room_type}</strong> cho khách.
+                </p>
 
-                <div style="margin-top: 15px;">
-                    <label for="checkinRoomIdInput" style="display:block; font-size:13px; margin-bottom:4px;">
-                        ID phòng để check-in (đã được gán cho khách)
-                    </label>
-                    <input 
-                        type="number" 
-                        id="checkinRoomIdInput" 
-                        placeholder="Nhập ID phòng, ví dụ: 1" 
-                        style="width:100%; padding:8px 10px; border:1px solid #d1d5db; border-radius:6px; font-size:13px;"
-                    >
-                </div>
-
-                <div style="margin-top: 15px; display:flex; gap:10px; justify-content:flex-end;">
+                <div style="margin-top: 20px; display:flex; gap:10px; justify-content:flex-end;">
                     <button class="btn-primary" onclick="processCheckin(${booking.id})">
                         Thực Hiện Check-in
                     </button>
@@ -200,39 +192,29 @@ async function searchCheckinBooking() {
 }
 
 async function processCheckin(bookingId) {
-    const roomIdInput = document.getElementById('checkinRoomIdInput');
     const resultDiv = document.getElementById('checkinBookingResult');
-
-    if (!roomIdInput) {
-        showNotification('Không tìm thấy ô nhập ID phòng.', 'error');
-        return;
-    }
-
-    const roomId = roomIdInput.value.trim();
-    if (!roomId) {
-        showNotification('Vui lòng nhập ID phòng để check-in.', 'error');
-        return;
-    }
-
     const currentUser = AuthManager.getCurrentUser();
+
     if (!currentUser) {
         showNotification('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', 'error');
         return;
     }
 
+    resultDiv.innerHTML = '<p class="loading">Đang xử lý check-in...</p>';
+
     try {
+        // Không cần room_id: backend tự động chọn phòng trống phù hợp
         await CheckInAPI.processCheckIn({
             booking_id: bookingId,
-            room_id: parseInt(roomId, 10),
-            checkin_time: new Date().toISOString(),
             receptionist_id: currentUser.id
         });
 
-        showNotification('Check-in thành công!', 'success');
+        showNotification('Check-in thành công! Hệ thống đã tự động assign phòng.', 'success');
         resultDiv.innerHTML = '';
         await loadBookings(); // Cập nhật lại danh sách đặt phòng và trạng thái
     } catch (error) {
         showNotification('Lỗi khi check-in: ' + error.message, 'error');
+        resultDiv.innerHTML = '<p class="loading">Đã xảy ra lỗi khi check-in.</p>';
     }
 }
 

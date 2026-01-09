@@ -65,6 +65,21 @@
                 </div>
 
                 <form id="paymentForm" class="auth-form">
+                    <!-- Payment Method -->
+                    <div class="form-group">
+                        <label>Phương Thức Thanh Toán</label>
+                        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="radio" name="paymentMethod" value="wallet" checked>
+                                <span>Thanh toán bằng ví (trừ vào số dư ngay)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="radio" name="paymentMethod" value="cash">
+                                <span>Thanh toán tiền mặt tại quầy (bỏ qua bước trừ tiền ví)</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Coupon Code (Optional) -->
                     <div class="form-group">
                         <label>Mã Giảm Giá (Tùy chọn)</label>
@@ -166,31 +181,43 @@
         }
 
         function setupPaymentForm() {
-            // Form submission - mặc định dùng phương thức 'cash' (thanh toán tại quầy hoặc từ ví)
+            // Form submission - cho phép chọn: thanh toán bằng ví hoặc tiền mặt tại quầy
             document.getElementById('paymentForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                const paymentMethod = 'cash';
+                const selectedMethodInput = document.querySelector('input[name="paymentMethod"]:checked');
+                const selectedMethod = selectedMethodInput ? selectedMethodInput.value : 'wallet';
                 const submitBtn = document.getElementById('submitPaymentBtn');
 
                 setLoading(submitBtn, true);
 
                 try {
-                    const paymentData = {
-                        booking_id: currentBooking.id,
-                        amount: finalAmount,
-                        payment_method: paymentMethod
-                    };
+                    if (selectedMethod === 'wallet') {
+                        // Thanh toán bằng ví: gọi API payment với phương thức 'cash' (ví nội bộ)
+                        const paymentData = {
+                            booking_id: currentBooking.id,
+                            amount: finalAmount,
+                            payment_method: 'cash'
+                        };
 
-                    const payment = await PaymentAPI.processPayment(paymentData);
+                        const payment = await PaymentAPI.processPayment(paymentData);
 
-                    // Show success
-                    document.getElementById('paymentFormContainer').style.display = 'none';
-                    document.getElementById('paymentSuccess').style.display = 'block';
-                    document.getElementById('paymentId').textContent = payment.id || 'N/A';
-                    document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
+                        // Show success
+                        document.getElementById('paymentFormContainer').style.display = 'none';
+                        document.getElementById('paymentSuccess').style.display = 'block';
+                        document.getElementById('paymentId').textContent = payment.id || 'N/A';
+                        document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
 
-                    showNotification('Thanh toán thành công!', 'success');
+                        showNotification('Thanh toán bằng ví thành công!', 'success');
+                    } else {
+                        // Thanh toán tiền mặt: bỏ qua bước trừ tiền ví / gọi API
+                        document.getElementById('paymentFormContainer').style.display = 'none';
+                        document.getElementById('paymentSuccess').style.display = 'block';
+                        document.getElementById('paymentId').textContent = 'CASH-' + currentBooking.id;
+                        document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
+
+                        showNotification('Đã ghi nhận thanh toán tiền mặt. Vui lòng thanh toán tại quầy khi nhận phòng.', 'success');
+                    }
                 } catch (error) {
                     const msg = error.message || '';
                     if (msg.includes('Booking has already been fully paid')) {

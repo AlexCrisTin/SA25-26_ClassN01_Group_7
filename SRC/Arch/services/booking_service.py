@@ -61,7 +61,7 @@ class BookingService:
                 nights = 1
             total_price = room_price * nights
         
-        # Create the booking
+        # Create the booking (tạm ở trạng thái pending)
         booking = self.repo.save(
             guest_name,
             room_type,
@@ -72,21 +72,24 @@ class BookingService:
             user_id=user_id
         )
         
-        # Business Logic: Process payment via PaymentService if payment information provided
-        # Note: Payment does NOT automatically confirm booking - receptionist must confirm manually
+        # Business Logic: Process payment via PaymentService nếu có thông tin thanh toán
+        # Lưu ý: Nếu thanh toán thất bại (ví không đủ tiền, lỗi payment gateway, ...),
+        # booking sẽ bị hủy và lỗi được trả về cho client.
         if payment_method and payment_amount:
             try:
-                payment = self.payment_service.process_payment(
+                self.payment_service.process_payment(
                     booking.id,
                     payment_amount,
-                    payment_method
+                    payment_method,
+                    user_id=user_id
                 )
-                # Payment is processed but booking remains 'pending' until receptionist confirms
-                # This allows receptionist to verify booking before confirming
+                # Payment được xử lý nhưng booking vẫn 'pending' cho đến khi lễ tân xác nhận
             except ValueError as e:
-                # Payment failed, but booking is still created (pending status)
-                # In production, you might want to rollback the booking
-                pass
+                # Thanh toán lỗi -> hủy booking vừa tạo và đẩy lỗi ra ngoài
+                try:
+                    self.repo.delete(booking.id)
+                finally:
+                    raise
         
         return booking
 
