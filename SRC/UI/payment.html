@@ -126,7 +126,8 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        let currentBooking = null;
+        let currentBooking = null;      // Khi thanh toán cho booking đã tồn tại
+        let bookingDraft = null;        // Khi thanh toán trước rồi mới tạo booking
         let appliedCoupon = null;
         let finalAmount = 0;
         let currentWallet = null;
@@ -141,19 +142,24 @@
                 return;
             }
             
-            // Get booking ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const bookingId = urlParams.get('bookingId');
+            const mode = urlParams.get('mode'); // mode=draft khi đi từ room-detail
 
-            if (!bookingId) {
+            if (bookingId) {
+                // Thanh toán cho booking đã tồn tại
+                loadBookingDetails(bookingId);
+                loadWalletBalance();
+                setupPaymentForm();
+            } else if (mode === 'draft') {
+                // Thanh toán trước rồi mới tạo booking
+                loadDraftBooking();
+                loadWalletBalance();
+                setupPaymentForm();
+            } else {
                 showNotification('Không tìm thấy thông tin đặt phòng', 'error');
-                setTimeout(() => window.location.href = 'my-bookings.html', 2000);
-                return;
+                setTimeout(() => window.location.href = 'dashboard.html', 2000);
             }
-
-            loadBookingDetails(bookingId);
-            loadWalletBalance();
-            setupPaymentForm();
         });
 
         async function loadBookingDetails(bookingId) {
@@ -180,6 +186,34 @@
             }
         }
 
+        function loadDraftBooking() {
+            try {
+                const draftStr = localStorage.getItem('pendingBookingDraft');
+                if (!draftStr) {
+                    throw new Error('Không tìm thấy dữ liệu đặt phòng tạm.');
+                }
+
+                bookingDraft = JSON.parse(draftStr);
+
+                const user = AuthManager.getCurrentUser();
+                const guestName = user && (user.full_name || user.username) ? (user.full_name || user.username) : (bookingDraft.guest_name || 'Khách');
+
+                document.getElementById('bookingId').textContent = '(chưa tạo)';
+                document.getElementById('guestName').textContent = guestName;
+                document.getElementById('roomType').textContent = bookingDraft.room_type || 'Phòng';
+                document.getElementById('checkInDate').textContent = formatDate(bookingDraft.check_in_date);
+                document.getElementById('checkOutDate').textContent = formatDate(bookingDraft.check_out_date);
+
+                finalAmount = bookingDraft.total_price || 0;
+                document.getElementById('totalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                document.getElementById('subtotalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                document.getElementById('finalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+            } catch (error) {
+                showNotification('Lỗi khi tải thông tin đặt phòng tạm: ' + error.message, 'error');
+                setTimeout(() => window.location.href = 'rooms.html', 2000);
+            }
+        }
+
         function setupPaymentForm() {
             // Form submission - cho phép chọn: thanh toán bằng ví hoặc tiền mặt tại quầy
             document.getElementById('paymentForm').addEventListener('submit', async function(e) {
@@ -193,35 +227,68 @@
 
                 try {
                     if (selectedMethod === 'wallet') {
-                        // Thanh toán bằng ví: gọi API payment với phương thức 'cash' (ví nội bộ)
-                        const paymentData = {
-                            booking_id: currentBooking.id,
-                            amount: finalAmount,
-                            payment_method: 'cash'
-                        };
+                        if (currentBooking) {
+                            // Thanh toán ví cho booking đã tồn tại
+                            const paymentData = {
+                                booking_id: currentBooking.id,
+                                amount: finalAmount,
+                                payment_method: 'cash'
+                            };
 
-                        const payment = await PaymentAPI.processPayment(paymentData);
+                            const payment = await PaymentAPI.processPayment(paymentData);
 
-                        // Show success
-                        document.getElementById('paymentFormContainer').style.display = 'none';
-                        document.getElementById('paymentSuccess').style.display = 'block';
-                        document.getElementById('paymentId').textContent = payment.id || 'N/A';
-                        document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
+                            document.getElementById('paymentFormContainer').style.display = 'none';
+                            document.getElementById('paymentSuccess').style.display = 'block';
+                            document.getElementById('paymentId').textContent = payment.id || 'N/A';
+                            document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
 
-                        showNotification('Thanh toán bằng ví thành công!', 'success');
+                            showNotification('Thanh toán bằng ví thành công!', 'success');
+                        } else if (bookingDraft) {
+                            // Thanh toán ví trước, tạo booking sau (gọi createBooking với payment info)
+                            const data = {
+                                ...bookingDraft,
+                                payment_method: 'cash',
+                                payment_amount: finalAmount
+                            };
+
+                            const booking = await BookingAPI.createBooking(data);
+                            // Nếu tạo thành công, xem như đã thanh toán vì backend đã trừ ví
+                            document.getElementById('paymentFormContainer').style.display = 'none';
+                            document.getElementById('paymentSuccess').style.display = 'block';
+                            document.getElementById('paymentId').textContent = 'PAY-' + booking.id;
+                            document.getElementById('confirmedBookingId').textContent = '#' + booking.id;
+
+                            // Xóa draft
+                            localStorage.removeItem('pendingBookingDraft');
+
+                            showNotification('Đặt phòng và thanh toán bằng ví thành công!', 'success');
+                        }
                     } else {
-                        // Thanh toán tiền mặt: bỏ qua bước trừ tiền ví / gọi API
-                        document.getElementById('paymentFormContainer').style.display = 'none';
-                        document.getElementById('paymentSuccess').style.display = 'block';
-                        document.getElementById('paymentId').textContent = 'CASH-' + currentBooking.id;
-                        document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
+                        // Thanh toán tiền mặt: chỉ tạo booking, không trừ ví
+                        if (currentBooking) {
+                            // Đang thanh toán tiền mặt cho booking đã tồn tại
+                            document.getElementById('paymentFormContainer').style.display = 'none';
+                            document.getElementById('paymentSuccess').style.display = 'block';
+                            document.getElementById('paymentId').textContent = 'CASH-' + currentBooking.id;
+                            document.getElementById('confirmedBookingId').textContent = '#' + currentBooking.id;
 
-                        showNotification('Đã ghi nhận thanh toán tiền mặt. Vui lòng thanh toán tại quầy khi nhận phòng.', 'success');
+                            showNotification('Đã ghi nhận thanh toán tiền mặt. Vui lòng thanh toán tại quầy khi nhận phòng.', 'success');
+                        } else if (bookingDraft) {
+                            const booking = await BookingAPI.createBooking(bookingDraft);
+
+                            document.getElementById('paymentFormContainer').style.display = 'none';
+                            document.getElementById('paymentSuccess').style.display = 'block';
+                            document.getElementById('paymentId').textContent = 'CASH-' + booking.id;
+                            document.getElementById('confirmedBookingId').textContent = '#' + booking.id;
+
+                            localStorage.removeItem('pendingBookingDraft');
+
+                            showNotification('Đặt phòng thành công. Vui lòng thanh toán tiền mặt tại quầy khi nhận phòng.', 'success');
+                        }
                     }
                 } catch (error) {
                     const msg = error.message || '';
                     if (msg.includes('Booking has already been fully paid')) {
-                        // Nếu booking đã được thanh toán trước đó, coi như thành công và quay lại dashboard
                         showNotification('Đặt phòng này đã được thanh toán trước đó.', 'success');
                         setTimeout(() => {
                             window.location.href = 'dashboard.html';

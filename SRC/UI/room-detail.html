@@ -403,34 +403,26 @@
                 totalPrice = currentRoom.price * nights;
             }
 
-            const bookingData = {
-                // Các field service/backend yêu cầu
+            const bookingDraft = {
                 guest_name: guestName,
                 room_type: currentRoom.room_type || 'standard',
                 check_in_date: checkInDate,
                 check_out_date: checkOutDate,
                 total_price: totalPrice,
-
-                // Thông tin bổ sung (backend hiện tại có thể bỏ qua)
                 room_id: currentRoom.id,
                 guests: guestCount,
                 special_requests: specialRequests
             };
 
             try {
-                // Tạo đặt phòng và chuyển sang trang thanh toán
-                const booking = await BookingAPI.createBooking(bookingData);
-                alert('Đặt phòng thành công! Vui lòng tiếp tục thanh toán để hoàn tất.');
+                // Lưu tạm thông tin đặt phòng để xử lý thanh toán trước
+                localStorage.setItem('pendingBookingDraft', JSON.stringify(bookingDraft));
                 closeBookingModal();
-                if (booking && booking.id) {
-                    window.location.href = `payment.html?bookingId=${booking.id}`;
-                } else {
-                    // Nếu không lấy được mã đặt phòng, quay lại trang Đặt phòng của tôi
-                    window.location.href = 'my-bookings.html';
-                }
+                // Chuyển sang trang thanh toán ở chế độ draft (chưa tạo booking trong DB)
+                window.location.href = 'payment.html?mode=draft';
             } catch (error) {
-                console.error('Error creating booking:', error);
-                alert('Có lỗi xảy ra khi đặt phòng: ' + (error.message || error));
+                console.error('Error preparing booking draft:', error);
+                alert('Có lỗi xảy ra khi chuẩn bị đặt phòng: ' + (error.message || error));
             }
         }
     </script>
