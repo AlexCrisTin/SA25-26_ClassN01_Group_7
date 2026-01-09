@@ -6,6 +6,62 @@
     <title>Đặt Phòng Của Tôi - Luxe Hotel</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/auth.css">
+    <style>
+        .cancel-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .cancel-modal {
+            background: #fff;
+            max-width: 480px;
+            width: 90%;
+            border-radius: 12px;
+            padding: 20px 22px 18px;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+        }
+
+        .cancel-modal h2 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            color: #1e3a5f;
+        }
+
+        .cancel-modal p {
+            font-size: 13px;
+            color: #4b5563;
+            margin: 0 0 10px;
+        }
+
+        .cancel-modal textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-size: 13px;
+            resize: vertical;
+            margin-top: 4px;
+        }
+
+        .cancel-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .cancel-modal-error {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+    </style>
 </head>
 <body>
     <!-- Main Navigation -->
@@ -59,10 +115,31 @@
         </div>
     </div>
 
+    <!-- Cancel Booking Modal -->
+    <div id="cancelModal" class="cancel-modal-overlay">
+        <div class="cancel-modal">
+            <h2>Hủy Đặt Phòng</h2>
+            <p>Vui lòng cho chúng tôi biết lý do hủy phòng. Lưu ý: tiền đặt cọc (nếu có) sẽ không được hoàn lại.</p>
+            <label style="font-size: 13px; font-weight: 500; color:#374151; display:block; margin-bottom:4px;">
+                Lý do hủy phòng
+            </label>
+            <textarea id="cancelReasonInput" placeholder="Ví dụ: thay đổi kế hoạch, đặt nhầm ngày, tìm được chỗ khác phù hợp hơn..."></textarea>
+            <div id="cancelModalError" class="cancel-modal-error"></div>
+            <p style="font-size:12px; color:#9ca3af; margin-top:8px;">
+                Khi xác nhận hủy, đặt phòng sẽ chuyển sang trạng thái <strong>Đã Hủy</strong> và tiền đặt cọc (nếu có) sẽ bị khấu trừ theo chính sách khách sạn.
+            </p>
+            <div class="cancel-modal-footer">
+                <button class="action-btn btn-view" type="button" onclick="closeCancelModal()">Quay lại</button>
+                <button class="action-btn btn-cancel" type="button" onclick="confirmCancelBooking()">Xác nhận hủy</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
         let allBookings = [];
+        let pendingCancelBookingId = null;
 
         document.addEventListener('DOMContentLoaded', async function() {
             // Check authentication
@@ -202,19 +279,49 @@
         }
 
         async function cancelBooking(bookingId) {
-            if (!confirm('Bạn có chắc chắn muốn hủy đặt phòng này? Hành động này không thể hoàn tác.')) {
+            // Mở modal yêu cầu lý do hủy
+            pendingCancelBookingId = bookingId;
+            const modal = document.getElementById('cancelModal');
+            const reasonInput = document.getElementById('cancelReasonInput');
+            const errorDiv = document.getElementById('cancelModalError');
+
+            if (reasonInput) reasonInput.value = '';
+            if (errorDiv) errorDiv.textContent = '';
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeCancelModal() {
+            const modal = document.getElementById('cancelModal');
+            if (modal) modal.style.display = 'none';
+            pendingCancelBookingId = null;
+        }
+
+        async function confirmCancelBooking() {
+            const reasonInput = document.getElementById('cancelReasonInput');
+            const errorDiv = document.getElementById('cancelModalError');
+
+            if (!pendingCancelBookingId) {
+                closeCancelModal();
+                return;
+            }
+
+            const reason = reasonInput ? reasonInput.value.trim() : '';
+            if (!reason) {
+                if (errorDiv) {
+                    errorDiv.textContent = 'Vui lòng nhập lý do hủy phòng.';
+                }
                 return;
             }
 
             try {
                 showNotification('Đang hủy đặt phòng...', 'info');
-                await BookingAPI.cancelBooking(bookingId);
-                showNotification('Hủy đặt phòng thành công!', 'success');
-                
-                // Reload bookings
+                // Backend hiện chưa nhận lý do hủy, nên chỉ gửi bookingId
+                await BookingAPI.cancelBooking(pendingCancelBookingId);
+                showNotification('Hủy đặt phòng thành công! Tiền đặt cọc (nếu có) sẽ không được hoàn lại.', 'success');
+                closeCancelModal();
                 setTimeout(() => {
                     loadBookings();
-                }, 1000);
+                }, 800);
             } catch (error) {
                 showNotification('Lỗi khi hủy đặt phòng: ' + error.message, 'error');
             }
@@ -223,9 +330,9 @@
         window.viewBooking = viewBooking;
         window.editBooking = editBooking;
         window.cancelBooking = cancelBooking;
+        window.closeCancelModal = closeCancelModal;
+        window.confirmCancelBooking = confirmCancelBooking;
     </script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
     <script>
         // Block admin from accessing my-bookings page
         document.addEventListener('DOMContentLoaded', function() {
