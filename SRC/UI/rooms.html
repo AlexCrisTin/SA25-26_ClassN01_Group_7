@@ -30,27 +30,38 @@
         </div>
     </nav>
 
-    <header class="hero booking-hero">
-        <div class="overlay"></div>
-        <div class="hero-content">
-            <h1>Khám Phá Phòng Nghỉ</h1>
-            <p>Danh sách đầy đủ các loại phòng và mức giá hiện có</p>
+    <header class="rooms-hero">
+        <div class="container">
+            <div class="rooms-hero-content">
+                <div class="rooms-hero-text">
+                    <span class="rooms-hero-tag">Khám phá</span>
+                    <h1>Khám Phá Phòng Nghỉ</h1>
+                    <p>Danh sách đầy đủ các loại phòng, giá và tình trạng sẵn sàng cho chuyến nghỉ dưỡng của bạn.</p>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container rooms-page">
-        <div class="section-header" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
-            <div>
-                <h2 style="margin: 0;">Danh Sách Phòng</h2>
-                <p style="color: #666;">Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.</p>
+    <main class="rooms-page">
+        <div class="container">
+            <div class="rooms-header">
+                <div class="rooms-header-text">
+                    <h2>Danh Sách Phòng</h2>
+                    <p>Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.</p>
+                </div>
+                <div class="rooms-header-search">
+                    <input
+                        type="text"
+                        id="roomSearch"
+                        placeholder="Tìm số phòng, loại phòng, trạng thái..."
+                        onkeyup="filterRoomsList()"
+                    >
+                </div>
             </div>
-            <div class="search-bar" style="min-width: 280px;">
-                <input type="text" id="roomSearch" placeholder="Tìm số phòng, loại phòng, trạng thái..." onkeyup="filterRoomsList()">
-            </div>
-        </div>
 
-        <div id="roomsGrid" class="rooms-grid">
-            <div class="loading">Đang tải danh sách phòng...</div>
+            <div id="roomsGrid" class="rooms-grid">
+                <div class="loading">Đang tải danh sách phòng...</div>
+            </div>
         </div>
     </main>
 

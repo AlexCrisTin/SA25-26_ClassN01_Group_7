@@ -1,5 +1,100 @@
+ .rooms-hero {
+     background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
+     border-bottom: 1px solid #e5e7eb;
+     padding: 40px 0 30px;
+ }
+
+ .rooms-hero-content {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start;
+     gap: 32px;
+     flex-wrap: wrap;
+ }
+
+ .rooms-hero-text h1 {
+     font-size: 32px;
+     margin-bottom: 8px;
+     color: #111827;
+ }
+
+ .rooms-hero-text p {
+     font-size: 14px;
+     color: #6b7280;
+     max-width: 520px;
+ }
+
+ .rooms-hero-tag {
+     display: inline-block;
+     margin-bottom: 8px;
+     padding: 4px 10px;
+     border-radius: 999px;
+     font-size: 11px;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     background: #eff6ff;
+     color: #1d4ed8;
+     font-weight: 600;
+ }
+
+
+
+ .rooms-hero-meta-item .label {
+     display: block;
+     font-size: 11px;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: #9ca3af;
+     margin-bottom: 2px;
+ }
+
+ .rooms-hero-meta-item .value {
+     font-size: 13px;
+     color: #4b5563;
+ }
+
  .rooms-page {
-     padding: 40px 0 60px;
+     padding: 30px 0 60px;
+ }
+
+ .rooms-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 24px;
+     margin-bottom: 24px;
+     flex-wrap: wrap;
+ }
+
+ .rooms-header-text h2 {
+     margin: 0 0 4px;
+     font-size: 22px;
+     color: #111827;
+ }
+
+ .rooms-header-text p {
+     margin: 0;
+     font-size: 13px;
+     color: #6b7280;
+ }
+
+ .rooms-header-search {
+     min-width: 260px;
+ }
+
+ .rooms-header-search input {
+     width: 100%;
+     padding: 10px 12px;
+     border-radius: 999px;
+     border: 1px solid #d1d5db;
+     font-size: 13px;
+     outline: none;
+     transition: border-color 0.15s ease, box-shadow 0.15s ease;
+ }
+
+ .rooms-header-search input:focus {
+     border-color: #d4a574;
+     box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.25);
  }
 
  .rooms-grid {
@@ -197,6 +292,10 @@
  }
 
  @media (max-width: 768px) {
+     .rooms-hero-content {
+         flex-direction: column;
+     }
+
      .rooms-grid {
          grid-template-columns: 1fr;
      }
