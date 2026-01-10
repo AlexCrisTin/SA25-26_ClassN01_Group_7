@@ -206,6 +206,7 @@ class BookingRepository:
             check_in_date,
             float(row['total_price']),
             check_out_date,
-            row['status']
+            row['status'],
+            row.get('room_id')  # room_id có thể là None
         )
 

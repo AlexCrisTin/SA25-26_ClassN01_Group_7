@@ -1,5 +1,6 @@
 from repository.booking_repository import BookingRepository
 from repository.checkin_repository import CheckInRepository
+from repository.room_repository import RoomRepository
 from services.room_service import RoomService
 from services.payment_service import PaymentService
 from datetime import datetime, timedelta
@@ -13,6 +14,7 @@ class BookingService:
         self.repo = BookingRepository()
         self.checkin_repo = CheckInRepository()
         self.room_service = RoomService()
+        self.room_repo = RoomRepository()
         self.payment_service = PaymentService()
 
     def create_booking(self, guest_name, room_type, check_in_date, total_price=None,
@@ -49,10 +51,14 @@ class BookingService:
         if not available_rooms:
             raise ValueError(f"Invalid Data: No available rooms of type '{room_type}' for the requested dates.")
         
+        # Select the first available room and reserve it
+        selected_room = available_rooms[0]
+        room_id = selected_room.id
+        
         # Calculate total price if not provided (based on room price and duration)
         if total_price is None or total_price <= 0:
-            # Use the first available room's price
-            room_price = available_rooms[0].price
+            # Use the selected room's price
+            room_price = selected_room.price
             # Calculate number of nights
             if check_out_date:
                 check_out = datetime.strptime(check_out_date, "%Y-%m-%d") if isinstance(check_out_date, str) else check_out_date
@@ -61,20 +67,36 @@ class BookingService:
                 nights = 1
             total_price = room_price * nights
         
-        # Create the booking (tạm ở trạng thái pending)
-        booking = self.repo.save(
-            guest_name,
-            room_type,
-            check_in_date,
-            total_price,
-            check_out_date,
-            status='pending',
-            user_id=user_id
-        )
+        # Reserve the room by updating its status to 'reserved'
+        try:
+            self.room_repo.update(room_id, status='reserved')
+        except Exception as e:
+            raise ValueError(f"Error reserving room: {e}")
+        
+        # Create the booking (tạm ở trạng thái pending) with room_id
+        booking = None
+        try:
+            booking = self.repo.save(
+                guest_name,
+                room_type,
+                check_in_date,
+                total_price,
+                check_out_date,
+                status='pending',
+                user_id=user_id,
+                room_id=room_id
+            )
+        except Exception as e:
+            # If booking creation fails, release the room
+            try:
+                self.room_repo.update(room_id, status='available')
+            except:
+                pass
+            raise ValueError(f"Error creating booking: {e}")
         
         # Business Logic: Process payment via PaymentService nếu có thông tin thanh toán
         # Lưu ý: Nếu thanh toán thất bại (ví không đủ tiền, lỗi payment gateway, ...),
-        # booking sẽ bị hủy và lỗi được trả về cho client.
+        # booking sẽ bị hủy và phòng sẽ được release.
         if payment_method and payment_amount:
             try:
                 self.payment_service.process_payment(
@@ -85,9 +107,14 @@ class BookingService:
                 )
                 # Payment được xử lý nhưng booking vẫn 'pending' cho đến khi lễ tân xác nhận
             except ValueError as e:
-                # Thanh toán lỗi -> hủy booking vừa tạo và đẩy lỗi ra ngoài
+                # Thanh toán lỗi -> release phòng, hủy booking và đẩy lỗi ra ngoài
                 try:
+                    # Release the room
+                    self.room_repo.update(room_id, status='available')
+                    # Delete the booking
                     self.repo.delete(booking.id)
+                except:
+                    pass
                 finally:
                     raise
         
@@ -128,6 +155,18 @@ class BookingService:
         checkin = self.checkin_repo.find_checkin_by_booking_id(booking_id)
         if checkin:
             raise ValueError(f"Cannot cancel booking {booking_id}: Check-in record exists.")
+        
+        # Release the room if booking has a room_id assigned
+        room_id = booking.room_id if hasattr(booking, 'room_id') and booking.room_id else None
+        if room_id:
+            try:
+                # Check current room status - only release if it's 'reserved'
+                room = self.room_repo.find_by_id(room_id)
+                if room and room.status == 'reserved':
+                    self.room_repo.update(room_id, status='available')
+            except Exception as e:
+                # Log error but don't fail cancellation
+                print(f"Warning: Could not release room {room_id} for booking {booking_id}: {e}")
         
         booking.status = 'cancelled'
         self.repo.delete(booking_id)

@@ -254,6 +254,23 @@
             };
             document.getElementById('sidebarStatus').textContent = statusMap[statusLabel] || statusLabel;
 
+            // Disable booking button if room is not available
+            const reserveBtn = document.getElementById('reserveBtn');
+            const isAvailable = statusLabel === 'available';
+            if (!isAvailable) {
+                reserveBtn.disabled = true;
+                reserveBtn.textContent = 'Không thể đặt phòng';
+                reserveBtn.style.opacity = '0.6';
+                reserveBtn.style.cursor = 'not-allowed';
+                reserveBtn.title = `Phòng ${statusMap[statusLabel]}. Vui lòng chọn phòng khác.`;
+            } else {
+                reserveBtn.disabled = false;
+                reserveBtn.textContent = 'Đặt phòng ngay';
+                reserveBtn.style.opacity = '1';
+                reserveBtn.style.cursor = 'pointer';
+                reserveBtn.title = '';
+            }
+
             // Description
             document.getElementById('roomDescription').textContent =
                 room.description || 'Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.';
@@ -325,8 +342,25 @@
             });
 
             // Reserve button: nếu chưa đăng nhập thì chuyển tới login, nếu đã đăng nhập thì mở form đặt phòng
-            const reserveBtn = document.getElementById('reserveBtn');
+            // reserveBtn đã được khai báo ở trên
             reserveBtn.addEventListener('click', function() {
+                // Kiểm tra trạng thái phòng trước khi cho phép đặt
+                if (!currentRoom) {
+                    alert('Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
+                    return;
+                }
+
+                const roomStatus = currentRoom.status || 'available';
+                if (roomStatus !== 'available') {
+                    const statusMessages = {
+                        occupied: 'Phòng đang có khách. Vui lòng chọn phòng khác.',
+                        maintenance: 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
+                        reserved: 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.'
+                    };
+                    alert(statusMessages[roomStatus] || 'Phòng không khả dụng. Vui lòng chọn phòng khác.');
+                    return;
+                }
+
                 if (!AuthManager.isLoggedIn()) {
                     window.location.href = 'login.html';
                     return;
@@ -373,6 +407,19 @@
 
             if (!currentRoom) {
                 alert('Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
+                return;
+            }
+
+            // Kiểm tra trạng thái phòng trước khi cho phép đặt
+            const roomStatus = currentRoom.status || 'available';
+            if (roomStatus !== 'available') {
+                const statusMessages = {
+                    occupied: 'Phòng đang có khách. Vui lòng chọn phòng khác.',
+                    maintenance: 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
+                    reserved: 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.'
+                };
+                alert(statusMessages[roomStatus] || 'Phòng không khả dụng. Vui lòng chọn phòng khác.');
+                closeBookingModal();
                 return;
             }
 
