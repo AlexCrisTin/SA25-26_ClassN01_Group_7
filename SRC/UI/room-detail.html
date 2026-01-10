@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi Tiết Phòng - Luxe Hotel</title>
+    <title>Chi Tiết Phòng - Demacia Hotel</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
     <link rel="stylesheet" href="css/booking.css">
     <link rel="stylesheet" href="css/room-detail.css">
 </head>
@@ -14,7 +15,7 @@
         <div class="container">
             <div class="logo">
                 <span class="logo-icon">◆</span>
-                <span class="logo-text">Luxe</span>
+                <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
 
@@ -61,7 +62,7 @@
                     <div class="room-main-info">
                         <h1 id="roomTitle">Phòng Nghỉ</h1>
                         <div class="room-main-meta">
-                            <span id="roomAddress">Luxe Hotel, Sapa</span>
+                            <span id="roomAddress">Demacia Hotel, Sapa</span>
                             <span>•</span>
                             <span id="roomType">Loại phòng</span>
                             <span>•</span>
@@ -234,7 +235,7 @@
             document.getElementById('roomDetail').style.display = 'block';
 
             const title = `Phòng ${room.room_number || ''} - ${room.room_type || 'Phòng Nghỉ'}`;
-            document.title = title + ' - Luxe Hotel';
+            document.title = title + ' - Demacia Hotel';
             document.getElementById('roomTitle').textContent = title;
 
             document.getElementById('roomType').textContent = room.room_type || 'Loại phòng';
@@ -281,7 +282,7 @@
             thumb1.alt = `Room ${room.room_number || ''}`;
             thumb2.alt = `Room ${room.room_number || ''}`;
 
-            // Nếu chỉ có 1 ảnh, ẩn phần “+x ảnh khác”
+            // Nếu chỉ có 1 ảnh, ẩn phần "+x ảnh khác"
             if (moreEl && room.image_url) {
                 moreEl.textContent = '0';
                 moreEl.parentElement.style.display = 'none';
@@ -428,5 +429,3 @@
     </script>
 </body>
 </html>
-
-
