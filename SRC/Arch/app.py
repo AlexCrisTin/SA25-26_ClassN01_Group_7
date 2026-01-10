@@ -245,7 +245,7 @@ def get_checkin(checkin_id):
     return checkin_controller.get_checkin(checkin_id)
 
 @app.route('/api/checkouts/summary/<booking_id>', methods=['GET'])
-@require_receptionist_or_admin  # Chỉ receptionist và admin mới xem được checkout summary
+@require_auth  # User có thể xem checkout summary của booking của mình
 def get_checkout_summary(booking_id):
     return checkin_controller.get_checkout_summary(booking_id)
 

@@ -3,7 +3,7 @@ from datetime import datetime
 class Booking:
     #Model: Định nghĩa cấu trúc dữ liệu Booking
     
-    def __init__(self, booking_id, guest_name, room_type, check_in_date, total_price, check_out_date=None, status='pending', room_id=None):
+    def __init__(self, booking_id, guest_name, room_type, check_in_date, total_price, check_out_date=None, status='pending', room_id=None, user_id=None):
         self.id = booking_id
         self.guest_name = guest_name
         self.room_type = room_type
@@ -12,6 +12,7 @@ class Booking:
         self.total_price = total_price
         self.status = status  # pending, confirmed, cancelled, checked_in, checked_out
         self.room_id = room_id  # ID của phòng được gán cho booking
+        self.user_id = user_id  # ID của user đặt phòng
         
         # Validation
         if total_price <= 0:
@@ -40,6 +41,7 @@ class Booking:
             "check_out_date": self.check_out_date,
             "total_price": self.total_price,
             "status": self.status,
-            "room_id": self.room_id
+            "room_id": self.room_id,
+            "user_id": self.user_id
         }
 
