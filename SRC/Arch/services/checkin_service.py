@@ -2,6 +2,7 @@ from repository.checkin_repository import CheckInRepository
 from repository.room_repository import RoomRepository
 from repository.booking_repository import BookingRepository
 from repository.staff_repository import StaffRepository
+from repository.service_request_repository import ServiceRequestRepository
 
 class CheckInService:
     #Service: Xử lý logic nghiệp vụ cho CheckIn/CheckOut.
@@ -11,6 +12,7 @@ class CheckInService:
         self.room_repo = RoomRepository()
         self.booking_repo = BookingRepository()
         self.staff_repo = StaffRepository()
+        self.service_request_repo = ServiceRequestRepository()
     
     def process_checkin(self, booking_id, receptionist_id, room_id=None):
         """
@@ -78,7 +80,7 @@ class CheckInService:
         # Lưu bản ghi check-in (thời gian checkin do DB tự sinh)
         return self.checkin_repo.save_checkin(booking_id, room_id, valid_receptionist_id)
 
-    def process_checkout(self, booking_id, checkout_time, total_amount, receptionist_id):
+    def process_checkout(self, booking_id, checkout_time, total_amount=None, receptionist_id=None):
         #Xử lý check-out với validation
         # Check if booking exists
         booking = self.booking_repo.find_by_id(booking_id)
@@ -95,6 +97,14 @@ class CheckInService:
         existing_checkout = next((c for c in existing_checkouts if c.booking_id == booking_id), None)
         if existing_checkout:
             raise ValueError(f"Booking {booking_id} has already been checked out.")
+        
+        # Tính tổng tiền: booking.total_price + chi phí dịch vụ
+        booking_base_price = booking.total_price or 0.0
+        service_cost = self.service_request_repo.get_total_service_cost(booking_id)
+        
+        # Nếu total_amount không được truyền, tự động tính
+        if total_amount is None:
+            total_amount = booking_base_price + service_cost
         
         # Update room status to available trong database
         room = self.room_repo.find_by_id(checkin.room_id)
@@ -116,6 +126,25 @@ class CheckInService:
 
         # Lưu bản ghi checkout; checkout_time do DB tự sinh, total_amount là tổng tiền cuối cùng
         return self.checkin_repo.save_checkout(booking_id, total_amount, valid_receptionist_id)
+    
+    def get_service_requests_for_booking(self, booking_id):
+        """Lấy danh sách service requests của booking"""
+        return self.service_request_repo.find_by_booking_id(booking_id)
+    
+    def calculate_total_checkout_amount(self, booking_id):
+        """Tính tổng tiền checkout bao gồm cả dịch vụ"""
+        booking = self.booking_repo.find_by_id(booking_id)
+        if not booking:
+            raise ValueError(f"Booking with ID {booking_id} not found.")
+        
+        booking_base_price = booking.total_price or 0.0
+        service_cost = self.service_request_repo.get_total_service_cost(booking_id)
+        
+        return {
+            'booking_price': booking_base_price,
+            'service_cost': service_cost,
+            'total_amount': booking_base_price + service_cost
+        }
 
     def get_checkin_details(self, checkin_id):
         #Lấy thông tin check-in theo ID

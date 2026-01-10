@@ -43,4 +43,13 @@ class CheckInController:
             return self.view.checkin_found(checkin)
         except ValueError as e:
             return self.view.error_response(str(e), 404)
+    
+    def get_checkout_summary(self, booking_id):
+        #Xử lý GET /api/checkouts/summary/<booking_id> - Lấy thông tin tổng hợp cho checkout
+        try:
+            service_requests = self.service.get_service_requests_for_booking(booking_id)
+            total_info = self.service.calculate_total_checkout_amount(booking_id)
+            return self.view.checkout_summary(service_requests, total_info)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
 

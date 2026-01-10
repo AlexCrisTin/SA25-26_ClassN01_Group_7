@@ -281,30 +281,113 @@ async function searchCheckoutBooking() {
 
         currentCheckoutBooking = booking;
 
-        const amount = booking.total_price || 0;
-
-        resultDiv.innerHTML = `
-            <div class="report-card">
-                <h3>Check-out cho đặt phòng #${booking.id} - ${booking.guest_name}</h3>
-                <p>Loại phòng: <strong>${booking.room_type}</strong></p>
-                <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
-                <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
-                <p>Tổng tiền trong hệ thống: <strong>${amount.toLocaleString('vi-VN')} VNĐ</strong></p>
-                <p style="color:#666; font-size:13px; margin-top:8px;">
-                    Hệ thống sẽ dùng số tiền trên làm tổng tiền thanh toán khi check-out.
-                </p>
-                <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px;">
-                    <button class="btn-primary" onclick="processCheckout()">
-                        Thực Hiện Check-out
-                    </button>
+        // Load checkout summary (service requests and total)
+        try {
+            const summary = await CheckInAPI.getCheckoutSummary(booking.id);
+            displayCheckoutSummary(booking, summary);
+        } catch (error) {
+            console.warn('Could not load checkout summary, using booking price only:', error);
+            // Fallback to booking price only
+            const amount = booking.total_price || 0;
+            resultDiv.innerHTML = `
+                <div class="report-card">
+                    <h3>Check-out cho đặt phòng #${booking.id} - ${booking.guest_name}</h3>
+                    <p>Loại phòng: <strong>${booking.room_type}</strong></p>
+                    <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
+                    <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
+                    <p>Tổng tiền: <strong>${amount.toLocaleString('vi-VN')} VNĐ</strong></p>
+                    <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px;">
+                        <button class="btn-primary" onclick="processCheckout()">
+                            Thực Hiện Check-out
+                        </button>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
     } catch (error) {
         console.error(error);
         showNotification('Lỗi khi tìm kiếm đặt phòng: ' + error.message, 'error');
         resultDiv.innerHTML = '<p class="loading">Đã xảy ra lỗi khi tìm kiếm.</p>';
     }
+}
+
+function displayCheckoutSummary(booking, summary) {
+    const resultDiv = document.getElementById('checkoutBookingResult');
+    
+    const bookingPrice = summary.booking_price || booking.total_price || 0;
+    const serviceCost = summary.service_cost || 0;
+    const totalAmount = summary.total_amount || (bookingPrice + serviceCost);
+    
+    // Store total amount for checkout
+    currentCheckoutBooking.totalAmount = totalAmount;
+    
+    let serviceRequestsHtml = '';
+    if (summary.service_requests && summary.service_requests.length > 0) {
+        serviceRequestsHtml = `
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <h4 style="margin: 0 0 12px 0; color: #333; font-size: 16px;">Chi phí dịch vụ phát sinh:</h4>
+                <div style="background: #f9f9f9; border-radius: 8px; padding: 12px;">
+                    ${summary.service_requests.map(sr => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e0e0e0;">
+                            <div>
+                                <p style="margin: 0; font-weight: 500; color: #333;">${sr.service_name || 'Dịch vụ'}</p>
+                                <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">
+                                    Số lượng: ${sr.quantity || 1} • 
+                                    ${sr.status === 'completed' ? '✅ Đã hoàn thành' : sr.status === 'in_progress' ? '⏳ Đang xử lý' : '⏸️ Chờ xử lý'}
+                                </p>
+                            </div>
+                            <strong style="color: #0066cc;">${(sr.total_price || 0).toLocaleString('vi-VN')} VNĐ</strong>
+                        </div>
+                    `).join('')}
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-top: 8px; border-top: 2px solid #0066cc;">
+                        <strong style="color: #333;">Tổng chi phí dịch vụ:</strong>
+                        <strong style="color: #0066cc; font-size: 16px;">${serviceCost.toLocaleString('vi-VN')} VNĐ</strong>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        serviceRequestsHtml = `
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <p style="color: #999; font-size: 14px; margin: 0;">Không có dịch vụ phát sinh</p>
+            </div>
+        `;
+    }
+    
+    resultDiv.innerHTML = `
+        <div class="report-card">
+            <h3>Check-out cho đặt phòng #${booking.id} - ${booking.guest_name}</h3>
+            <p>Loại phòng: <strong>${booking.room_type}</strong></p>
+            <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
+            <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <h4 style="margin: 0 0 12px 0; color: #333; font-size: 16px;">Chi tiết thanh toán:</h4>
+                <div style="background: #f9f9f9; border-radius: 8px; padding: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e0e0e0;">
+                        <span style="color: #666;">Giá phòng:</span>
+                        <strong style="color: #333;">${bookingPrice.toLocaleString('vi-VN')} VNĐ</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e0e0e0;">
+                        <span style="color: #666;">Chi phí dịch vụ:</span>
+                        <strong style="color: #333;">${serviceCost.toLocaleString('vi-VN')} VNĐ</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; margin-top: 8px; border-top: 2px solid #0066cc;">
+                        <strong style="color: #333; font-size: 18px;">Tổng thanh toán:</strong>
+                        <strong style="color: #0066cc; font-size: 20px;">${totalAmount.toLocaleString('vi-VN')} VNĐ</strong>
+                    </div>
+                </div>
+            </div>
+            
+            ${serviceRequestsHtml}
+            
+            <div style="margin-top: 20px; display:flex; justify-content:flex-end; gap:10px;">
+                <button class="btn-primary" onclick="processCheckout()">
+                    Thực Hiện Check-out
+                </button>
+            </div>
+        </div>
+    `;
 }
 
 async function processCheckout() {
@@ -324,9 +407,12 @@ async function processCheckout() {
     resultDiv.innerHTML = '<p class="loading">Đang xử lý check-out...</p>';
 
     try {
+        // Use totalAmount if available (includes service costs), otherwise use booking price
+        const totalAmount = currentCheckoutBooking.totalAmount || currentCheckoutBooking.total_price || 0;
+        
         await CheckInAPI.processCheckOut({
             booking_id: currentCheckoutBooking.id,
-            total_amount: currentCheckoutBooking.total_price || 0,
+            total_amount: totalAmount,
             receptionist_id: currentUser.id
         });
 

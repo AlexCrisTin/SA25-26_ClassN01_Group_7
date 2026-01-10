@@ -147,18 +147,28 @@
             });
         });
 
+        // Store booking data for updating
+        let currentBookingsData = {};
+
         async function loadCheckedInRooms(userId) {
+            const container = document.getElementById('checkedInRooms');
+            
             try {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Đang tải thông tin phòng...</p>';
+                
                 const bookings = await BookingAPI.getMyBookings();
+                console.log('All bookings:', bookings);
                 
                 // Filter only checked-in bookings
                 const checkedInBookings = bookings.filter(b => b.status === 'checked_in');
+                console.log('Checked-in bookings:', checkedInBookings);
                 
                 if (checkedInBookings.length === 0) {
-                    return; // Keep empty state
+                    // Keep empty state
+                    return;
                 }
 
-                // Load room details and services for each checked-in booking
+                // Load room details, services, and checkout summary for each checked-in booking
                 const roomsData = await Promise.all(
                     checkedInBookings.map(async (booking) => {
                         let room = null;
@@ -166,16 +176,40 @@
                             try {
                                 room = await RoomAPI.getRoom(booking.room_id);
                             } catch (error) {
-                                console.warn('Could not fetch room info:', error);
+                                console.warn('Could not fetch room info for booking', booking.id, ':', error);
                             }
                         }
-                        return { booking, room };
+                        
+                        // Load checkout summary to get service costs
+                        let checkoutSummary = null;
+                        try {
+                            checkoutSummary = await CheckInAPI.getCheckoutSummary(booking.id);
+                        } catch (error) {
+                            console.warn('Could not load checkout summary for booking', booking.id, ':', error);
+                            // Continue without checkout summary - not critical
+                        }
+                        
+                        // Store booking data for later updates
+                        currentBookingsData[booking.id] = { booking, room, checkoutSummary };
+                        
+                        return { booking, room, checkoutSummary };
                     })
                 );
 
+                console.log('Rooms data loaded:', roomsData);
                 displayCheckedInRooms(roomsData);
             } catch (error) {
                 console.error('Error loading checked-in rooms:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Lỗi khi tải thông tin phòng</h3>
+                        <p>${error.message || 'Đã xảy ra lỗi không xác định'}</p>
+                        <button onclick="location.reload()" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 10px 24px; margin-top: 10px;">
+                            Tải Lại
+                        </button>
+                    </div>
+                `;
                 showNotification('Lỗi khi tải thông tin phòng: ' + error.message, 'error');
             }
         }
@@ -195,7 +229,7 @@
                 console.warn('Could not load services:', error);
             }
 
-            container.innerHTML = roomsData.map(({ booking, room }) => `
+            container.innerHTML = roomsData.map(({ booking, room, checkoutSummary }) => `
                 <div class="checked-in-room-card" style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
                         <div>
@@ -222,13 +256,28 @@
                         </div>
                         <div>
                             <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">Tổng tiền</p>
-                            <p style="margin: 0; font-weight: 500; color: #333;">${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</p>
+                            <p style="margin: 0; font-weight: 500; color: #333;" id="totalPrice-${booking.id}">
+                                ${(() => {
+                                    const bookingPrice = booking.total_price || 0;
+                                    const serviceCost = checkoutSummary ? (checkoutSummary.service_cost || 0) : 0;
+                                    const total = bookingPrice + serviceCost;
+                                    return total.toLocaleString('vi-VN') + ' VNĐ';
+                                })()}
+                            </p>
+                            ${checkoutSummary && checkoutSummary.service_cost > 0 ? `
+                                <p style="margin: 4px 0 0 0; color: #666; font-size: 11px;">
+                                    (Phòng: ${(booking.total_price || 0).toLocaleString('vi-VN')} VNĐ + Dịch vụ: ${checkoutSummary.service_cost.toLocaleString('vi-VN')} VNĐ)
+                                </p>
+                            ` : ''}
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         <button class="auth-btn" onclick="openServiceOrderModal(${booking.id})" style="background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
                             📞 Đặt Dịch Vụ
+                        </button>
+                        <button class="auth-btn" onclick="viewOrderedServices(${booking.id})" style="background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                            📋 Xem Dịch Vụ Đã Đặt
                         </button>
                         <button class="auth-btn" onclick="viewRoomDetails(${booking.id})" style="background: #f5f5f5; color: #333; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
                             👁️ Xem Chi Tiết
@@ -315,8 +364,117 @@
                 });
                 showNotification('Đặt dịch vụ thành công!', 'success');
                 closeServiceOrderModal();
+                
+                // Reload checkout summary and update total price
+                await updateBookingTotalPrice(bookingId);
             } catch (error) {
                 showNotification('Lỗi khi đặt dịch vụ: ' + error.message, 'error');
+            }
+        }
+
+        async function updateBookingTotalPrice(bookingId) {
+            try {
+                // Reload checkout summary
+                const summary = await CheckInAPI.getCheckoutSummary(bookingId);
+                
+                // Update stored data
+                if (currentBookingsData[bookingId]) {
+                    currentBookingsData[bookingId].checkoutSummary = summary;
+                }
+                
+                // Update UI
+                const totalPriceElement = document.getElementById(`totalPrice-${bookingId}`);
+                if (totalPriceElement) {
+                    const booking = currentBookingsData[bookingId]?.booking;
+                    if (booking) {
+                        const bookingPrice = booking.total_price || 0;
+                        const serviceCost = summary.service_cost || 0;
+                        const total = bookingPrice + serviceCost;
+                        
+                        totalPriceElement.innerHTML = `
+                            ${total.toLocaleString('vi-VN')} VNĐ
+                            ${serviceCost > 0 ? `
+                                <p style="margin: 4px 0 0 0; color: #666; font-size: 11px;">
+                                    (Phòng: ${bookingPrice.toLocaleString('vi-VN')} VNĐ + Dịch vụ: ${serviceCost.toLocaleString('vi-VN')} VNĐ)
+                                </p>
+                            ` : ''}
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.warn('Could not update booking total price:', error);
+            }
+        }
+
+        async function viewOrderedServices(bookingId) {
+            // Create modal HTML
+            const modal = document.createElement('div');
+            modal.id = 'orderedServicesModal';
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center;';
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="margin: 0;">Dịch Vụ Đã Đặt</h2>
+                        <button onclick="closeOrderedServicesModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+                    </div>
+                    <div id="orderedServicesList" style="margin-bottom: 20px;">
+                        <p style="text-align: center; color: #999;">Đang tải danh sách dịch vụ...</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+
+            // Load service requests
+            try {
+                const summary = await CheckInAPI.getCheckoutSummary(bookingId);
+                const serviceList = document.getElementById('orderedServicesList');
+                
+                if (summary.service_requests && summary.service_requests.length > 0) {
+                    const totalServiceCost = summary.service_cost || 0;
+                    
+                    serviceList.innerHTML = `
+                        ${summary.service_requests.map(sr => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; background: #f9f9f9;">
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #333;">${sr.service_name || 'Dịch vụ'}</h4>
+                                    <p style="margin: 0; color: #666; font-size: 13px;">
+                                        Số lượng: ${sr.quantity || 1} • 
+                                        Đơn giá: ${(sr.unit_price || 0).toLocaleString('vi-VN')} VNĐ
+                                    </p>
+                                    <p style="margin: 4px 0 0 0; font-size: 12px;">
+                                        ${sr.status === 'completed' ? '✅ Đã hoàn thành' : 
+                                          sr.status === 'in_progress' ? '⏳ Đang xử lý' : 
+                                          sr.status === 'pending' ? '⏸️ Chờ xử lý' : 
+                                          '❌ Đã hủy'}
+                                    </p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <strong style="color: #0066cc; font-size: 16px;">${(sr.total_price || 0).toLocaleString('vi-VN')} VNĐ</strong>
+                                </div>
+                            </div>
+                        `).join('')}
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid #0066cc;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="font-size: 18px; color: #333;">Tổng chi phí dịch vụ:</strong>
+                                <strong style="font-size: 20px; color: #0066cc;">${totalServiceCost.toLocaleString('vi-VN')} VNĐ</strong>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    serviceList.innerHTML = '<p style="color: #999; text-align: center; padding: 40px 0;">Chưa có dịch vụ nào được đặt</p>';
+                }
+            } catch (error) {
+                const serviceList = document.getElementById('orderedServicesList');
+                serviceList.innerHTML = '<p style="color: #f44336; text-align: center;">Lỗi khi tải danh sách dịch vụ: ' + error.message + '</p>';
+            }
+        }
+
+        function closeOrderedServicesModal() {
+            const modal = document.getElementById('orderedServicesModal');
+            if (modal) {
+                modal.remove();
             }
         }
 
@@ -328,6 +486,8 @@
         window.closeServiceOrderModal = closeServiceOrderModal;
         window.orderService = orderService;
         window.viewRoomDetails = viewRoomDetails;
+        window.viewOrderedServices = viewOrderedServices;
+        window.closeOrderedServicesModal = closeOrderedServicesModal;
 
 
         async function loadUserProfile(userId) {

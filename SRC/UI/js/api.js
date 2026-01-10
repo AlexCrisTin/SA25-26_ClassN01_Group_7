@@ -297,6 +297,11 @@ const CheckInAPI = {
     // Get check-in by ID
     getCheckIn: async (checkInId) => {
         return await apiCall(`/checkins/${checkInId}`, 'GET');
+    },
+
+    // Get checkout summary (service requests and total)
+    getCheckoutSummary: async (bookingId) => {
+        return await apiCall(`/checkouts/summary/${bookingId}`, 'GET');
     }
 };
 

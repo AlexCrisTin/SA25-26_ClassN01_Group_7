@@ -19,9 +19,9 @@ class ServiceView:
         return jsonify([service.to_dict() for service in services]), 200
     
     @staticmethod
-    def service_requested(service):
+    def service_requested(service_request):
         #Response khi request service thành công
-        return jsonify({"message": "Service requested successfully", "service": service.to_dict()}), 200
+        return jsonify({"message": "Service requested successfully", "service_request": service_request}), 201
     
     @staticmethod
     def service_updated(service):

@@ -43,9 +43,17 @@ class ServiceController:
         #Xử lý POST /api/services/request
         data = request.json
         try:
-            # In real implementation, this would create a service request
-            service = self.service.get_service_details(data.get('service_id'))
-            return self.view.service_requested(service)
+            # Get user_id from current_user (set by require_auth decorator)
+            user_id = getattr(request, 'current_user', None)
+            user_id = user_id.id if user_id else None
+            
+            # Create service request
+            service_request = self.service.create_service_request(
+                data.get('booking_id'),
+                data.get('service_id'),
+                data.get('quantity', 1)
+            )
+            return self.view.service_requested(service_request)
         except ValueError as e:
             return self.view.error_response(str(e), 400)
     

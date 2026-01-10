@@ -1,10 +1,12 @@
 from repository.service_repository import ServiceRepository
+from repository.service_request_repository import ServiceRequestRepository
 
 class ServiceService:
     #Service: Xử lý logic nghiệp vụ cho Hotel Service.
 
     def __init__(self):
         self.repo = ServiceRepository()
+        self.service_request_repo = ServiceRequestRepository()
 
     def create_service(self, service_name, description, price, category):
         #Tạo service mới với validation
@@ -61,3 +63,54 @@ class ServiceService:
             raise ValueError(f"Service with ID {service_id} not found.")
         
         return self.repo.delete(service_id)
+    
+    def create_service_request(self, booking_id, service_id, quantity=1):
+        #Tạo service request mới
+        service = self.repo.find_by_id(service_id)
+        if not service:
+            raise ValueError(f"Service with ID {service_id} not found.")
+        
+        if quantity <= 0:
+            raise ValueError("Invalid Data: Quantity must be positive.")
+        
+        unit_price = service.price
+        total_price = unit_price * quantity
+        
+        # Save service request to database
+        connection = None
+        try:
+            from db_config import db_config
+            from mysql.connector import Error
+            
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+            
+            query = """
+                INSERT INTO service_requests (booking_id, service_id, quantity, unit_price, total_price, status)
+                VALUES (%s, %s, %s, %s, %s, 'pending')
+            """
+            values = (booking_id, service_id, quantity, float(unit_price), float(total_price))
+            cursor.execute(query, values)
+            connection.commit()
+            
+            service_request_id = cursor.lastrowid
+            
+            # Return service request data
+            return {
+                'id': service_request_id,
+                'booking_id': booking_id,
+                'service_id': service_id,
+                'service_name': service.service_name,
+                'quantity': quantity,
+                'unit_price': unit_price,
+                'total_price': total_price,
+                'status': 'pending'
+            }
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error creating service request: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()

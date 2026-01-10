@@ -19,6 +19,16 @@ class CheckInView:
         return jsonify(checkin.to_dict()), 200
     
     @staticmethod
+    def checkout_summary(service_requests, total_info):
+        #Response khi lấy thông tin tổng hợp checkout
+        return jsonify({
+            "service_requests": service_requests,
+            "booking_price": total_info['booking_price'],
+            "service_cost": total_info['service_cost'],
+            "total_amount": total_info['total_amount']
+        }), 200
+    
+    @staticmethod
     def error_response(message, status_code=400):
         #Format response lỗi
         return jsonify({"error": message}), status_code

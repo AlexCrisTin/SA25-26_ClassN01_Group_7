@@ -244,6 +244,11 @@ def process_checkout():
 def get_checkin(checkin_id):
     return checkin_controller.get_checkin(checkin_id)
 
+@app.route('/api/checkouts/summary/<booking_id>', methods=['GET'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới xem được checkout summary
+def get_checkout_summary(booking_id):
+    return checkin_controller.get_checkout_summary(booking_id)
+
 # ========== STAFF ROUTES ==========
 @app.route('/api/staff', methods=['GET'])
 @require_admin  # Chỉ admin mới xem được danh sách staff
