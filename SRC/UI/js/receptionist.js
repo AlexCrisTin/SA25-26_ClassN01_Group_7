@@ -164,18 +164,38 @@ async function searchCheckinBooking() {
             return;
         }
 
-        // Hiển thị thẻ thông tin booking với nút check-in tự động (không cần nhập room_id)
-        resultDiv.innerHTML = `
-            <div class="report-card">
-                <h3>Đặt phòng #${booking.id} - ${booking.guest_name}</h3>
-                <p>Loại phòng: <strong>${booking.room_type}</strong></p>
-                <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
-                <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
-                <p>Tổng tiền: <strong>${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</strong></p>
+        // Fetch room information nếu có room_id
+        let roomNumber = null;
+        if (booking.room_id) {
+            try {
+                const room = await RoomAPI.getRoom(booking.room_id);
+                roomNumber = room.room_number;
+            } catch (error) {
+                console.warn('Could not fetch room info:', error);
+            }
+        }
+
+        // Hiển thị thẻ thông tin booking với số phòng (nếu có)
+        let roomInfoHtml = '';
+        if (roomNumber) {
+            roomInfoHtml = `<p>Phòng đã đặt: <strong>Phòng ${roomNumber}</strong></p>`;
+        } else {
+            roomInfoHtml = `
                 <p style="color: #666; font-size: 13px; margin-top: 10px;">
                     Hệ thống sẽ tự động chọn một phòng trống phù hợp với loại phòng 
                     <strong>${booking.room_type}</strong> cho khách.
                 </p>
+            `;
+        }
+
+        resultDiv.innerHTML = `
+            <div class="report-card">
+                <h3>Đặt phòng #${booking.id} - ${booking.guest_name}</h3>
+                <p>Loại phòng: <strong>${booking.room_type}</strong></p>
+                ${roomInfoHtml}
+                <p>Ngày nhận: <strong>${formatDate(booking.check_in_date)}</strong></p>
+                <p>Ngày trả: <strong>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</strong></p>
+                <p>Tổng tiền: <strong>${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</strong></p>
 
                 <div style="margin-top: 20px; display:flex; gap:10px; justify-content:flex-end;">
                     <button class="btn-primary" onclick="processCheckin(${booking.id})">
