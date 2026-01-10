@@ -2,7 +2,7 @@
 
 Software Architecture Group 7
 
-# Member:
+### Member:
 - Tran Ngoc An - AlexCrisTin
 - Le Manh Duc - duc198sl
 - Nguyen Hung Thanh - HungThanh-web
@@ -10,7 +10,7 @@ Software Architecture Group 7
 
 # Project Hotel Management System
 
-# Folders:
+### Folders:
 - Documents: plan, SRS, and lab 
 - Design: architectural design documentation
 - SRC: code program

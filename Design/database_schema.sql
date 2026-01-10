@@ -95,7 +95,7 @@ CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL CHECK (amount > 0),
-    payment_method ENUM('credit_card', 'cash', 'bank_transfer') NOT NULL,
+    payment_method ENUM('credit_card', 'cash', 'bank_transfer', 'wallet') NOT NULL,
     status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'pending',
     transaction_id VARCHAR(100), -- ID giao dịch từ payment gateway
     payment_date TIMESTAMP NULL,
@@ -252,10 +252,11 @@ CREATE TABLE reports (
 
 CREATE TABLE wallets (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL UNIQUE, -- Khóa logic tới users.id hoặc định danh người dùng
+    user_id INT NOT NULL UNIQUE, -- Liên kết với users.id
     balance DECIMAL(15, 2) NOT NULL DEFAULT 0 CHECK (balance >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_wallet_user_id (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

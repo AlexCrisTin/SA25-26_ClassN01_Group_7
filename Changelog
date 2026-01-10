@@ -5,25 +5,76 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-01-10
 
 ### Added
-- Enhanced booking page UI with dynamic room loading from API
-- Room carousel on homepage displaying 3 rooms at a time with navigation
-- User-specific bookings endpoint (`/api/bookings/my`) for viewing personal bookings
-- Image upload functionality for room management (admin panel)
-- Image preview and management in room add/edit forms
+- Service request system for ordering additional services during stay
+  - New `service_requests` table in database
+  - `ServiceRequest` model and `ServiceRequestRepository` for persistence
+  - Service costs integration into checkout process
+- Checkout summary endpoint (`GET /api/checkouts/summary/<booking_id>`) displaying booking price and service costs
+- Multiple bookings display in check-in/check-out workflow
+  - When searching by guest name, all eligible bookings are shown for selection
+  - Improved UX for handling guests with multiple room bookings
+- Cash payment option in payment page alongside wallet payment
+- Cancel booking modal with reason input and deposit loss warning
+- CSS extraction for better maintainability
+  - Extracted inline CSS from `contact.html` to `css/contact.css`
+  - Extracted inline CSS from `my-bookings.html` to `css/my-bookings.css`
+- Dashboard improvements for checked-in users
+  - "Phòng Đang Sử Dụng" section displaying only checked-in rooms
+  - Service ordering functionality directly from dashboard
+  - View ordered services modal with total price updates
+- Automatic room assignment during check-in (no manual room ID input required)
+- Room status auto-update: rooms are set to 'reserved' when booking is created, 'available' when cancelled
+- Smooth scroll navigation from homepage menu to sections (GIỚI THIỆU, PHÒNG)
+- Room listing UI redesign with modern card layout matching provided design
 
 ### Changed
-- Booking page now loads rooms dynamically from database instead of hardcoded data
-- Room selection dropdown shows available rooms with count and pricing
-- My bookings page now uses user-specific endpoint instead of admin endpoint
-- Improved UI/UX for booking flow with modal displays and room selection
+- Booking flow refactored: redirects to `payment.html` before creating booking
+  - Booking details saved as draft in `localStorage`
+  - Actual booking creation happens after payment confirmation or cash selection
+- Check-in process: automatic room assignment based on room type
+  - Removed requirement for manual room ID input
+  - System automatically selects available room matching booking's room type
+- Check-out process: displays service costs and calculates total amount
+  - Shows breakdown of booking price, service costs, and total payment
+  - Service requests are included in checkout calculation
+- Dashboard: removed booking statistics, focused on current stay management
+  - Only displays checked-in rooms for active users
+  - Total price dynamically updates when services are ordered
+- Receptionist panel: enhanced check-in/check-out search
+  - Displays all matching bookings when multiple rooms are booked
+  - Improved selection interface for choosing which booking to process
+- Room detail page: added validation to prevent booking unavailable rooms
+  - Disables booking button for 'occupied', 'maintenance', or 'reserved' rooms
+- Payment service: removed automatic booking confirmation after payment
+  - Bookings remain 'pending' until manually confirmed by receptionist
+- Booking service: improved error handling with rollback on payment failure
+  - Booking is cancelled if payment processing fails
+  - Room status is reverted if booking creation fails
 
 ### Fixed
-- Fixed "Access denied" error in my-bookings.html by implementing user-specific bookings endpoint
-- Fixed room image display issues in carousel and booking pages
-- Fixed admin room editing functionality (modal display and data binding)
-- Fixed room capacity handling (null values) in database operations
+- Fixed booking status incorrectly showing 'confirmed' immediately after creation
+  - Bookings now correctly remain 'pending' until receptionist confirmation
+- Fixed room status not updating to 'reserved' when booking is created
+  - Rooms are now properly reserved upon successful booking
+- Fixed wallet balance validation: users cannot proceed with booking if insufficient funds
+- Fixed check-in foreign key constraint error for `receptionist_id`
+  - System gracefully handles invalid receptionist IDs by setting to NULL
+- Fixed checked-in rooms not displaying in dashboard
+  - Corrected JavaScript destructuring of `checkoutSummary` in room data
+- Fixed room availability validation in `room-detail.html`
+  - Prevents booking attempts for unavailable rooms
+- Fixed TabError (inconsistent tabs/spaces) in `checkin_service.py`
+- Fixed requirements.txt security vulnerabilities
+  - Updated Flask to 3.1.2
+  - Updated flask-cors to 6.0.0
+  - Updated mysql-connector-python to 9.5.0
+  - Updated python-dotenv to 1.2.1
+
+### Security
+- Updated dependencies to latest versions to address security vulnerabilities
 
 ## [0.3.0] - 2026-01-02
 
