@@ -300,7 +300,20 @@
                 </div>
                 <div class="form-group">
                     <label>Chức Vụ *</label>
-                    <input type="text" id="staff_position" required placeholder="e.g., Receptionist, Housekeeper">
+                    <input type="text" id="staff_position" required placeholder="e.g., Receptionist, Housekeeper" onchange="toggleReceptionistFields()">
+                </div>
+                <div id="receptionistAccountFields" class="form-group" style="display: none;">
+                    <div style="background: #e8f4fd; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid #0066cc;">
+                        <p style="margin: 0 0 12px 0; font-size: 14px; color: #0066cc; font-weight: 500;">📋 Tạo tài khoản đăng nhập cho Receptionist</p>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Tên Đăng Nhập *</label>
+                            <input type="text" id="staff_username" placeholder="Nhập tên đăng nhập">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Mật Khẩu *</label>
+                            <input type="password" id="staff_password" placeholder="Nhập mật khẩu">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Phòng Ban *</label>
@@ -502,6 +515,44 @@
     <script src="js/auth.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        // Toggle hiển thị các trường tài khoản cho Receptionist
+        function toggleReceptionistFields() {
+            const positionInput = document.getElementById('staff_position');
+            const accountFields = document.getElementById('receptionistAccountFields');
+            const usernameInput = document.getElementById('staff_username');
+            const passwordInput = document.getElementById('staff_password');
+            
+            if (positionInput && accountFields) {
+                const position = positionInput.value.trim().toLowerCase();
+                if (position === 'receptionist') {
+                    accountFields.style.display = 'block';
+                    if (usernameInput) usernameInput.required = true;
+                    if (passwordInput) passwordInput.required = true;
+                } else {
+                    accountFields.style.display = 'none';
+                    if (usernameInput) {
+                        usernameInput.required = false;
+                        usernameInput.value = '';
+                    }
+                    if (passwordInput) {
+                        passwordInput.required = false;
+                        passwordInput.value = '';
+                    }
+                }
+            }
+        }
+        
+        // Gọi hàm khi trang load để kiểm tra giá trị ban đầu
+        document.addEventListener('DOMContentLoaded', function() {
+            const positionInput = document.getElementById('staff_position');
+            if (positionInput) {
+                // Thêm event listener cho input và change
+                positionInput.addEventListener('input', toggleReceptionistFields);
+                positionInput.addEventListener('change', toggleReceptionistFields);
+            }
+        });
+    </script>
 </body>
 </html>
 

@@ -408,6 +408,15 @@ function displayStaff(staff) {
 
 function showAddStaffModal() {
     document.getElementById('addStaffForm').reset();
+    // Ẩn các trường tài khoản khi mở modal mới
+    const accountFields = document.getElementById('receptionistAccountFields');
+    if (accountFields) {
+        accountFields.style.display = 'none';
+    }
+    const usernameInput = document.getElementById('staff_username');
+    const passwordInput = document.getElementById('staff_password');
+    if (usernameInput) usernameInput.required = false;
+    if (passwordInput) passwordInput.required = false;
     document.getElementById('addStaffModal').style.display = 'block';
 }
 
@@ -741,14 +750,31 @@ function setupFormHandlers() {
     document.getElementById('addStaffForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        const position = document.getElementById('staff_position').value.trim();
+        const isReceptionist = position.toLowerCase() === 'receptionist';
+        
         const staffData = {
             full_name: document.getElementById('staff_full_name').value,
             email: document.getElementById('staff_email').value,
             phone: document.getElementById('staff_phone').value,
-            position: document.getElementById('staff_position').value,
+            position: position,
             department: document.getElementById('staff_department').value,
             hire_date: document.getElementById('staff_hire_date').value || null
         };
+        
+        // Nếu là Receptionist, thêm username và password
+        if (isReceptionist) {
+            const username = document.getElementById('staff_username').value.trim();
+            const password = document.getElementById('staff_password').value;
+            
+            if (!username || !password) {
+                showNotification('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu cho Receptionist!', 'error');
+                return;
+            }
+            
+            staffData.username = username;
+            staffData.password = password;
+        }
 
         try {
             await StaffAPI.createStaff(staffData);

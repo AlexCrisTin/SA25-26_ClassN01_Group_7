@@ -1,4 +1,3 @@
--- Tạo database
 CREATE DATABASE IF NOT EXISTS hotel_management;
 USE hotel_management;
 
@@ -27,11 +26,11 @@ CREATE TABLE staff (
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20),
-    position VARCHAR(50) NOT NULL, -- receptionist, manager, cleaner, etc.
+    position VARCHAR(50) NOT NULL, 
     department VARCHAR(50),
     hire_date DATE NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
-    user_id INT, -- Liên kết với users table nếu có tài khoản
+    user_id INT, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
@@ -46,7 +45,7 @@ CREATE TABLE staff (
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_number VARCHAR(20) UNIQUE NOT NULL,
-    room_type VARCHAR(50) NOT NULL, -- single, double, triple, senior, connecting, suite
+    room_type VARCHAR(50) NOT NULL, 
     price DECIMAL(10, 2) NOT NULL CHECK (price > 0),
     status ENUM('available', 'occupied', 'maintenance', 'reserved') DEFAULT 'available',
     capacity INT CHECK (capacity > 0),
