@@ -300,13 +300,28 @@
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center;';
             
             modal.innerHTML = `
-                <div style="background: white; border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="margin: 0;">Đặt Dịch Vụ</h2>
-                        <button onclick="closeServiceOrderModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+                <div style="background: white; border-radius: 16px; padding: 0; max-width: 700px; width: 90%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                    <!-- Header -->
+                    <div style="background: linear-gradient(135deg, #0066cc 0%, #004499 100%); padding: 24px; color: white;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600;">Đặt Dịch Vụ</h2>
+                                <p style="margin: 0; font-size: 14px; opacity: 0.9;">Chọn dịch vụ bạn muốn sử dụng</p>
+                            </div>
+                            <button onclick="closeServiceOrderModal()" style="background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" 
+                                onmouseover="this.style.background='rgba(255,255,255,0.3)'" 
+                                onmouseout="this.style.background='rgba(255,255,255,0.2)'">&times;</button>
+                        </div>
                     </div>
-                    <div id="serviceOrderList" style="margin-bottom: 20px;">
-                        <p style="text-align: center; color: #999;">Đang tải danh sách dịch vụ...</p>
+                    
+                    <!-- Content -->
+                    <div style="padding: 24px; overflow-y: auto; flex: 1;">
+                        <div id="serviceOrderList">
+                            <div style="text-align: center; padding: 40px 20px;">
+                                <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+                                <p style="color: #666; font-size: 16px; margin: 0;">Đang tải danh sách dịch vụ...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -319,25 +334,50 @@
                 const serviceList = document.getElementById('serviceOrderList');
                 
                 if (services && services.length > 0) {
-                    serviceList.innerHTML = services.map(service => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px;">
-                            <div>
-                                <h4 style="margin: 0 0 4px 0; font-size: 16px;">${service.service_name || service.name || 'Dịch vụ'}</h4>
-                                <p style="margin: 0; color: #666; font-size: 14px;">${service.description || ''}</p>
-                                <p style="margin: 4px 0 0 0; color: #0066cc; font-weight: 500;">${service.price ? service.price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</p>
-                            </div>
-                            <button onclick="orderService(${bookingId}, ${service.id}, '${(service.service_name || service.name || 'Dịch vụ').replace(/'/g, "\\'")}', ${service.price || 0})" 
-                                class="auth-btn" style="background: #0066cc; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                                Đặt Ngay
-                            </button>
+                    serviceList.innerHTML = `
+                        <div style="display: grid; gap: 16px;">
+                            ${services.map(service => `
+                                <div style="display: flex; align-items: center; padding: 20px; border: 2px solid #e8f0fe; border-radius: 12px; background: #f8f9ff; transition: all 0.3s; cursor: pointer;"
+                                    onmouseover="this.style.borderColor='#0066cc'; this.style.boxShadow='0 4px 12px rgba(0,102,204,0.15)'; this.style.transform='translateY(-2px)'"
+                                    onmouseout="this.style.borderColor='#e8f0fe'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 8px;">
+                                            <h4 style="margin: 0; font-size: 18px; font-weight: 600; color: #333; line-height: 1.4;">${service.service_name || service.name || 'Dịch vụ'}</h4>
+                                            <span style="background: linear-gradient(135deg, #0066cc, #004499); color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; white-space: nowrap; margin-left: 12px;">
+                                                ${service.price && service.price > 0 ? service.price.toLocaleString('vi-VN') + ' VNĐ' : 'Miễn phí'}
+                                            </span>
+                                        </div>
+                                        ${service.description ? `<p style="margin: 0; color: #666; font-size: 14px; line-height: 1.5;">${service.description}</p>` : ''}
+                                        ${service.category ? `<p style="margin: 8px 0 0 0; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">${service.category}</p>` : ''}
+                                    </div>
+                                    <button onclick="orderService(${bookingId}, ${service.id}, '${(service.service_name || service.name || 'Dịch vụ').replace(/'/g, "\\'")}', ${service.price || 0})" 
+                                        style="background: linear-gradient(135deg, #0066cc, #004499); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; margin-left: 16px; white-space: nowrap; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,102,204,0.3);"
+                                        onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 12px rgba(0,102,204,0.4)'"
+                                        onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0,102,204,0.3)'">
+                                        Đặt Ngay
+                                    </button>
+                                </div>
+                            `).join('')}
                         </div>
-                    `).join('');
+                    `;
                 } else {
-                    serviceList.innerHTML = '<p style="color: #999; text-align: center;">Không có dịch vụ nào</p>';
+                    serviceList.innerHTML = `
+                        <div style="text-align: center; padding: 60px 20px;">
+                            <div style="font-size: 64px; margin-bottom: 16px;">📭</div>
+                            <h3 style="margin: 0 0 8px 0; color: #333; font-size: 20px;">Không có dịch vụ nào</h3>
+                            <p style="color: #999; font-size: 14px; margin: 0;">Hiện tại chưa có dịch vụ nào khả dụng</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
                 const serviceList = document.getElementById('serviceOrderList');
-                serviceList.innerHTML = '<p style="color: #f44336; text-align: center;">Lỗi khi tải danh sách dịch vụ: ' + error.message + '</p>';
+                serviceList.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px;">
+                        <div style="font-size: 64px; margin-bottom: 16px;">⚠️</div>
+                        <h3 style="margin: 0 0 8px 0; color: #f44336; font-size: 20px;">Lỗi khi tải danh sách dịch vụ</h3>
+                        <p style="color: #666; font-size: 14px; margin: 0;">${error.message || 'Đã xảy ra lỗi không xác định'}</p>
+                    </div>
+                `;
             }
         }
 
