@@ -396,7 +396,7 @@ INSERT INTO rooms (room_number, room_type, price, status, capacity) VALUES
 -- Insert sample services
 INSERT INTO services (service_name, description, price, category) VALUES
 ('Airport Transfer', 'Dịch vụ đưa đón sân bay', 200000.00, 'transportation'),
-('Breakfast', 'Bữa sáng buffet', 150000.00, 'food'),
+('Breakfast', 'Bữa sáng buffet', 0, 'food'),
 ('Tour Guide', 'Hướng dẫn viên du lịch', 500000.00, 'tour'),
 ('BBQ Party', 'Tiệc BBQ ngoài trời', 800000.00, 'food'),
 ('Laundry', 'Dịch vụ giặt ủi', 100000.00, 'room_service'),
