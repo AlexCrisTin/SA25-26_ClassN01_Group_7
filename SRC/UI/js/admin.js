@@ -893,8 +893,21 @@ window.removeEditRoomImage = removeEditRoomImage;
 async function loadUsers() {
     try {
         const users = await UserAPI.getAllUsers();
-        allUsers = users;
-        displayUsers(users);
+        
+        // Sắp xếp users theo cấp bậc: administrator > receptionist > user
+        const roleOrder = { 'administrator': 1, 'receptionist': 2, 'user': 3 };
+        const sortedUsers = users.sort((a, b) => {
+            const roleA = roleOrder[a.role] || 99;
+            const roleB = roleOrder[b.role] || 99;
+            if (roleA !== roleB) {
+                return roleA - roleB;
+            }
+            // Nếu cùng role, sắp xếp theo tên
+            return (a.full_name || '').localeCompare(b.full_name || '');
+        });
+        
+        allUsers = sortedUsers;
+        displayUsers(sortedUsers);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách người dùng: ' + error.message, 'error');
         document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="7" class="error">Lỗi khi tải dữ liệu</td></tr>';
@@ -977,7 +990,19 @@ function filterUsers() {
         (u.email && u.email.toLowerCase().includes(searchTerm)) ||
         (u.role && u.role.toLowerCase().includes(searchTerm))
     );
-    displayUsers(filtered);
+    
+    // Sắp xếp kết quả tìm kiếm theo cấp bậc
+    const roleOrder = { 'administrator': 1, 'receptionist': 2, 'user': 3 };
+    const sortedFiltered = filtered.sort((a, b) => {
+        const roleA = roleOrder[a.role] || 99;
+        const roleB = roleOrder[b.role] || 99;
+        if (roleA !== roleB) {
+            return roleA - roleB;
+        }
+        return (a.full_name || '').localeCompare(b.full_name || '');
+    });
+    
+    displayUsers(sortedFiltered);
 }
 
 window.loadUsers = loadUsers;
