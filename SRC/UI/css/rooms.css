@@ -97,11 +97,11 @@
      box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.25);
  }
 
- .rooms-grid {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-     gap: 24px;
- }
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
 
  .room-list-card {
      background: #ffffff;
