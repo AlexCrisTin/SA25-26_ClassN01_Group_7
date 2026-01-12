@@ -151,9 +151,24 @@ const UserAPI = {
         return await apiCall('/users', 'POST', userData);
     },
 
+    // Get all users (Admin only)
+    getAllUsers: async () => {
+        return await apiCall('/users', 'GET');
+    },
+
     // Get user by ID
     getUser: async (userId) => {
         return await apiCall(`/users/${userId}`, 'GET');
+    },
+
+    // Update user (Admin only)
+    updateUser: async (userId, userData) => {
+        return await apiCall(`/users/${userId}`, 'PUT', userData);
+    },
+
+    // Delete user (Admin only)
+    deleteUser: async (userId) => {
+        return await apiCall(`/users/${userId}`, 'DELETE');
     },
 
     // Update user profile

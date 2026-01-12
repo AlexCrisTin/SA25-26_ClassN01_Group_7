@@ -47,6 +47,37 @@ class UserController:
         except ValueError as e:
             return self.view.error_response(str(e), 400)
     
+    def get_all_users(self):
+        #Xử lý GET /api/users
+        try:
+            users = self.service.get_all_users()
+            return self.view.users_found(users)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+    
+    def update_user(self, user_id):
+        #Xử lý PUT /api/users/<user_id>
+        data = request.json
+        try:
+            user = self.service.update_user(
+                user_id,
+                data.get('full_name'),
+                data.get('phone'),
+                data.get('email'),
+                data.get('role')
+            )
+            return self.view.user_updated(user)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+    
+    def delete_user(self, user_id):
+        #Xử lý DELETE /api/users/<user_id>
+        try:
+            self.service.delete_user(user_id)
+            return self.view.user_deleted()
+        except ValueError as e:
+            return self.view.error_response(str(e), 404)
+    
     def login(self):
         #Xử lý POST /api/auth/login
         data = request.json

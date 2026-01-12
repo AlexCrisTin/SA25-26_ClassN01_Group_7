@@ -146,6 +146,27 @@ class UserRepository:
                 cursor.close()
                 connection.close()
     
+    def delete(self, user_id):
+        """Xóa user khỏi database"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+            
+            query = "DELETE FROM users WHERE id = %s"
+            cursor.execute(query, (user_id,))
+            connection.commit()
+            
+            return cursor.rowcount > 0
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error deleting user: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
     def _row_to_user(self, row):
         """Chuyển đổi database row thành User object"""
         return User(

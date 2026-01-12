@@ -4,6 +4,7 @@ let allRooms = [];
 let allBookings = [];
 let allStaff = [];
 let allServices = [];
+let allUsers = [];
 
 // Check admin access on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadRooms();
     // Tab quản lý đặt phòng đã được chuyển sang Receptionist Panel
     loadStaff();
+    loadUsers();
     loadServices();
 
     // Setup form handlers
@@ -827,6 +829,28 @@ function setupFormHandlers() {
             showNotification('Lỗi khi cập nhật dịch vụ: ' + error.message, 'error');
         }
     });
+
+    // Edit User Form
+    document.getElementById('editUserForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const userId = document.getElementById('edit_user_id').value;
+        const userData = {
+            full_name: document.getElementById('edit_user_full_name').value,
+            email: document.getElementById('edit_user_email').value,
+            phone: document.getElementById('edit_user_phone').value || null,
+            role: document.getElementById('edit_user_role').value
+        };
+
+        try {
+            await UserAPI.updateUser(userId, userData);
+            showNotification('Cập nhật người dùng thành công!', 'success');
+            closeModal('editUserModal');
+            loadUsers();
+        } catch (error) {
+            showNotification('Lỗi khi cập nhật người dùng: ' + error.message, 'error');
+        }
+    });
 }
 
 // Close modal when clicking outside
@@ -865,3 +889,99 @@ window.removeRoomImage = removeRoomImage;
 window.previewEditRoomImage = previewEditRoomImage;
 window.removeEditRoomImage = removeEditRoomImage;
 
+// ========== USER MANAGEMENT ==========
+async function loadUsers() {
+    try {
+        const users = await UserAPI.getAllUsers();
+        allUsers = users;
+        displayUsers(users);
+    } catch (error) {
+        showNotification('Lỗi khi tải danh sách người dùng: ' + error.message, 'error');
+        document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="7" class="error">Lỗi khi tải dữ liệu</td></tr>';
+    }
+}
+
+function displayUsers(users) {
+    const tbody = document.getElementById('usersTableBody');
+    if (!users || users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty">Không có người dùng nào</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = users.map(u => `
+        <tr>
+            <td>${u.id}</td>
+            <td>${u.username || 'N/A'}</td>
+            <td>${u.full_name || 'N/A'}</td>
+            <td>${u.email || 'N/A'}</td>
+            <td>${u.phone || 'N/A'}</td>
+            <td><span class="badge badge-${u.role === 'administrator' ? 'admin' : u.role === 'receptionist' ? 'receptionist' : 'user'}">${u.role || 'user'}</span></td>
+            <td>
+                <button class="btn-view" onclick="viewUser(${u.id})">Xem</button>
+                <button class="btn-edit" onclick="editUser(${u.id})">Sửa</button>
+                <button class="btn-delete" onclick="deleteUser(${u.id})">Xóa</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+async function viewUser(userId) {
+    try {
+        const user = await UserAPI.getUser(userId);
+        document.getElementById('view_user_id').textContent = user.id || 'N/A';
+        document.getElementById('view_user_username').textContent = user.username || 'N/A';
+        document.getElementById('view_user_full_name').textContent = user.full_name || 'N/A';
+        document.getElementById('view_user_email').textContent = user.email || 'N/A';
+        document.getElementById('view_user_phone').textContent = user.phone || 'N/A';
+        document.getElementById('view_user_role').textContent = user.role || 'user';
+        document.getElementById('viewUserModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin người dùng: ' + error.message, 'error');
+    }
+}
+
+async function editUser(userId) {
+    try {
+        const user = await UserAPI.getUser(userId);
+        document.getElementById('edit_user_id').value = user.id;
+        document.getElementById('edit_user_username').value = user.username || '';
+        document.getElementById('edit_user_full_name').value = user.full_name || '';
+        document.getElementById('edit_user_email').value = user.email || '';
+        document.getElementById('edit_user_phone').value = user.phone || '';
+        document.getElementById('edit_user_role').value = user.role || 'user';
+        document.getElementById('editUserModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin người dùng: ' + error.message, 'error');
+    }
+}
+
+async function deleteUser(userId) {
+    if (!confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) {
+        return;
+    }
+    
+    try {
+        await UserAPI.deleteUser(userId);
+        showNotification('Xóa người dùng thành công!', 'success');
+        loadUsers();
+    } catch (error) {
+        showNotification('Lỗi khi xóa người dùng: ' + error.message, 'error');
+    }
+}
+
+function filterUsers() {
+    const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+    const filtered = allUsers.filter(u => 
+        (u.username && u.username.toLowerCase().includes(searchTerm)) ||
+        (u.full_name && u.full_name.toLowerCase().includes(searchTerm)) ||
+        (u.email && u.email.toLowerCase().includes(searchTerm)) ||
+        (u.role && u.role.toLowerCase().includes(searchTerm))
+    );
+    displayUsers(filtered);
+}
+
+window.loadUsers = loadUsers;
+window.viewUser = viewUser;
+window.editUser = editUser;
+window.deleteUser = deleteUser;
+window.filterUsers = filterUsers;

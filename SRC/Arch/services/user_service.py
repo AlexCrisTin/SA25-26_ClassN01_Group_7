@@ -64,6 +64,41 @@ class UserService:
             return self.repo.update(user_id, **update_data)
         return user
     
+    def update_user(self, user_id, full_name=None, phone=None, email=None, role=None):
+        #Cập nhật thông tin user (cho admin)
+        user = self.repo.find_by_id(user_id)
+        if not user:
+            raise ValueError(f"User with ID {user_id} not found.")
+        
+        # Check if email already exists (if changing email)
+        if email and email != user.email:
+            existing_user = self.repo.find_by_email(email)
+            if existing_user and existing_user.id != user_id:
+                raise ValueError(f"Email {email} already exists.")
+        
+        # Update using repository
+        update_data = {}
+        if full_name:
+            update_data['full_name'] = full_name
+        if phone:
+            update_data['phone'] = phone
+        if email:
+            update_data['email'] = email
+        if role:
+            update_data['role'] = role
+        
+        if update_data:
+            return self.repo.update(user_id, **update_data)
+        return user
+    
+    def delete_user(self, user_id):
+        #Xóa user
+        user = self.repo.find_by_id(user_id)
+        if not user:
+            raise ValueError(f"User with ID {user_id} not found.")
+        
+        return self.repo.delete(user_id)
+    
     def authenticate_user(self, username, password):
         #Xác thực user với username và password
         user = self.repo.find_by_username(username)

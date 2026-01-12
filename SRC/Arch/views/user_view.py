@@ -27,6 +27,21 @@ class UserView:
         }), 200
     
     @staticmethod
+    def users_found(users):
+        #Response khi tìm thấy danh sách users
+        return jsonify([user.to_dict() for user in users]), 200
+    
+    @staticmethod
+    def user_updated(user):
+        #Response khi cập nhật user thành công
+        return jsonify({"message": "User updated successfully", "user": user.to_dict()}), 200
+    
+    @staticmethod
+    def user_deleted():
+        #Response khi xóa user thành công
+        return jsonify({"message": "User deleted successfully"}), 200
+    
+    @staticmethod
     def error_response(message, status_code=400):
         #Format response lỗi
         return jsonify({"error": message}), status_code

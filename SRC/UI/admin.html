@@ -38,6 +38,7 @@
         <div class="admin-tabs">
             <button class="tab-btn active" onclick="switchTab('rooms')">Quản Lý Phòng</button>
             <button class="tab-btn" onclick="switchTab('staff')">Quản Lý Nhân Viên</button>
+            <button class="tab-btn" onclick="switchTab('users')">Quản Lý Người Dùng</button>
             <button class="tab-btn" onclick="switchTab('services')">Quản Lý Dịch Vụ</button>
             <button class="tab-btn" onclick="switchTab('reports')">Báo Cáo & Thống Kê</button>
         </div>
@@ -110,6 +111,37 @@
                     <tbody id="staffTableBody">
                         <tr>
                             <td colspan="8" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Management Tab -->
+        <div id="users-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Quản Lý Người Dùng</h2>
+                <div class="search-bar" style="margin-left: auto;">
+                    <input type="text" id="userSearch" placeholder="Tìm theo tên, email, username, role" onkeyup="filterUsers()">
+                </div>
+            </div>
+
+            <div id="usersTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Họ Tên</th>
+                            <th>Email</th>
+                            <th>SĐT</th>
+                            <th>Vai Trò</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">Đang tải dữ liệu...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -494,6 +526,79 @@
                     <input type="text" id="service_category" placeholder="e.g., Spa, Dining, Transport">
                 </div>
                 <button type="submit" class="btn-primary">Thêm Dịch Vụ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View User Modal -->
+    <div id="viewUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('viewUserModal')">&times;</span>
+            <h2>Thông Tin Người Dùng</h2>
+            <div id="viewUserContent" class="view-content">
+                <div class="info-group">
+                    <label>ID:</label>
+                    <span id="view_user_id"></span>
+                </div>
+                <div class="info-group">
+                    <label>Username:</label>
+                    <span id="view_user_username"></span>
+                </div>
+                <div class="info-group">
+                    <label>Họ Tên:</label>
+                    <span id="view_user_full_name"></span>
+                </div>
+                <div class="info-group">
+                    <label>Email:</label>
+                    <span id="view_user_email"></span>
+                </div>
+                <div class="info-group">
+                    <label>Số Điện Thoại:</label>
+                    <span id="view_user_phone"></span>
+                </div>
+                <div class="info-group">
+                    <label>Vai Trò:</label>
+                    <span id="view_user_role"></span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('viewUserModal')">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editUserModal')">&times;</span>
+            <h2>Sửa Thông Tin Người Dùng</h2>
+            <form id="editUserForm">
+                <input type="hidden" id="edit_user_id">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="edit_user_username" readonly style="background-color: #f5f5f5;">
+                </div>
+                <div class="form-group">
+                    <label>Họ Tên *</label>
+                    <input type="text" id="edit_user_full_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="edit_user_email" required>
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại</label>
+                    <input type="tel" id="edit_user_phone">
+                </div>
+                <div class="form-group">
+                    <label>Vai Trò *</label>
+                    <select id="edit_user_role" required>
+                        <option value="user">User</option>
+                        <option value="receptionist">Receptionist</option>
+                        <option value="administrator">Administrator</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Cập Nhật</button>
             </form>
         </div>
     </div>

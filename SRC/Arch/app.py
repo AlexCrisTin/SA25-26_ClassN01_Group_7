@@ -155,10 +155,25 @@ def login():
 def create_user():
     return user_controller.create_user()
 
+@app.route('/api/users', methods=['GET'])
+@require_admin  # Chỉ admin mới xem được danh sách users
+def get_all_users():
+    return user_controller.get_all_users()
+
 @app.route('/api/users/<user_id>', methods=['GET'])
 @require_auth  # Phải đăng nhập để xem thông tin user
 def get_user(user_id):
     return user_controller.get_user(user_id)
+
+@app.route('/api/users/<user_id>', methods=['PUT'])
+@require_admin  # Chỉ admin mới update được user
+def update_user(user_id):
+    return user_controller.update_user(user_id)
+
+@app.route('/api/users/<user_id>', methods=['DELETE'])
+@require_admin  # Chỉ admin mới xóa được user
+def delete_user(user_id):
+    return user_controller.delete_user(user_id)
 
 @app.route('/api/users/<user_id>/profile', methods=['PUT'])
 @require_auth  # Phải đăng nhập để update profile (có thể thêm check user chỉ update được profile của mình)
