@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-01-11
+
+### Added
+- User Management tab in Admin Panel (`admin.html`)
+  - View all users with role-based sorting (administrator > receptionist > user)
+  - View user details modal
+  - Edit user information (full name, phone, email, role)
+  - Delete user functionality
+  - Search and filter users by name
+- Service Request Management tab in Receptionist Panel (`receptionist.html`)
+  - View all service requests with booking and service details
+  - Update service request status (pending, in_progress, completed, cancelled)
+  - Add notes when updating service request status
+  - Filter service requests by status
+  - Display service request information including booking ID, service name, quantity, and total price
+- Service deletion protection
+  - Prevents deletion of services that have associated service requests
+  - Shows user-friendly error message with count of linked service requests
+
+### Changed
+- Admin Panel: Removed receptionist account creation when adding new staff
+  - Simplified staff management workflow
+  - Single main receptionist account is sufficient for system operations
+- Room listing display: Limited to maximum 2 rooms per row on larger screens
+  - Improved visual layout and readability
+  - Better use of screen space
+- API error handling improvements (`api.js`)
+  - Enhanced network error detection and reporting
+  - Better handling of non-JSON responses
+  - More detailed error messages for troubleshooting server connectivity issues
+  - Checks `content-type` header before parsing JSON responses
+- Service request status update: Only sends `notes` parameter if it has a value
+  - Prevents sending `null` values in API requests
+
+### Fixed
+- Fixed `UnboundLocalError` in `service_controller.py`
+  - Resolved variable name conflict between Flask's `request` object and local variable
+  - Changed local variable name from `request` to `service_request` to avoid conflicts
+- Fixed service request status update connectivity errors
+  - Improved error handling provides clearer diagnostic information
+  - Better user feedback when server connection fails
+
 ## [0.4.0] - 2026-01-10
 
 ### Added
