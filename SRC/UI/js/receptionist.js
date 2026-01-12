@@ -1,5 +1,6 @@
 // Receptionist Panel JS
 let allBookings = [];
+let allServiceRequests = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
     // Chỉ cho phép receptionist hoặc admin
@@ -26,6 +27,33 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     await loadBookings();
+    
+    // Load service requests when service-requests tab is active
+    const serviceRequestsTab = document.getElementById('reception-service-requests-tab');
+    if (serviceRequestsTab && serviceRequestsTab.classList.contains('active')) {
+        await loadServiceRequests();
+    }
+    
+    // Setup form handler for update service request
+    const updateServiceRequestForm = document.getElementById('updateServiceRequestForm');
+    if (updateServiceRequestForm) {
+        updateServiceRequestForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const requestId = document.getElementById('update_request_id').value;
+            const status = document.getElementById('update_request_status').value;
+            const notes = document.getElementById('update_request_notes').value || null;
+            
+            try {
+                await ServiceRequestAPI.updateServiceRequestStatus(requestId, status, notes);
+                showNotification('Cập nhật trạng thái yêu cầu dịch vụ thành công!', 'success');
+                closeModal('updateServiceRequestModal');
+                loadServiceRequests();
+            } catch (error) {
+                showNotification('Lỗi khi cập nhật trạng thái: ' + error.message, 'error');
+            }
+        });
+    }
 });
 
 function switchReceptionTab(tabName) {
@@ -35,6 +63,11 @@ function switchReceptionTab(tabName) {
     const tabId = `reception-${tabName}-tab`;
     document.getElementById(tabId).classList.add('active');
     event.target.classList.add('active');
+    
+    // Load service requests when switching to service-requests tab
+    if (tabName === 'service-requests') {
+        loadServiceRequests();
+    }
 }
 
 // Reuse booking list for receptionist
@@ -602,4 +635,116 @@ window.updateBookingStatus = updateBookingStatus;
         window.displayCheckinBookingDetails = displayCheckinBookingDetails;
         window.displayCheckoutBookingDetails = displayCheckoutBookingDetails;
 
+// ========== SERVICE REQUEST MANAGEMENT ==========
+async function loadServiceRequests() {
+    try {
+        const requests = await ServiceRequestAPI.getAllServiceRequests();
+        allServiceRequests = requests;
+        displayServiceRequests(requests);
+    } catch (error) {
+        showNotification('Lỗi khi tải danh sách yêu cầu dịch vụ: ' + error.message, 'error');
+        document.getElementById('serviceRequestsTableBody').innerHTML = '<tr><td colspan="9" class="error">Lỗi khi tải dữ liệu</td></tr>';
+    }
+}
+
+function displayServiceRequests(requests) {
+    const tbody = document.getElementById('serviceRequestsTableBody');
+    if (!requests || requests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="empty">Không có yêu cầu dịch vụ nào</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = requests.map(req => {
+        const statusLabel = req.status || 'pending';
+        const statusClass = 
+            statusLabel === 'completed' ? 'status-completed' :
+            statusLabel === 'in_progress' ? 'status-in-progress' :
+            statusLabel === 'cancelled' ? 'status-cancelled' : 'status-pending';
+        
+        const requestedAt = req.requested_at ? new Date(req.requested_at).toLocaleString('vi-VN') : 'N/A';
+        const totalPrice = req.total_price ? parseFloat(req.total_price).toLocaleString('vi-VN') + ' VNĐ' : 'N/A';
+        
+        return `
+            <tr>
+                <td>${req.id}</td>
+                <td>${req.service_name || 'N/A'}</td>
+                <td>${req.guest_name || 'N/A'}</td>
+                <td>${req.room_number || 'N/A'}</td>
+                <td>${req.quantity || 1}</td>
+                <td>${totalPrice}</td>
+                <td><span class="badge ${statusClass}">${getStatusLabel(statusLabel)}</span></td>
+                <td>${requestedAt}</td>
+                <td>
+                    <button class="btn-edit" onclick="updateServiceRequestStatus(${req.id})">Cập Nhật</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function getStatusLabel(status) {
+    const labels = {
+        'pending': 'Chờ Xử Lý',
+        'in_progress': 'Đang Xử Lý',
+        'completed': 'Đã Hoàn Thành',
+        'cancelled': 'Đã Hủy'
+    };
+    return labels[status] || status;
+}
+
+async function updateServiceRequestStatus(requestId) {
+    try {
+        const request = await ServiceRequestAPI.getServiceRequest(requestId);
+        document.getElementById('update_request_id').value = request.id;
+        document.getElementById('update_request_service_name').value = request.service_name || 'N/A';
+        document.getElementById('update_request_guest_name').value = request.guest_name || 'N/A';
+        document.getElementById('update_request_room_number').value = request.room_number || 'N/A';
+        document.getElementById('update_request_status').value = request.status || 'pending';
+        document.getElementById('update_request_notes').value = request.notes || '';
+        document.getElementById('updateServiceRequestModal').style.display = 'block';
+    } catch (error) {
+        showNotification('Lỗi khi tải thông tin yêu cầu dịch vụ: ' + error.message, 'error');
+    }
+}
+
+function filterServiceRequests() {
+    const searchTerm = document.getElementById('serviceRequestSearch').value.toLowerCase();
+    const statusFilter = document.getElementById('serviceRequestStatusFilter').value;
+    
+    let filtered = allServiceRequests || [];
+    
+    if (searchTerm) {
+        filtered = filtered.filter(req => 
+            (req.service_name && req.service_name.toLowerCase().includes(searchTerm)) ||
+            (req.guest_name && req.guest_name.toLowerCase().includes(searchTerm)) ||
+            (req.room_number && req.room_number.toLowerCase().includes(searchTerm)) ||
+            (req.category && req.category.toLowerCase().includes(searchTerm))
+        );
+    }
+    
+    if (statusFilter !== 'all') {
+        filtered = filtered.filter(req => req.status === statusFilter);
+    }
+    
+    displayServiceRequests(filtered);
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+window.loadServiceRequests = loadServiceRequests;
+window.updateServiceRequestStatus = updateServiceRequestStatus;
+window.filterServiceRequests = filterServiceRequests;
+window.closeModal = closeModal;
 

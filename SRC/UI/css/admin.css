@@ -541,3 +541,24 @@
     background-color: #28a745;
     color: white;
 }
+
+/* Status badges for service requests */
+.status-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-in-progress {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.status-completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-cancelled {
+    background-color: #dc3545;
+    color: white;
+}

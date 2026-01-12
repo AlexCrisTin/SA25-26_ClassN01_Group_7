@@ -57,10 +57,15 @@ class ServiceService:
         return self.repo.update(service_id, **update_data)
     
     def delete_service(self, service_id):
-        #Xóa service
+        #Xóa service với kiểm tra service_requests
         service = self.repo.find_by_id(service_id)
         if not service:
             raise ValueError(f"Service with ID {service_id} not found.")
+        
+        # Kiểm tra xem có service_requests nào đang sử dụng service này không
+        request_count = self.service_request_repo.count_by_service_id(service_id)
+        if request_count > 0:
+            raise ValueError(f"Không thể xóa dịch vụ này. Dịch vụ đang được sử dụng trong {request_count} yêu cầu dịch vụ. Vui lòng hủy hoặc hoàn thành các yêu cầu dịch vụ trước khi xóa.")
         
         return self.repo.delete(service_id)
     
@@ -114,3 +119,22 @@ class ServiceService:
             if connection and connection.is_connected():
                 cursor.close()
                 connection.close()
+    
+    def get_all_service_requests(self):
+        #Lấy tất cả service requests
+        return self.service_request_repo.find_all()
+    
+    def get_service_request(self, request_id):
+        #Lấy thông tin service request theo ID
+        request = self.service_request_repo.find_by_id(request_id)
+        if not request:
+            raise ValueError(f"Service request with ID {request_id} not found.")
+        return request
+    
+    def update_service_request_status(self, request_id, status, notes=None):
+        #Cập nhật status của service request
+        valid_statuses = ['pending', 'in_progress', 'completed', 'cancelled']
+        if status not in valid_statuses:
+            raise ValueError(f"Invalid status. Must be one of: {', '.join(valid_statuses)}")
+        
+        return self.service_request_repo.update_status(request_id, status, notes)

@@ -211,6 +211,22 @@ def update_service(service_id):
 def delete_service(service_id):
     return service_controller.delete_service(service_id)
 
+# ========== SERVICE REQUEST ROUTES ==========
+@app.route('/api/service-requests', methods=['GET'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới xem được service requests
+def get_all_service_requests():
+    return service_controller.get_all_service_requests()
+
+@app.route('/api/service-requests/<request_id>', methods=['GET'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới xem được service request
+def get_service_request(request_id):
+    return service_controller.get_service_request(request_id)
+
+@app.route('/api/service-requests/<request_id>', methods=['PUT'])
+@require_receptionist_or_admin  # Chỉ receptionist và admin mới update được service request
+def update_service_request_status(request_id):
+    return service_controller.update_service_request_status(request_id)
+
 # ========== PAYMENT ROUTES ==========
 @app.route('/api/payments', methods=['POST'])
 @require_auth  # User phải đăng nhập để thanh toán

@@ -80,4 +80,33 @@ class ServiceController:
             return self.view.service_deleted()
         except ValueError as e:
             return self.view.error_response(str(e), 404)
+    
+    def get_all_service_requests(self):
+        #Xử lý GET /api/service-requests
+        try:
+            requests = self.service.get_all_service_requests()
+            return self.view.service_requests_found(requests)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+    
+    def get_service_request(self, request_id):
+        #Xử lý GET /api/service-requests/<request_id>
+        try:
+            request = self.service.get_service_request(request_id)
+            return self.view.service_request_found(request)
+        except ValueError as e:
+            return self.view.error_response(str(e), 404)
+    
+    def update_service_request_status(self, request_id):
+        #Xử lý PUT /api/service-requests/<request_id>
+        data = request.json
+        try:
+            service_request = self.service.update_service_request_status(
+                request_id,
+                data.get('status'),
+                data.get('notes')
+            )
+            return self.view.service_request_updated(service_request)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
 

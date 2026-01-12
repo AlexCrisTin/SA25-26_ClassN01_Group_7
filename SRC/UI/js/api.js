@@ -38,7 +38,21 @@ async function apiCall(endpoint, method = 'GET', data = null, requireAuth = fals
 
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-        const result = await response.json();
+        
+        // Check if response is ok before trying to parse JSON
+        let result;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            try {
+                result = await response.json();
+            } catch (jsonError) {
+                throw new Error(`Invalid JSON response: ${response.status} ${response.statusText}`);
+            }
+        } else {
+            // If not JSON, get text response
+            const text = await response.text();
+            throw new Error(`Unexpected response format: ${text || response.statusText}`);
+        }
         
         if (!response.ok) {
             // Handle authentication/authorization errors
@@ -174,6 +188,28 @@ const UserAPI = {
     // Update user profile
     updateProfile: async (userId, profileData) => {
         return await apiCall(`/users/${userId}/profile`, 'PUT', profileData);
+    }
+};
+
+// ========== SERVICE REQUEST API ==========
+const ServiceRequestAPI = {
+    // Get all service requests
+    getAllServiceRequests: async () => {
+        return await apiCall('/service-requests', 'GET');
+    },
+
+    // Get service request by ID
+    getServiceRequest: async (requestId) => {
+        return await apiCall(`/service-requests/${requestId}`, 'GET');
+    },
+
+    // Update service request status
+    updateServiceRequestStatus: async (requestId, status, notes = null) => {
+        const data = { status };
+        if (notes) {
+            data.notes = notes;
+        }
+        return await apiCall(`/service-requests/${requestId}`, 'PUT', data);
     }
 };
 
@@ -337,6 +373,7 @@ window.BookingAPI = BookingAPI;
 window.UserAPI = UserAPI;
 window.PaymentAPI = PaymentAPI;
 window.ServiceAPI = ServiceAPI;
+window.ServiceRequestAPI = ServiceRequestAPI;
 window.StaffAPI = StaffAPI;
 window.ReportAPI = ReportAPI;
 window.CouponAPI = CouponAPI;

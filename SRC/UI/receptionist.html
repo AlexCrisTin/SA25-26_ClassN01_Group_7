@@ -39,6 +39,7 @@
             <button class="tab-btn active" onclick="switchReceptionTab('bookings')">Quản Lý Đặt Phòng</button>
             <button class="tab-btn" onclick="switchReceptionTab('checkin')">Check-in</button>
             <button class="tab-btn" onclick="switchReceptionTab('checkout')">Check-out</button>
+            <button class="tab-btn" onclick="switchReceptionTab('service-requests')">Quản Lý Yêu Cầu Dịch Vụ</button>
         </div>
 
         <!-- Bookings Management Tab (reuse admin bookings UI) -->
@@ -108,6 +109,84 @@
             </div>
 
             <div id="checkoutBookingResult"></div>
+        </div>
+
+        <!-- Service Requests Management Tab -->
+        <div id="reception-service-requests-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Quản Lý Yêu Cầu Dịch Vụ</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="serviceRequestSearch" placeholder="Tìm theo tên dịch vụ, tên khách, số phòng..." onkeyup="filterServiceRequests()">
+                <select id="serviceRequestStatusFilter" onchange="filterServiceRequests()">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="pending">Chờ Xử Lý</option>
+                    <option value="in_progress">Đang Xử Lý</option>
+                    <option value="completed">Đã Hoàn Thành</option>
+                    <option value="cancelled">Đã Hủy</option>
+                </select>
+            </div>
+
+            <div id="serviceRequestsTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Dịch Vụ</th>
+                            <th>Tên Khách</th>
+                            <th>Số Phòng</th>
+                            <th>Số Lượng</th>
+                            <th>Giá</th>
+                            <th>Trạng Thái</th>
+                            <th>Thời Gian Yêu Cầu</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="serviceRequestsTableBody">
+                        <tr>
+                            <td colspan="9" class="loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Service Request Status Modal -->
+    <div id="updateServiceRequestModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('updateServiceRequestModal')">&times;</span>
+            <h2>Cập Nhật Trạng Thái Yêu Cầu Dịch Vụ</h2>
+            <form id="updateServiceRequestForm">
+                <input type="hidden" id="update_request_id">
+                <div class="form-group">
+                    <label>Dịch Vụ</label>
+                    <input type="text" id="update_request_service_name" readonly style="background-color: #f5f5f5;">
+                </div>
+                <div class="form-group">
+                    <label>Tên Khách</label>
+                    <input type="text" id="update_request_guest_name" readonly style="background-color: #f5f5f5;">
+                </div>
+                <div class="form-group">
+                    <label>Số Phòng</label>
+                    <input type="text" id="update_request_room_number" readonly style="background-color: #f5f5f5;">
+                </div>
+                <div class="form-group">
+                    <label>Trạng Thái *</label>
+                    <select id="update_request_status" required>
+                        <option value="pending">Chờ Xử Lý</option>
+                        <option value="in_progress">Đang Xử Lý</option>
+                        <option value="completed">Đã Hoàn Thành</option>
+                        <option value="cancelled">Đã Hủy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ghi Chú</label>
+                    <textarea id="update_request_notes" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Cập Nhật</button>
+            </form>
         </div>
     </div>
 
