@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/room-detail.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -42,7 +41,6 @@
 
         <div id="roomDetail" style="display:none;">
             <div class="room-detail-layout">
-                <!-- Left: Main content -->
                 <div>
                     <div class="room-gallery" id="roomGallery">
                         <div class="room-gallery-main">
@@ -119,7 +117,6 @@
                     
                 </div>
 
-                <!-- Right: Sidebar -->
                 <aside>
                     <div class="sidebar-card">
                         <div class="sidebar-price" id="sidebarPrice">—</div>
@@ -136,7 +133,6 @@
         </div>
     </div>
 
-    <!-- Booking Modal -->
     <div id="bookingModal" class="booking-modal">
         <div class="booking-modal-content">
             <div class="booking-modal-header">
@@ -178,7 +174,6 @@
             const params = new URLSearchParams(window.location.search);
             currentRoomId = params.get('id');
 
-            // Optional auth display
             const user = AuthManager.getCurrentUser();
             if (user) {
                 document.getElementById('userName').textContent = user.username || user.full_name || 'User';
@@ -235,7 +230,6 @@
             };
             document.getElementById('sidebarStatus').textContent = statusMap[statusLabel] || statusLabel;
 
-            // Disable booking button if room is not available
             const reserveBtn = document.getElementById('reserveBtn');
             const isAvailable = statusLabel === 'available';
             if (!isAvailable) {
@@ -252,18 +246,14 @@
                 reserveBtn.title = '';
             }
 
-            // Description
             document.getElementById('roomDescription').textContent =
                 room.description || 'Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.';
 
-            // Highlights
             document.getElementById('hlBedrooms').textContent = room.room_type || 'Phòng ngủ';
             document.getElementById('hlBathrooms').textContent = 'Phòng tắm riêng';
             document.getElementById('hlCapacity').textContent = `Sức chứa ${room.capacity || 'N/A'} người`;
             document.getElementById('hlPets').textContent = 'Chính sách linh hoạt';
 
-            // Images
-            // Images: dùng ảnh admin upload; nếu chưa có, fallback ảnh mẫu
             const imageUrl = room.image_url
                 ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`)
                 : 'images/room-connecting.jpg';
@@ -280,19 +270,16 @@
             thumb1.alt = `Room ${room.room_number || ''}`;
             thumb2.alt = `Room ${room.room_number || ''}`;
 
-            // Nếu chỉ có 1 ảnh, ẩn phần "+x ảnh khác"
             if (moreEl && room.image_url) {
                 moreEl.textContent = '0';
                 moreEl.parentElement.style.display = 'none';
             }
 
-            // Amenities
             const amenitiesContainer = document.getElementById('roomAmenities');
             amenitiesContainer.innerHTML = '';
             let amenities = [];
             if (room.amenities) {
                 try {
-                    // Cho phép lưu dưới dạng JSON array hoặc chuỗi phân tách bằng dấu phẩy
                     if (typeof room.amenities === 'string') {
                         const trimmed = room.amenities.trim();
                         if (trimmed.startsWith('[')) {
@@ -322,10 +309,7 @@
                 amenitiesContainer.appendChild(div);
             });
 
-            // Reserve button: nếu chưa đăng nhập thì chuyển tới login, nếu đã đăng nhập thì mở form đặt phòng
-            // reserveBtn đã được khai báo ở trên
             reserveBtn.addEventListener('click', function() {
-                // Kiểm tra trạng thái phòng trước khi cho phép đặt
                 if (!currentRoom) {
                     alert('Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
                     return;
@@ -354,7 +338,6 @@
             const modal = document.getElementById('bookingModal');
             if (!modal) return;
 
-            // Gợi ý ngày nhận/trả phòng mặc định
             const today = new Date();
             const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
@@ -391,7 +374,6 @@
                 return;
             }
 
-            // Kiểm tra trạng thái phòng trước khi cho phép đặt
             const roomStatus = currentRoom.status || 'available';
             if (roomStatus !== 'available') {
                 const statusMessages = {
@@ -419,11 +401,9 @@
                 return;
             }
 
-            // Lấy tên khách từ user hiện tại
             const user = AuthManager.getCurrentUser();
             const guestName = user && (user.full_name || user.username) ? (user.full_name || user.username) : 'Khách';
 
-            // Tính số đêm và tổng tiền (nếu có giá phòng)
             const checkIn = new Date(checkInDate);
             const checkOut = new Date(checkOutDate);
             const nights = Math.max(1, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
@@ -444,10 +424,8 @@
             };
 
             try {
-                // Lưu tạm thông tin đặt phòng để xử lý thanh toán trước
                 localStorage.setItem('pendingBookingDraft', JSON.stringify(bookingDraft));
                 closeBookingModal();
-                // Chuyển sang trang thanh toán ở chế độ draft (chưa tạo booking trong DB)
                 window.location.href = 'payment.html?mode=draft';
             } catch (error) {
                 console.error('Error preparing booking draft:', error);

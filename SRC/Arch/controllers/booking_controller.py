@@ -20,11 +20,11 @@ class BookingController:
                 data.get('guest_name'),
                 data.get('room_type'),
                 data.get('check_in_date'),
-                data.get('total_price'),  # Optional: will be calculated from room price if not provided
-                data.get('check_out_date'),  # Optional: defaults to 1 day after check-in
-                data.get('payment_method'),  # Optional: credit_card, cash, bank_transfer
-                data.get('payment_amount'),  # Optional: amount to pay immediately
-                user_id  # Pass user_id to service
+                data.get('total_price'),
+                data.get('check_out_date'),
+                data.get('payment_method'),
+                data.get('payment_amount'),
+                user_id
             )
             return self.view.booking_created(booking)
         except ValueError as e:

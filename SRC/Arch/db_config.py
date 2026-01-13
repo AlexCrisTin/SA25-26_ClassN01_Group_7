@@ -4,8 +4,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Load environment variables from .env file
-# Tìm file .env trong thư mục hiện tại hoặc thư mục cha
+
 env_path = Path(__file__).parent / '.env'
 if not env_path.exists():
     env_path = Path(__file__).parent.parent.parent / '.env'
@@ -51,6 +50,6 @@ class DatabaseConfig:
             print(f"Error: {e}")
             return False
 
-# Singleton instance
+
 db_config = DatabaseConfig()
 

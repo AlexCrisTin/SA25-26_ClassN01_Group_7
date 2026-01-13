@@ -156,9 +156,9 @@ CREATE TABLE coupons (
     valid_from DATE NOT NULL,
     valid_to DATE NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
-    max_uses INT, -- Số lần sử dụng tối đa (NULL = không giới hạn)
-    current_uses INT DEFAULT 0, -- Số lần đã sử dụng
-    min_purchase_amount DECIMAL(10, 2) DEFAULT 0, -- Giá trị đơn hàng tối thiểu
+    max_uses INT, 
+    current_uses INT DEFAULT 0,
+    min_purchase_amount DECIMAL(10, 2) DEFAULT 0,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -192,9 +192,9 @@ CREATE TABLE coupon_usages (
 
 CREATE TABLE checkins (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    booking_id INT NOT NULL UNIQUE, -- Một booking chỉ có một check-in
+    booking_id INT NOT NULL UNIQUE,
     room_id INT NOT NULL,
-    receptionist_id INT, -- Nhân viên lễ tân xử lý check-in
+    receptionist_id INT,
     checkin_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     guest_count INT DEFAULT 1 CHECK (guest_count > 0),
     notes TEXT,
@@ -212,12 +212,12 @@ CREATE TABLE checkins (
 
 CREATE TABLE checkouts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    booking_id INT NOT NULL UNIQUE, -- Một booking chỉ có một check-out
-    receptionist_id INT, -- Nhân viên lễ tân xử lý check-out
+    booking_id INT NOT NULL UNIQUE,
+    receptionist_id INT,
     checkout_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_amount DECIMAL(10, 2) NOT NULL, -- Tổng số tiền thanh toán (bao gồm dịch vụ)
-    additional_charges DECIMAL(10, 2) DEFAULT 0, -- Phí phát sinh (damage, minibar, etc.)
-    refund_amount DECIMAL(10, 2) DEFAULT 0, -- Số tiền hoàn lại (nếu có)
+    total_amount DECIMAL(10, 2) NOT NULL,
+    additional_charges DECIMAL(10, 2) DEFAULT 0,
+    refund_amount DECIMAL(10, 2) DEFAULT 0,
     payment_status ENUM('paid', 'pending', 'partial') DEFAULT 'pending',
     notes TEXT,
     FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
@@ -236,9 +236,9 @@ CREATE TABLE reports (
     generated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     period_start DATE,
     period_end DATE,
-    data JSON, -- Lưu trữ dữ liệu báo cáo dạng JSON
-    generated_by INT, -- Người tạo báo cáo
-    file_path VARCHAR(255), -- Đường dẫn file báo cáo (nếu export)
+    data JSON,
+    generated_by INT,
+    file_path VARCHAR(255),
     FOREIGN KEY (generated_by) REFERENCES users(id) ON DELETE SET NULL,
     INDEX idx_report_type (report_type),
     INDEX idx_generated_date (generated_date),
@@ -251,7 +251,7 @@ CREATE TABLE reports (
 
 CREATE TABLE wallets (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE, -- Liên kết với users.id
+    user_id INT NOT NULL UNIQUE,
     balance DECIMAL(15, 2) NOT NULL DEFAULT 0 CHECK (balance >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -278,9 +278,7 @@ CREATE TRIGGER after_checkin_insert
 AFTER INSERT ON checkins
 FOR EACH ROW
 BEGIN
-    -- Cập nhật trạng thái phòng thành occupied
     UPDATE rooms SET status = 'occupied' WHERE id = NEW.room_id;
-    -- Cập nhật trạng thái booking thành checked_in
     UPDATE bookings SET status = 'checked_in' WHERE id = NEW.booking_id;
 END//
 DELIMITER ;
@@ -302,7 +300,7 @@ BEGIN
 END//
 DELIMITER ;
     
--- VIEWS (Các view hữu ích)
+-- VIEWS 
 
 -- View: Thông tin booking đầy đủ
 CREATE VIEW v_booking_details AS

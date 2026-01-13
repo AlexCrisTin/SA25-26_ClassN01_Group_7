@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -33,8 +32,7 @@
             <h1>Receptionist Panel</h1>
             <p>Quản lý đặt phòng, check-in, check-out</p>
         </div>
-
-        <!-- Receptionist Tabs -->
+        
         <div class="admin-tabs">
             <button class="tab-btn active" onclick="switchReceptionTab('bookings')">Quản Lý Đặt Phòng</button>
             <button class="tab-btn" onclick="switchReceptionTab('checkin')">Check-in</button>
@@ -42,7 +40,6 @@
             <button class="tab-btn" onclick="switchReceptionTab('service-requests')">Quản Lý Yêu Cầu Dịch Vụ</button>
         </div>
 
-        <!-- Bookings Management Tab (reuse admin bookings UI) -->
         <div id="reception-bookings-tab" class="tab-content active">
             <div class="section-header">
                 <h2>Quản Lý Đặt Phòng</h2>
@@ -83,7 +80,6 @@
             </div>
         </div>
 
-        <!-- Check-in Tab -->
         <div id="reception-checkin-tab" class="tab-content">
             <div class="section-header">
                 <h2>Xử Lý Check-in</h2>
@@ -97,7 +93,6 @@
             <div id="checkinBookingResult"></div>
         </div>
 
-        <!-- Check-out Tab -->
         <div id="reception-checkout-tab" class="tab-content">
             <div class="section-header">
                 <h2>Xử Lý Check-out</h2>
@@ -111,7 +106,6 @@
             <div id="checkoutBookingResult"></div>
         </div>
 
-        <!-- Service Requests Management Tab -->
         <div id="reception-service-requests-tab" class="tab-content">
             <div class="section-header">
                 <h2>Quản Lý Yêu Cầu Dịch Vụ</h2>
@@ -153,7 +147,6 @@
         </div>
     </div>
 
-    <!-- Update Service Request Status Modal -->
     <div id="updateServiceRequestModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('updateServiceRequestModal')">&times;</span>

@@ -55,7 +55,6 @@
             const loginForm = document.getElementById('loginForm');
             const loginBtn = document.getElementById('loginBtn');
 
-            // Redirect if already logged in
             if (AuthManager.isLoggedIn()) {
                 window.location.href = AuthManager.getRedirectUrl();
                 return;
@@ -81,7 +80,6 @@
                 if (result.success) {
                     showNotification('Đăng nhập thành công!', 'success');
                     setTimeout(() => {
-                        // Redirect based on user role
                         window.location.href = AuthManager.getRedirectUrl();
                     }, 1000);
                 } else {

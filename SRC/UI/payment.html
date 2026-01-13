@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/payment.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -26,7 +25,6 @@
 
     <div class="auth-container">
         <div class="payment-wrapper">
-            <!-- Left: Payment Form -->
             <div class="payment-form-container">
                 <div class="auth-box">
                     <div class="auth-header">
@@ -35,7 +33,6 @@
                     </div>
 
                     <div id="paymentFormContainer">
-                <!-- Booking Summary (Hidden - using card on right instead) -->
                 <div class="payment-summary" id="bookingSummary" style="display: none;">
                     <h3>Thông Tin Đặt Phòng</h3>
                     <div class="summary-item">
@@ -68,7 +65,6 @@
                     </div>
                 </div>
                 
-                <!-- Wallet Balance Display -->
                 <div class="wallet-balance-display" style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #b3d9ff;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #333; font-weight: 500;">Số dư ví của bạn:</span>
@@ -77,7 +73,6 @@
                 </div>
 
                 <form id="paymentForm" class="auth-form">
-                    <!-- Payment Method -->
                     <div class="form-group">
                         <label>Phương Thức Thanh Toán</label>
                         <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
@@ -92,7 +87,6 @@
                         </div>
                     </div>
 
-                    <!-- Coupon Code (Optional) -->
                     <div class="form-group">
                         <label>Mã Giảm Giá (Tùy chọn)</label>
                         <div style="display: flex; gap: 10px;">
@@ -102,7 +96,6 @@
                         <div id="couponMessage" style="margin-top: 5px; font-size: 12px;"></div>
                     </div>
 
-                    <!-- Final Amount -->
                     <div class="payment-summary" style="margin-top: 20px;">
                         <div class="summary-item">
                             <span>Tổng Tiền:</span>
@@ -135,10 +128,8 @@
                 </div>
             </div>
 
-            <!-- Right: Booking Summary Card -->
             <div class="booking-summary-card-container">
                 <div class="booking-summary-card" id="bookingSummaryCard">
-                    <!-- Hotel/Room Info -->
                     <div class="booking-card-header">
                         <div class="booking-room-image">
                             <img id="bookingRoomImage" src="http://localhost:5000/uploads/rooms/luu-y-khi-dat-phong-khach-san (8)-1400x875.png" alt="Room Image" onerror="this.src='http://localhost:5000/uploads/rooms/luu-y-khi-dat-phong-khach-san (8)-1400x875.png'">
@@ -150,7 +141,6 @@
                         </div>
                     </div>
 
-                    <!-- Booking Dates and Guests -->
                     <div class="booking-dates-card">
                         <div class="booking-date-item">
                             <div class="date-icon">📅</div>
@@ -173,7 +163,6 @@
                         <p id="bookingGuests">1 phòng, 2 người lớn</p>
                     </div>
 
-                    <!-- Price Details -->
                     <div class="booking-price-details">
                         <h4>Chi tiết giá:</h4>
                         <div class="price-row">
@@ -202,14 +191,13 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        let currentBooking = null;      // Khi thanh toán cho booking đã tồn tại
-        let bookingDraft = null;        // Khi thanh toán trước rồi mới tạo booking
+        let currentBooking = null;
+        let bookingDraft = null;        
         let appliedCoupon = null;
         let finalAmount = 0;
         let currentWallet = null;
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Block admin from accessing payment page
             if (!AuthManager.requireAuth()) {
                 return;
             }
@@ -220,15 +208,13 @@
             
             const urlParams = new URLSearchParams(window.location.search);
             const bookingId = urlParams.get('bookingId');
-            const mode = urlParams.get('mode'); // mode=draft khi đi từ room-detail
+            const mode = urlParams.get('mode');
 
             if (bookingId) {
-                // Thanh toán cho booking đã tồn tại
                 loadBookingDetails(bookingId);
                 loadWalletBalance();
                 setupPaymentForm();
             } else if (mode === 'draft') {
-                // Thanh toán trước rồi mới tạo booking
                 loadDraftBooking();
                 loadWalletBalance();
                 setupPaymentForm();
@@ -246,7 +232,6 @@
                     throw new Error('Không tìm thấy đặt phòng');
                 }
 
-                // Display booking summary
                 document.getElementById('bookingId').textContent = '#' + currentBooking.id;
                 document.getElementById('guestName').textContent = currentBooking.guest_name;
                 document.getElementById('roomType').textContent = currentBooking.room_type;
@@ -258,7 +243,6 @@
                 document.getElementById('subtotalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
                 document.getElementById('finalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
 
-                // Update booking summary card
                 await updateBookingSummaryCard(currentBooking);
             } catch (error) {
                 showNotification('Lỗi khi tải thông tin đặt phòng: ' + error.message, 'error');
@@ -288,7 +272,6 @@
                 document.getElementById('subtotalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
                 document.getElementById('finalAmount').textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
 
-                // Update booking summary card
                 await updateBookingSummaryCard(bookingDraft);
             } catch (error) {
                 showNotification('Lỗi khi tải thông tin đặt phòng tạm: ' + error.message, 'error');
@@ -297,7 +280,6 @@
         }
 
         function setupPaymentForm() {
-            // Form submission - cho phép chọn: thanh toán bằng ví hoặc tiền mặt tại quầy
             document.getElementById('paymentForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
@@ -310,7 +292,6 @@
                 try {
                     if (selectedMethod === 'wallet') {
                         if (currentBooking) {
-                            // Thanh toán ví cho booking đã tồn tại
                             const paymentData = {
                                 booking_id: currentBooking.id,
                                 amount: finalAmount,
@@ -326,7 +307,6 @@
 
                             showNotification('Thanh toán bằng ví thành công!', 'success');
                         } else if (bookingDraft) {
-                            // Thanh toán ví trước, tạo booking sau (gọi createBooking với payment info)
                             const data = {
                                 ...bookingDraft,
                                 payment_method: 'cash',
@@ -334,21 +314,17 @@
                             };
 
                             const booking = await BookingAPI.createBooking(data);
-                            // Nếu tạo thành công, xem như đã thanh toán vì backend đã trừ ví
                             document.getElementById('paymentFormContainer').style.display = 'none';
                             document.getElementById('paymentSuccess').style.display = 'block';
                             document.getElementById('paymentId').textContent = 'PAY-' + booking.id;
                             document.getElementById('confirmedBookingId').textContent = '#' + booking.id;
 
-                            // Xóa draft
                             localStorage.removeItem('pendingBookingDraft');
 
                             showNotification('Đặt phòng và thanh toán bằng ví thành công!', 'success');
                         }
                     } else {
-                        // Thanh toán tiền mặt: chỉ tạo booking, không trừ ví
-                        if (currentBooking) {
-                            // Đang thanh toán tiền mặt cho booking đã tồn tại
+                            if (currentBooking) {
                             document.getElementById('paymentFormContainer').style.display = 'none';
                             document.getElementById('paymentSuccess').style.display = 'block';
                             document.getElementById('paymentId').textContent = 'CASH-' + currentBooking.id;
@@ -454,22 +430,18 @@
 
         async function updateBookingSummaryCard(booking) {
             try {
-                // Update dates
                 document.getElementById('bookingCheckIn').textContent = formatDateForCard(booking.check_in_date);
                 document.getElementById('bookingCheckOut').textContent = formatDateForCard(booking.check_out_date);
 
-                // Calculate number of nights
                 const checkIn = new Date(booking.check_in_date);
                 const checkOut = new Date(booking.check_out_date);
                 const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
                 const nightsText = nights > 0 ? nights : 1;
 
-                // Get room image - try to find a room with matching room_type
-                let roomImage = 'http://localhost:5000/uploads/rooms/luu-y-khi-dat-phong-khach-san (8)-1400x875.png'; // default
+                let roomImage = 'http://localhost:5000/uploads/rooms/luu-y-khi-dat-phong-khach-san (8)-1400x875.png';
                 try {
-                    const rooms = await RoomAPI.searchRooms(booking.room_type, null); // Search without status filter to get any room of this type
+                    const rooms = await RoomAPI.searchRooms(booking.room_type, null);
                     if (rooms && rooms.length > 0) {
-                        // Find first room with image
                         const roomWithImage = rooms.find(r => r.image_url) || rooms[0];
                         if (roomWithImage && roomWithImage.image_url) {
                             if (roomWithImage.image_url.startsWith('/uploads/')) {
@@ -486,25 +458,21 @@
                 }
                 document.getElementById('bookingRoomImage').src = roomImage;
 
-                // Update hotel name and location
                 document.getElementById('bookingHotelName').textContent = 'Demacia Hotel';
                 document.getElementById('bookingLocation').textContent = 'Việt Nam';
 
-                // Calculate price breakdown
                 const totalPrice = booking.total_price || 0;
                 const pricePerNight = Math.round(totalPrice / nightsText);
-                const serviceFee = Math.round(totalPrice * 0.0028); // ~0.28% service fee
-                const tax = Math.round(totalPrice * 0.0165); // ~1.65% tax
+                const serviceFee = Math.round(totalPrice * 0.0028);
+                const tax = Math.round(totalPrice * 0.0165);
                 const subtotal = totalPrice - serviceFee - tax;
 
-                // Update price details
                 document.getElementById('pricePerNight').textContent = `${pricePerNight.toLocaleString('vi-VN')} VNĐ x ${nightsText} đêm`;
                 document.getElementById('priceAmount').textContent = `${subtotal.toLocaleString('vi-VN')} VNĐ`;
                 document.getElementById('serviceFee').textContent = `${serviceFee.toLocaleString('vi-VN')} VNĐ`;
                 document.getElementById('taxAmount').textContent = `${tax.toLocaleString('vi-VN')} VNĐ`;
                 document.getElementById('bookingTotalPrice').textContent = `${totalPrice.toLocaleString('vi-VN')} VNĐ`;
 
-                // Update guests info (default to 2 adults if not specified)
                 const numGuests = booking.num_guests || booking.num_adults || 2;
                 document.getElementById('bookingGuests').textContent = `1 phòng, ${numGuests} người lớn`;
             } catch (error) {

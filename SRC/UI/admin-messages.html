@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/admin-messages.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -36,7 +35,6 @@
         </div>
 
         <div class="messages-container">
-            <!-- Users List -->
             <div class="users-list">
                 <div class="users-list-header">
                     <h2>Danh Sách Khách Hàng</h2>
@@ -58,7 +56,6 @@
                 </div>
             </div>
 
-            <!-- Chat Panel -->
             <div class="chat-panel" id="chatPanel">
                 <div class="no-chat-selected">
                     <div class="no-chat-selected-icon">👈</div>
@@ -74,14 +71,12 @@
     <script src="js/admin-messages.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
             if (!AuthManager.requireAuth()) {
                 return;
             }
 
             const user = AuthManager.getCurrentUser();
 
-            // Chỉ cho phép admin hoặc receptionist truy cập trang này
             if (!AuthManager.isAdmin() && !AuthManager.isReceptionist()) {
                 showNotification('Bạn không có quyền truy cập trang này', 'error');
                 setTimeout(() => {
@@ -90,24 +85,19 @@
                 return;
             }
 
-            // Hiển thị tên người dùng
             document.getElementById('adminUserName').textContent = user.username || user.full_name || 'User';
 
-            // Ẩn/hiện các link nav theo role:
             const navAdmin = document.getElementById('navAdmin');
             const navReception = document.getElementById('navReception');
 
             if (AuthManager.isAdmin()) {
-                // Admin: nhìn được cả ADMIN PANEL & RECEPTIONIST PANEL
                 if (navAdmin) navAdmin.style.display = '';
                 if (navReception) navReception.style.display = '';
             } else if (AuthManager.isReceptionist()) {
-                // Receptionist: không thấy ADMIN PANEL
                 if (navAdmin) navAdmin.style.display = 'none';
                 if (navReception) navReception.style.display = '';
             }
 
-            // Initialize admin messages manager
             if (typeof AdminMessagesManager !== 'undefined') {
                 AdminMessagesManager.init();
             }

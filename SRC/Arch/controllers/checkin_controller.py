@@ -16,7 +16,7 @@ class CheckInController:
             checkin = self.service.process_checkin(
                 data.get('booking_id'),
                 data.get('receptionist_id'),
-                data.get('room_id')  # Optional: nếu không truyền, service sẽ tự động chọn phòng
+                data.get('room_id')
             )
             return self.view.checkin_processed(checkin)
         except ValueError as e:

@@ -70,13 +70,11 @@
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirm_password');
 
-            // Redirect if already logged in
             if (AuthManager.isLoggedIn()) {
                 window.location.href = AuthManager.getRedirectUrl();
                 return;
             }
 
-            // Validate password match
             confirmPasswordInput.addEventListener('blur', function() {
                 if (passwordInput.value !== confirmPasswordInput.value) {
                     confirmPasswordInput.setCustomValidity('Mật khẩu không khớp');
@@ -119,7 +117,6 @@
                 if (result.success) {
                     showNotification('Đăng ký thành công! Đang chuyển hướng...', 'success');
                     setTimeout(() => {
-                        // New users always go to dashboard (they have role 'user')
                         window.location.href = AuthManager.getRedirectUrl();
                     }, 1000);
                 } else {

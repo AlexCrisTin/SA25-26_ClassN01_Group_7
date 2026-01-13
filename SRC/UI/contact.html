@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/contact.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -39,7 +38,6 @@
             </div>
 
             <div class="contact-content">
-                <!-- Contact Information -->
                 <div class="contact-info-card">
                     <h2>Thông Tin Liên Hệ</h2>
                     <div class="info-item">
@@ -72,7 +70,6 @@
                     </div>
                 </div>
 
-                <!-- Chat Section -->
                 <div class="chat-container">
                     <div class="chat-header">
                         <div class="admin-avatar">A</div>
@@ -116,22 +113,19 @@
     <script src="js/chat.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
             if (!AuthManager.requireAuth()) {
                 return;
             }
 
             const user = AuthManager.getCurrentUser();
             
-            // Show admin panel link if user is admin
+
             if (AuthManager.isAdmin()) {
                 document.getElementById('adminNavItem').style.display = 'block';
             }
             
-            // Display user info
             document.getElementById('userName').textContent = user.username || user.full_name || 'User';
 
-            // Initialize chat
             if (typeof ChatManager !== 'undefined') {
                 ChatManager.init(user);
             }

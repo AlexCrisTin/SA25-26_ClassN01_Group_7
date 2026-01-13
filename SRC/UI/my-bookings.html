@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/my-bookings.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -60,7 +59,6 @@
         </div>
     </div>
 
-    <!-- Cancel Booking Modal -->
     <div id="cancelModal" class="cancel-modal-overlay">
         <div class="cancel-modal">
             <h2>Hủy Đặt Phòng</h2>
@@ -87,7 +85,6 @@
         let pendingCancelBookingId = null;
 
         document.addEventListener('DOMContentLoaded', async function() {
-            // Check authentication
             if (!AuthManager.requireAuth()) {
                 return;
             }
@@ -95,10 +92,8 @@
             const user = AuthManager.getCurrentUser();
             document.getElementById('userName').textContent = user.username || user.full_name || 'User';
 
-            // Load bookings
             await loadBookings();
 
-            // Filter handler
             document.getElementById('filterStatus').addEventListener('change', function() {
                 filterBookings(this.value);
             });
@@ -212,19 +207,15 @@
         }
 
         function viewBooking(bookingId) {
-            // In a real app, navigate to booking detail page
             showNotification('Đang mở chi tiết đặt phòng #' + bookingId, 'info');
-            // window.location.href = `booking-detail.html?id=${bookingId}`;
         }
 
         function editBooking(bookingId) {
-            // In a real app, navigate to edit booking page
             showNotification('Chức năng sửa đặt phòng đang được phát triển', 'info');
-            // window.location.href = `edit-booking.html?id=${bookingId}`;
+
         }
 
         async function cancelBooking(bookingId) {
-            // Mở modal yêu cầu lý do hủy
             pendingCancelBookingId = bookingId;
             const modal = document.getElementById('cancelModal');
             const reasonInput = document.getElementById('cancelReasonInput');
@@ -260,7 +251,6 @@
 
             try {
                 showNotification('Đang hủy đặt phòng...', 'info');
-                // Backend hiện chưa nhận lý do hủy, nên chỉ gửi bookingId
                 await BookingAPI.cancelBooking(pendingCancelBookingId);
                 showNotification('Hủy đặt phòng thành công! Tiền đặt cọc (nếu có) sẽ không được hoàn lại.', 'success');
                 closeCancelModal();
@@ -279,7 +269,6 @@
         window.confirmCancelBooking = confirmCancelBooking;
     </script>
     <script>
-        // Block admin from accessing my-bookings page
         document.addEventListener('DOMContentLoaded', function() {
             if (!AuthManager.requireAuth()) {
                 return;

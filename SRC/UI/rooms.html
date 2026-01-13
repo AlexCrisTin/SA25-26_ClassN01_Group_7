@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/rooms.css">
 </head>
 <body>
-    <!-- Main Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="logo">
@@ -72,7 +71,6 @@
         let allRooms = [];
 
         document.addEventListener('DOMContentLoaded', async function() {
-            // Auth optional: nếu có user, hiển thị tên và logout; nếu chưa login, ẩn nút logout
             const user = AuthManager.getCurrentUser();
             if (user) {
                 document.getElementById('userName').textContent = user.username || user.full_name || 'User';
