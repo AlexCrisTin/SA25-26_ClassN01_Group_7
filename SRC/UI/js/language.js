@@ -216,12 +216,37 @@ const LanguageManager = {
                 manageBookings: 'Quản Lý Đặt Phòng',
                 checkin: 'Check-in',
                 checkout: 'Check-out',
-                manageServiceRequests: 'Quản Lý Yêu Cầu Dịch Vụ'
+                manageServiceRequests: 'Quản Lý Yêu Cầu Dịch Vụ',
+                guestName: 'Tên Khách',
+                roomType: 'Loại Phòng',
+                checkInDate: 'Ngày Nhận',
+                checkOutDate: 'Ngày Trả',
+                totalAmount: 'Tổng Tiền',
+                status: 'Trạng Thái',
+                actions: 'Thao Tác',
+                searchBookings: 'Tìm kiếm đặt phòng...',
+                processCheckin: 'Xử Lý Check-in',
+                processCheckout: 'Xử Lý Check-out',
+                searchCheckinPlaceholder: 'Nhập ID đặt phòng hoặc tên khách...',
+                searchCheckoutPlaceholder: 'Nhập ID đặt phòng hoặc tên khách...',
+                service: 'Dịch Vụ',
+                roomNumber: 'Số Phòng',
+                quantity: 'Số Lượng',
+                price: 'Giá',
+                requestTime: 'Thời Gian Yêu Cầu',
+                searchServiceRequests: 'Tìm theo tên dịch vụ, tên khách, số phòng...',
+                updateServiceRequestStatus: 'Cập Nhật Trạng Thái Yêu Cầu Dịch Vụ',
+                statusRequired: 'Trạng Thái *',
+                notes: 'Ghi Chú',
+                notesPlaceholder: 'Nhập ghi chú (nếu có)',
+                update: 'Cập Nhật'
             },
             common: {
                 all: 'Tất cả',
                 cancel: 'Hủy',
-                back: 'Quay lại'
+                back: 'Quay lại',
+                search: 'Tìm kiếm',
+                loading: 'Đang tải dữ liệu...'
             },
             booking: {
                 status: {
@@ -229,6 +254,14 @@ const LanguageManager = {
                     confirmed: 'Đã Xác Nhận',
                     checkedIn: 'Đã Check-in',
                     checkedOut: 'Đã Check-out',
+                    cancelled: 'Đã Hủy'
+                }
+            },
+            serviceRequest: {
+                status: {
+                    pending: 'Chờ Xử Lý',
+                    inProgress: 'Đang Xử Lý',
+                    completed: 'Đã Hoàn Thành',
                     cancelled: 'Đã Hủy'
                 }
             },
@@ -456,12 +489,37 @@ const LanguageManager = {
                 manageBookings: 'Manage Bookings',
                 checkin: 'Check-in',
                 checkout: 'Check-out',
-                manageServiceRequests: 'Manage Service Requests'
+                manageServiceRequests: 'Manage Service Requests',
+                guestName: 'Guest Name',
+                roomType: 'Room Type',
+                checkInDate: 'Check-in Date',
+                checkOutDate: 'Check-out Date',
+                totalAmount: 'Total Amount',
+                status: 'Status',
+                actions: 'Actions',
+                searchBookings: 'Search bookings...',
+                processCheckin: 'Process Check-in',
+                processCheckout: 'Process Check-out',
+                searchCheckinPlaceholder: 'Enter booking ID or guest name...',
+                searchCheckoutPlaceholder: 'Enter booking ID or guest name...',
+                service: 'Service',
+                roomNumber: 'Room Number',
+                quantity: 'Quantity',
+                price: 'Price',
+                requestTime: 'Request Time',
+                searchServiceRequests: 'Search by service name, guest name, room number...',
+                updateServiceRequestStatus: 'Update Service Request Status',
+                statusRequired: 'Status *',
+                notes: 'Notes',
+                notesPlaceholder: 'Enter notes (if any)',
+                update: 'Update'
             },
             common: {
                 all: 'All',
                 cancel: 'Cancel',
-                back: 'Back'
+                back: 'Back',
+                search: 'Search',
+                loading: 'Loading data...'
             },
             booking: {
                 status: {
@@ -469,6 +527,14 @@ const LanguageManager = {
                     confirmed: 'Confirmed',
                     checkedIn: 'Checked In',
                     checkedOut: 'Checked Out',
+                    cancelled: 'Cancelled'
+                }
+            },
+            serviceRequest: {
+                status: {
+                    pending: 'Pending',
+                    inProgress: 'In Progress',
+                    completed: 'Completed',
                     cancelled: 'Cancelled'
                 }
             },

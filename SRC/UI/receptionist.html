@@ -49,18 +49,18 @@
 
         <div id="reception-bookings-tab" class="tab-content active">
             <div class="section-header">
-                <h2>Quản Lý Đặt Phòng</h2>
+                <h2 data-i18n="receptionist.manageBookings">Quản Lý Đặt Phòng</h2>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="bookingSearch" placeholder="Tìm kiếm đặt phòng..." onkeyup="filterBookings()">
+                <input type="text" id="bookingSearch" data-i18n-placeholder="receptionist.searchBookings" placeholder="Tìm kiếm đặt phòng..." onkeyup="filterBookings()">
                 <select id="bookingStatusFilter" onchange="filterBookings()">
-                    <option value="all">Tất cả trạng thái</option>
-                    <option value="pending">Chờ Xác Nhận</option>
-                    <option value="confirmed">Đã Xác Nhận</option>
-                    <option value="checked_in">Đã Check-in</option>
-                    <option value="checked_out">Đã Check-out</option>
-                    <option value="cancelled">Đã Hủy</option>
+                    <option value="all" data-i18n="common.all">Tất cả trạng thái</option>
+                    <option value="pending" data-i18n="booking.status.pending">Chờ Xác Nhận</option>
+                    <option value="confirmed" data-i18n="booking.status.confirmed">Đã Xác Nhận</option>
+                    <option value="checked_in" data-i18n="booking.status.checkedIn">Đã Check-in</option>
+                    <option value="checked_out" data-i18n="booking.status.checkedOut">Đã Check-out</option>
+                    <option value="cancelled" data-i18n="booking.status.cancelled">Đã Hủy</option>
                 </select>
             </div>
 
@@ -69,18 +69,18 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tên Khách</th>
-                            <th>Loại Phòng</th>
-                            <th>Ngày Nhận</th>
-                            <th>Ngày Trả</th>
-                            <th>Tổng Tiền</th>
-                            <th>Trạng Thái</th>
-                            <th>Thao Tác</th>
+                            <th data-i18n="receptionist.guestName">Tên Khách</th>
+                            <th data-i18n="receptionist.roomType">Loại Phòng</th>
+                            <th data-i18n="receptionist.checkInDate">Ngày Nhận</th>
+                            <th data-i18n="receptionist.checkOutDate">Ngày Trả</th>
+                            <th data-i18n="receptionist.totalAmount">Tổng Tiền</th>
+                            <th data-i18n="receptionist.status">Trạng Thái</th>
+                            <th data-i18n="receptionist.actions">Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody id="bookingsTableBody">
                         <tr>
-                            <td colspan="8" class="loading">Đang tải dữ liệu...</td>
+                            <td colspan="8" class="loading" data-i18n="common.loading">Đang tải dữ liệu...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -89,12 +89,12 @@
 
         <div id="reception-checkin-tab" class="tab-content">
             <div class="section-header">
-                <h2>Xử Lý Check-in</h2>
+                <h2 data-i18n="receptionist.processCheckin">Xử Lý Check-in</h2>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="checkinBookingSearch" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
-                <button class="btn-primary" onclick="searchCheckinBooking()">Tìm kiếm</button>
+                <input type="text" id="checkinBookingSearch" data-i18n-placeholder="receptionist.searchCheckinPlaceholder" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
+                <button class="btn-primary" onclick="searchCheckinBooking()" data-i18n="common.search">Tìm kiếm</button>
             </div>
 
             <div id="checkinBookingResult"></div>
@@ -102,12 +102,12 @@
 
         <div id="reception-checkout-tab" class="tab-content">
             <div class="section-header">
-                <h2>Xử Lý Check-out</h2>
+                <h2 data-i18n="receptionist.processCheckout">Xử Lý Check-out</h2>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="checkoutBookingSearch" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
-                <button class="btn-primary" onclick="searchCheckoutBooking()">Tìm kiếm</button>
+                <input type="text" id="checkoutBookingSearch" data-i18n-placeholder="receptionist.searchCheckoutPlaceholder" placeholder="Nhập ID đặt phòng hoặc tên khách..." />
+                <button class="btn-primary" onclick="searchCheckoutBooking()" data-i18n="common.search">Tìm kiếm</button>
             </div>
 
             <div id="checkoutBookingResult"></div>
@@ -115,17 +115,17 @@
 
         <div id="reception-service-requests-tab" class="tab-content">
             <div class="section-header">
-                <h2>Quản Lý Yêu Cầu Dịch Vụ</h2>
+                <h2 data-i18n="receptionist.manageServiceRequests">Quản Lý Yêu Cầu Dịch Vụ</h2>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="serviceRequestSearch" placeholder="Tìm theo tên dịch vụ, tên khách, số phòng..." onkeyup="filterServiceRequests()">
+                <input type="text" id="serviceRequestSearch" data-i18n-placeholder="receptionist.searchServiceRequests" placeholder="Tìm theo tên dịch vụ, tên khách, số phòng..." onkeyup="filterServiceRequests()">
                 <select id="serviceRequestStatusFilter" onchange="filterServiceRequests()">
-                    <option value="all">Tất cả trạng thái</option>
-                    <option value="pending">Chờ Xử Lý</option>
-                    <option value="in_progress">Đang Xử Lý</option>
-                    <option value="completed">Đã Hoàn Thành</option>
-                    <option value="cancelled">Đã Hủy</option>
+                    <option value="all" data-i18n="common.all">Tất cả trạng thái</option>
+                    <option value="pending" data-i18n="serviceRequest.status.pending">Chờ Xử Lý</option>
+                    <option value="in_progress" data-i18n="serviceRequest.status.inProgress">Đang Xử Lý</option>
+                    <option value="completed" data-i18n="serviceRequest.status.completed">Đã Hoàn Thành</option>
+                    <option value="cancelled" data-i18n="serviceRequest.status.cancelled">Đã Hủy</option>
                 </select>
             </div>
 
@@ -134,19 +134,19 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Dịch Vụ</th>
-                            <th>Tên Khách</th>
-                            <th>Số Phòng</th>
-                            <th>Số Lượng</th>
-                            <th>Giá</th>
-                            <th>Trạng Thái</th>
-                            <th>Thời Gian Yêu Cầu</th>
-                            <th>Thao Tác</th>
+                            <th data-i18n="receptionist.service">Dịch Vụ</th>
+                            <th data-i18n="receptionist.guestName">Tên Khách</th>
+                            <th data-i18n="receptionist.roomNumber">Số Phòng</th>
+                            <th data-i18n="receptionist.quantity">Số Lượng</th>
+                            <th data-i18n="receptionist.price">Giá</th>
+                            <th data-i18n="receptionist.status">Trạng Thái</th>
+                            <th data-i18n="receptionist.requestTime">Thời Gian Yêu Cầu</th>
+                            <th data-i18n="receptionist.actions">Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody id="serviceRequestsTableBody">
                         <tr>
-                            <td colspan="9" class="loading">Đang tải dữ liệu...</td>
+                            <td colspan="9" class="loading" data-i18n="common.loading">Đang tải dữ liệu...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -157,35 +157,35 @@
     <div id="updateServiceRequestModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('updateServiceRequestModal')">&times;</span>
-            <h2>Cập Nhật Trạng Thái Yêu Cầu Dịch Vụ</h2>
+            <h2 data-i18n="receptionist.updateServiceRequestStatus">Cập Nhật Trạng Thái Yêu Cầu Dịch Vụ</h2>
             <form id="updateServiceRequestForm">
                 <input type="hidden" id="update_request_id">
                 <div class="form-group">
-                    <label>Dịch Vụ</label>
+                    <label data-i18n="receptionist.service">Dịch Vụ</label>
                     <input type="text" id="update_request_service_name" readonly style="background-color: #f5f5f5;">
                 </div>
                 <div class="form-group">
-                    <label>Tên Khách</label>
+                    <label data-i18n="receptionist.guestName">Tên Khách</label>
                     <input type="text" id="update_request_guest_name" readonly style="background-color: #f5f5f5;">
                 </div>
                 <div class="form-group">
-                    <label>Số Phòng</label>
+                    <label data-i18n="receptionist.roomNumber">Số Phòng</label>
                     <input type="text" id="update_request_room_number" readonly style="background-color: #f5f5f5;">
                 </div>
                 <div class="form-group">
-                    <label>Trạng Thái *</label>
+                    <label data-i18n="receptionist.statusRequired">Trạng Thái *</label>
                     <select id="update_request_status" required>
-                        <option value="pending">Chờ Xử Lý</option>
-                        <option value="in_progress">Đang Xử Lý</option>
-                        <option value="completed">Đã Hoàn Thành</option>
-                        <option value="cancelled">Đã Hủy</option>
+                        <option value="pending" data-i18n="serviceRequest.status.pending">Chờ Xử Lý</option>
+                        <option value="in_progress" data-i18n="serviceRequest.status.inProgress">Đang Xử Lý</option>
+                        <option value="completed" data-i18n="serviceRequest.status.completed">Đã Hoàn Thành</option>
+                        <option value="cancelled" data-i18n="serviceRequest.status.cancelled">Đã Hủy</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Ghi Chú</label>
-                    <textarea id="update_request_notes" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
+                    <label data-i18n="receptionist.notes">Ghi Chú</label>
+                    <textarea id="update_request_notes" rows="3" data-i18n-placeholder="receptionist.notesPlaceholder" placeholder="Nhập ghi chú (nếu có)"></textarea>
                 </div>
-                <button type="submit" class="btn-primary">Cập Nhật</button>
+                <button type="submit" class="btn-primary" data-i18n="receptionist.update">Cập Nhật</button>
             </form>
         </div>
     </div>
