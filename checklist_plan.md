@@ -28,7 +28,6 @@ This document tracks the progress of all labs in the Software Architecture cours
   - [x] User (FR-01 to FR-05)
   - [x] Receptionist (FR-06 to FR-10)
   - [x] Administrator (FR-11 to FR-14)
-  - [x] Wallet Management (FR-15 to FR-17)
 - [x] Documented Non-Functional Requirements (NFRs):
   - [x] Performance (NFR-01)
   - [x] Security (NFR-02)
@@ -103,9 +102,9 @@ This document tracks the progress of all labs in the Software Architecture cours
   - [x] Services
   - [x] Staff
   - [x] Check-ins/Check-outs
-  - [x] Wallets
-  - [x] Coupons
-  - [x] Reports
+  - [] Wallets
+  - [] Coupons
+  - [] Reports
 - [x] Database configuration (`SRC/Arch/db_config.py`)
 - [x] Flask application setup (`SRC/Arch/app.py`)
 - [x] Middleware for authentication (`SRC/Arch/middleware/auth.py`)

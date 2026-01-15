@@ -3,8 +3,7 @@ from services.checkin_service import CheckInService
 from views.checkin_view import CheckInView
 
 class CheckInController:
-    #Controller: Xử lý HTTP requests cho CheckIn/CheckOut
-    
+
     def __init__(self):
         self.service = CheckInService()
         self.view = CheckInView()
