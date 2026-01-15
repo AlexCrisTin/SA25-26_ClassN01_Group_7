@@ -20,16 +20,16 @@
                 <li><a href="receptionist.html" data-i18n="admin.receptionistPanel">RECEPTIONIST PANEL</a></li>
                 <li><a href="admin-messages.html" data-i18n="nav.contact">CONTACT</a></li>
             </ul>
+            <div class="user-menu">
+                <span id="adminUserName" class="user-name"></span>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
+            </div>
             <div class="nav-right">
                 <div class="language-switcher">
                     <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
                     <span class="lang-separator">|</span>
                     <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
                 </div>
-            </div>
-            <div class="user-menu">
-                <span id="adminUserName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
