@@ -231,6 +231,16 @@ const LanguageManager = {
                     checkedOut: 'Đã Check-out',
                     cancelled: 'Đã Hủy'
                 }
+            },
+            adminMessages: {
+                title: 'Quản Lý Tin Nhắn Khách Hàng',
+                subtitle: 'Xem và trả lời tin nhắn từ khách hàng',
+                customerList: 'Danh Sách Khách Hàng',
+                searchPlaceholder: 'Tìm kiếm khách hàng...',
+                noMessages: 'Chưa có tin nhắn nào',
+                noMessagesDesc: 'Khách hàng sẽ xuất hiện ở đây khi họ gửi tin nhắn',
+                selectCustomer: 'Chọn khách hàng để xem tin nhắn',
+                selectCustomerDesc: 'Chọn một khách hàng từ danh sách bên trái để bắt đầu trò chuyện'
             }
         },
         en: {
@@ -461,6 +471,16 @@ const LanguageManager = {
                     checkedOut: 'Checked Out',
                     cancelled: 'Cancelled'
                 }
+            },
+            adminMessages: {
+                title: 'Customer Messages Management',
+                subtitle: 'View and reply to customer messages',
+                customerList: 'Customer List',
+                searchPlaceholder: 'Search customers...',
+                noMessages: 'No messages yet',
+                noMessagesDesc: 'Customers will appear here when they send messages',
+                selectCustomer: 'Select a customer to view messages',
+                selectCustomerDesc: 'Select a customer from the left list to start chatting'
             }
         }
     },

@@ -17,32 +17,40 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li id="navAdmin"><a href="admin.html">ADMIN PANEL</a></li>
-                <li id="navReception"><a href="receptionist.html">RECEPTIONIST PANEL</a></li>
-                <li><a href="admin-messages.html" class="active">CONTACT</a></li>
+                <li id="navAdmin"><a href="admin.html" data-i18n="nav.adminPanel">ADMIN PANEL</a></li>
+                <li id="navReception"><a href="receptionist.html" data-i18n="admin.receptionistPanel">RECEPTIONIST PANEL</a></li>
+                <li><a href="admin-messages.html" class="active" data-i18n="nav.contact">CONTACT</a></li>
             </ul>
             <div class="user-menu">
                 <span id="adminUserName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
+            </div>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Quản Lý Tin Nhắn Khách Hàng</h1>
-            <p>Xem và trả lời tin nhắn từ khách hàng</p>
+            <h1 data-i18n="adminMessages.title">Quản Lý Tin Nhắn Khách Hàng</h1>
+            <p data-i18n="adminMessages.subtitle">Xem và trả lời tin nhắn từ khách hàng</p>
         </div>
 
         <div class="messages-container">
             <div class="users-list">
                 <div class="users-list-header">
-                    <h2>Danh Sách Khách Hàng</h2>
+                    <h2 data-i18n="adminMessages.customerList">Danh Sách Khách Hàng</h2>
                 </div>
                 <div class="users-search">
                     <input 
                         type="text" 
                         id="userSearch" 
+                        data-i18n-placeholder="adminMessages.searchPlaceholder"
                         placeholder="Tìm kiếm khách hàng..."
                         onkeyup="AdminMessagesManager.filterUsers()"
                     >
@@ -50,8 +58,8 @@
                 <div class="users-list-content" id="usersList">
                     <div class="empty-state">
                         <div class="empty-state-icon">💬</div>
-                        <h3>Chưa có tin nhắn nào</h3>
-                        <p>Khách hàng sẽ xuất hiện ở đây khi họ gửi tin nhắn</p>
+                        <h3 data-i18n="adminMessages.noMessages">Chưa có tin nhắn nào</h3>
+                        <p data-i18n="adminMessages.noMessagesDesc">Khách hàng sẽ xuất hiện ở đây khi họ gửi tin nhắn</p>
                     </div>
                 </div>
             </div>
@@ -59,8 +67,8 @@
             <div class="chat-panel" id="chatPanel">
                 <div class="no-chat-selected">
                     <div class="no-chat-selected-icon">👈</div>
-                    <h3>Chọn khách hàng để xem tin nhắn</h3>
-                    <p>Chọn một khách hàng từ danh sách bên trái để bắt đầu trò chuyện</p>
+                    <h3 data-i18n="adminMessages.selectCustomer">Chọn khách hàng để xem tin nhắn</h3>
+                    <p data-i18n="adminMessages.selectCustomerDesc">Chọn một khách hàng từ danh sách bên trái để bắt đầu trò chuyện</p>
                 </div>
             </div>
         </div>
@@ -68,6 +76,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script src="js/admin-messages.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
