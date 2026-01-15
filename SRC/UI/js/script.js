@@ -219,10 +219,16 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.values(roomTypes).forEach(room => {
             const card = document.createElement('div');
             card.className = 'room-card';
+            
+            // Get translations
+            const roomPrefix = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.roomPrefix') : 'Phòng';
+            const fromPrice = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.fromPrice') : 'Chỉ từ';
+            const perNight = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.perNight') : 'VNĐ/Đêm';
+            
             card.innerHTML = `
-                <img src="images/room-${room.room_type.toLowerCase()}.jpg" alt="Phòng ${room.room_type}" onerror="this.src='https://via.placeholder.com/400x250?text=${room.room_type}'">
-                <h3>Phòng ${room.room_type}</h3>
-                <p class="room-price">Chỉ từ ${room.price.toLocaleString('vi-VN')} VNĐ/Đêm</p>
+                <img src="images/room-${room.room_type.toLowerCase()}.jpg" alt="${roomPrefix} ${room.room_type}" onerror="this.src='https://via.placeholder.com/400x250?text=${room.room_type}'">
+                <h3>${roomPrefix} ${room.room_type}</h3>
+                <p class="room-price">${fromPrice} ${room.price.toLocaleString('vi-VN')} ${perNight}</p>
             `;
             roomTypesGrid.appendChild(card);
         });
@@ -375,17 +381,19 @@ async function loadRoomsCarousel() {
             updateCarouselButtons();
         } else {
             // Show placeholder if no rooms
+            const noRoomsText = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.noRooms') : 'Chưa có phòng nào';
             document.getElementById('roomCarousel').innerHTML = `
                 <div class="room-card" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-                    <p style="color: #666; font-size: 18px;">Chưa có phòng nào</p>
+                    <p style="color: #666; font-size: 18px;">${noRoomsText}</p>
                 </div>
             `;
         }
     } catch (error) {
         console.error('Error loading rooms:', error);
+        const errorText = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.loadError') : 'Lỗi khi tải danh sách phòng';
         document.getElementById('roomCarousel').innerHTML = `
             <div class="room-card" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-                <p style="color: #dc3545; font-size: 18px;">Lỗi khi tải danh sách phòng</p>
+                <p style="color: #dc3545; font-size: 18px;">${errorText}</p>
             </div>
         `;
     }
@@ -434,15 +442,23 @@ function displayRoomsCarousel() {
         
         const price = room.price ? room.price.toLocaleString('vi-VN') : 'N/A';
         
+        // Get translations
+        const lang = window.LanguageManager ? window.LanguageManager.currentLanguage : 'vi';
+        const roomPrefix = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.roomPrefix') : 'Phòng';
+        const fromPrice = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.fromPrice') : 'Chỉ từ';
+        const perNight = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.perNight') : 'VNĐ/Đêm';
+        const capacity = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.capacity') : 'Sức chứa';
+        const people = window.LanguageManager ? window.LanguageManager.getTranslation('rooms.people') : 'người';
+        
         return `
             <div class="room-card">
-                <img src="${imageUrl}" alt="Phòng ${room.room_type}" 
+                <img src="${imageUrl}" alt="${roomPrefix} ${room.room_type}" 
                      onerror="console.error('Failed to load image:', '${imageUrl}'); this.src='images/room-default.jpg';"
                      onload="console.log('Image loaded successfully:', '${imageUrl}')"
                      style="width: 100%; height: 250px; object-fit: cover;">
-                <h3>Phòng ${room.room_type}</h3>
-                <p class="room-price">Chỉ từ ${price} VNĐ/Đêm</p>
-                ${room.capacity ? `<p style="padding: 0 20px 10px; color: #666; font-size: 14px;">Sức chứa: ${room.capacity} người</p>` : ''}
+                <h3>${roomPrefix} ${room.room_type}</h3>
+                <p class="room-price">${fromPrice} ${price} ${perNight}</p>
+                ${room.capacity ? `<p style="padding: 0 20px 10px; color: #666; font-size: 14px;">${capacity}: ${room.capacity} ${people}</p>` : ''}
             </div>
         `;
     }).join('');

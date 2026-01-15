@@ -15,22 +15,29 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="#home">TRANG CHỦ</a></li>
-                <li><a href="#about">GIỚI THIỆU</a></li>
-                <li><a href="#rooms">PHÒNG NGHỈ</a></li>
-                <li><a href="#services">DỊCH VỤ</a></li>
-                <li><a href="#news">TIN TỨC</a></li>
-                <li><a href="#gallery">HÌNH ẢNH</a></li>
-                <li><a href="#contact">LIÊN HỆ</a></li>
+                <li><a href="#home" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="#about" data-i18n="nav.about">GIỚI THIỆU</a></li>
+                <li><a href="#rooms" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="#services" data-i18n="nav.services">DỊCH VỤ</a></li>
+                <li><a href="#news" data-i18n="nav.news">TIN TỨC</a></li>
+                <li><a href="#gallery" data-i18n="nav.gallery">HÌNH ẢNH</a></li>
+                <li><a href="#contact" data-i18n="nav.contact">LIÊN HỆ</a></li>
             </ul>
-            <div class="user-menu" id="userMenu" style="display: none;">
-                <span id="userNameNav" class="user-name"></span>
-                <a href="admin.html" id="adminLink" class="book-now-btn" style="text-decoration: none; margin-right: 10px; display: none;">ADMIN PANEL</a>
-                <a href="dashboard.html" id="dashboardLink" class="book-now-btn" style="text-decoration: none; margin-right: 10px; display: none;">DASHBOARD</a>
-                <button class="logout-btn" onclick="AuthManager.logout()" style="padding: 8px 15px;">Đăng Xuất</button>
-            </div>
-            <div id="guestMenu">
-                <a href="login.html" class="book-now-btn" style="text-decoration: none; margin-right: 10px; background-color: #666;">Đăng Nhập</a>
+            <div class="nav-right">
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span id="userNameNav" class="user-name"></span>
+                    <a href="admin.html" id="adminLink" class="book-now-btn" style="text-decoration: none; margin-right: 10px; display: none;" data-i18n="nav.adminPanel">ADMIN PANEL</a>
+                    <a href="dashboard.html" id="dashboardLink" class="book-now-btn" style="text-decoration: none; margin-right: 10px; display: none;" data-i18n="nav.dashboard">DASHBOARD</a>
+                    <button class="logout-btn" onclick="AuthManager.logout()" style="padding: 8px 15px;" data-i18n="nav.logout">Đăng Xuất</button>
+                </div>
+                <div id="guestMenu">
+                    <a href="login.html" class="book-now-btn" style="text-decoration: none; margin-right: 10px; background-color: #666;" data-i18n="nav.login">Đăng Nhập</a>
+                </div>
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -40,9 +47,9 @@
         <div class="hero-background">
             <div class="hero-overlay">
                 <div class="hero-content">
-                    <p class="hero-subtitle">Thuộc quần thể biệt thự cao cấp</p>    
-                    <h1 class="hero-title">Sang trọng & đẳng cấp</h1>
-                    <a href="login.html" id="heroBookingBtn" style="text-decoration: none;"><button class="explore-btn">ĐẶT PHÒNG NGAY</button></a>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">Thuộc quần thể biệt thự cao cấp</p>    
+                    <h1 class="hero-title" data-i18n="hero.title">Sang trọng & đẳng cấp</h1>
+                    <a href="login.html" id="heroBookingBtn" style="text-decoration: none;"><button class="explore-btn" data-i18n="hero.bookNow">ĐẶT PHÒNG NGAY</button></a>
                 </div>
             </div>
         </div>
@@ -56,9 +63,9 @@
                     <img src="images/hotel-lobby.jpg" alt="Demacia Hotel Lobby">
                 </div>
                 <div class="welcome-text">
-                    <h2>Chào mừng đến với Demacia Hotel</h2>
-                    <p>Biệt thự và bungalow của Demacia Hotel được trang bị đầy đủ tiện nghi, nội thất sang trọng kết hợp giữa phong cách truyền thống Việt Nam và hiện đại phương Tây. Đội ngũ nhân viên được đào tạo chuyên nghiệp, tận tâm và nhiệt tình.</p>
-                    <p>Demacia Hotel tự tin mang đến cho bạn những trải nghiệm cảm xúc nâng cao và những trải nghiệm tốt nhất, tuyệt vời nhất cho kỳ nghỉ của bạn, chắc chắn bạn sẽ không hối tiếc khi lựa chọn chúng tôi.</p>
+                    <h2 data-i18n="welcome.title">Chào mừng đến với Demacia Hotel</h2>
+                    <p data-i18n="welcome.paragraph1">Biệt thự và bungalow của Demacia Hotel được trang bị đầy đủ tiện nghi, nội thất sang trọng kết hợp giữa phong cách truyền thống Việt Nam và hiện đại phương Tây. Đội ngũ nhân viên được đào tạo chuyên nghiệp, tận tâm và nhiệt tình.</p>
+                    <p data-i18n="welcome.paragraph2">Demacia Hotel tự tin mang đến cho bạn những trải nghiệm cảm xúc nâng cao và những trải nghiệm tốt nhất, tuyệt vời nhất cho kỳ nghỉ của bạn, chắc chắn bạn sẽ không hối tiếc khi lựa chọn chúng tôi.</p>
                 </div>
             </div>
         </div>
@@ -68,8 +75,8 @@
     <section class="room-types-section" id="rooms">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">KHÁM PHÁ</span>
-                <h2 class="section-title">Các Hạng Phòng</h2>
+                <span class="section-tag" data-i18n="rooms.explore">KHÁM PHÁ</span>
+                <h2 class="section-title" data-i18n="rooms.title">Các Hạng Phòng</h2>
             </div>
             <div class="room-carousel-wrapper">
                 <button class="carousel-btn carousel-btn-prev" onclick="moveRoomCarousel(-1)" aria-label="Previous">
@@ -112,30 +119,30 @@
     <!-- Services Section -->
     <section class="services-section" id="services">
         <div class="container">
-            <h2 class="section-title-center">Dịch Vụ</h2>
+            <h2 class="section-title-center" data-i18n="services.title">Dịch Vụ</h2>
             <div class="services-grid">
                 <div class="service-card">
                     <img src="images/service-airport.jpg" alt="Đưa đón sân bay">
                     <div class="service-overlay">
-                        <h3>Đưa đón sân bay</h3>
+                        <h3 data-i18n="services.airport">Đưa đón sân bay</h3>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="images/service-breakfast.jpg" alt="Bữa sáng miễn phí">
                     <div class="service-overlay">
-                        <h3>Bữa sáng miễn phí</h3>
+                        <h3 data-i18n="services.breakfast">Bữa sáng miễn phí</h3>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="images/service-tour.jpg" alt="Hướng dẫn viên du lịch">
                     <div class="service-overlay">
-                        <h3>Hướng dẫn viên du lịch thành phố</h3>
+                        <h3 data-i18n="services.tour">Hướng dẫn viên du lịch thành phố</h3>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="images/service-bbq.webp" alt="Tiệc BBQ bãi biển">
                     <div class="service-overlay">
-                        <h3>Tiệc BBQ bãi biển</h3>
+                        <h3 data-i18n="services.bbq">Tiệc BBQ bãi biển</h3>
                     </div>
                 </div>
             </div>
@@ -147,8 +154,8 @@
         <div class="promo-background">
             <img src="images/promo-video-bg.jpg" alt="Promotional Background" class="promo-bg-image" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
             <div class="promo-overlay" style="position: relative; z-index: 10;">
-                <p class="promo-tagline">Khám phá. Đi lang thang. Nghỉ ngơi</p>
-                <h2 class="promo-title">Một cuộc đi chơi bạn sẽ đặc biệt nhớ tới</h2>
+                <p class="promo-tagline" data-i18n="promo.tagline">Khám phá. Đi lang thang. Nghỉ ngơi</p>
+                <h2 class="promo-title" data-i18n="promo.title">Một cuộc đi chơi bạn sẽ đặc biệt nhớ tới</h2>
             </div>
         </div>
     </section>
@@ -156,52 +163,52 @@
     <!-- Featured Articles Section -->
     <section class="articles-section" id="news">
         <div class="container">
-            <h2 class="section-title-center">Những Bài Viết Nổi Bật</h2>
+            <h2 class="section-title-center" data-i18n="articles.title">Những Bài Viết Nổi Bật</h2>
             <div class="articles-grid">
                 <div class="article-card">
                     <img src="images/article-sapa-market.jpg" alt="Chợ Tình Sapa">
                     <div class="article-content">
-                        <h3>CHỢ TÌNH SAPA</h3>
-                        <p>Chợ tình Sapa được tổ chức tại thị trấn Sapa, đây là phiên chợ của dân tộc Dao được tổ chức vào tối thứ 7 hàng tuần.</p>
-                        <button class="detail-btn">CHI TIẾT</button>
+                        <h3 data-i18n="articles.sapa">CHỢ TÌNH SAPA</h3>
+                        <p data-i18n="articles.sapaDesc">Chợ tình Sapa được tổ chức tại thị trấn Sapa, đây là phiên chợ của dân tộc Dao được tổ chức vào tối thứ 7 hàng tuần.</p>
+                        <button class="detail-btn" data-i18n="articles.detail">CHI TIẾT</button>
                     </div>
                 </div>
                 <div class="article-card">
                     <img src="images/article-fansipan.jpg" alt="Núi Fansipan">
                     <div class="article-content">
-                        <h3>NÚI FANSIPAN</h3>
-                        <p>Đỉnh Phanxipăng - với độ cao 3.143m so với mực nước biển, nằm về phía Tây Nam thị trấn Sa Pa, huyện Sa Pa.</p>
-                        <button class="detail-btn">CHI TIẾT</button>
+                        <h3 data-i18n="articles.fansipan">NÚI FANSIPAN</h3>
+                        <p data-i18n="articles.fansipanDesc">Đỉnh Phanxipăng - với độ cao 3.143m so với mực nước biển, nằm về phía Tây Nam thị trấn Sa Pa, huyện Sa Pa.</p>
+                        <button class="detail-btn" data-i18n="articles.detail">CHI TIẾT</button>
                     </div>
                 </div>
                 <div class="article-card">
                     <img src="images/article-love-waterfall.jpg" alt="Thác Tình Yêu">
                     <div class="article-content">
-                        <h3>THÁC TÌNH YÊU</h3>
-                        <p>Thác Tình Yêu là một ngọn thác nổi tiếng nằm ở xã San Sả Hồ, cách trung tâm thị trấn Sa Pa 16 km.</p>
-                        <button class="detail-btn">CHI TIẾT</button>
+                        <h3 data-i18n="articles.loveWaterfall">THÁC TÌNH YÊU</h3>
+                        <p data-i18n="articles.loveWaterfallDesc">Thác Tình Yêu là một ngọn thác nổi tiếng nằm ở xã San Sả Hồ, cách trung tâm thị trấn Sa Pa 16 km.</p>
+                        <button class="detail-btn" data-i18n="articles.detail">CHI TIẾT</button>
                     </div>
                 </div>
                 <div class="article-card">
                     <img src="images/article-ham-rong.jpg" alt="Núi Hàm Rồng">
                     <div class="article-content">
-                        <h3>NÚI HÀM RỒNG</h3>
-                        <button class="detail-btn">CHI TIẾT</button>
+                        <h3 data-i18n="articles.hamRong">NÚI HÀM RỒNG</h3>
+                        <button class="detail-btn" data-i18n="articles.detail">CHI TIẾT</button>
                     </div>
                 </div>
                 <div class="article-card">
                     <img src="images/article-lao-chai.jpg" alt="Bản Lao Chải & Tả Van">
                     <div class="article-content">
-                        <h3>BẢN LAO CHẢI & TẢ VAN</h3>
-                        <button class="detail-btn">CHI TIẾT</button>
+                        <h3 data-i18n="articles.laoChai">BẢN LAO CHẢI & TẢ VAN</h3>
+                        <button class="detail-btn" data-i18n="articles.detail">CHI TIẾT</button>
                     </div>
                 </div>
                 <div class="article-card">
                     <img src="images/article-cat-cat.jpg" alt="Bản Cát Cát">
                     <div class="article-content">
-                        <h3>BẢN CÁT CÁT</h3>
-                        <p>Bản làng lâu đời và đẹp nhất Tây bắc</p>
-                        <button class="detail-btn">CHI TIẾT</button>
+                        <h3 data-i18n="articles.catCat">BẢN CÁT CÁT</h3>
+                        <p data-i18n="articles.catCatDesc">Bản làng lâu đời và đẹp nhất Tây bắc</p>
+                        <button class="detail-btn" data-i18n="articles.detail">CHI TIẾT</button>
                     </div>
                 </div>
             </div>
@@ -211,22 +218,22 @@
     <!-- Customer Feedback Section -->
     <section class="feedback-section">
         <div class="container">
-            <h2 class="section-title-center">Phản Hồi Khách Hàng</h2>
+            <h2 class="section-title-center" data-i18n="feedback.title">Phản Hồi Khách Hàng</h2>
             <div class="feedback-grid">
                 <div class="feedback-card">
                     <img src="images/customer-1.jpg" alt="Robert Downey Jr" class="customer-avatar">
                     <h4>Robert Downey Jr</h4>
-                    <p>"Tôi rất thích buổi sáng đi dạo trong khuân viên của khách sạn, không khí rất trong lành và có rất nhiều loài hoa đẹp mà tôi chưa từng được thấy."</p>
+                    <p data-i18n="feedback.customer1">"Tôi rất thích buổi sáng đi dạo trong khuân viên của khách sạn, không khí rất trong lành và có rất nhiều loài hoa đẹp mà tôi chưa từng được thấy."</p>
                 </div>
                 <div class="feedback-card">
                     <img src="images/customer-2.jpg" alt="Jenni" class="customer-avatar">
                     <h4>Jenni</h4>
-                    <p>"Chỗ ở rất thoải mái, rộng rãi và đặc biệt là rất thoáng mát và không khí rất trong lành. Tôi rất ưng ý với những món ăn được phục vụ tại khách sạn. Tôi nhất định sẽ quay trở lại đây trong tương lai..."</p>
+                    <p data-i18n="feedback.customer2">"Chỗ ở rất thoải mái, rộng rãi và đặc biệt là rất thoáng mát và không khí rất trong lành. Tôi rất ưng ý với những món ăn được phục vụ tại khách sạn. Tôi nhất định sẽ quay trở lại đây trong tương lai..."</p>
                 </div>
                 <div class="feedback-card">
                     <img src="images/customer-3.jpeg" alt="Hostal Miralva" class="customer-avatar">
                     <h4>Hostal Miralva</h4>
-                    <p>"Chất lượng các dịch vụ của khách sạn rất tốt, tôi và gia đình của tôi đã có những trải nghiệm vô cùng tuyệt vời nơi đây."</p>
+                    <p data-i18n="feedback.customer3">"Chất lượng các dịch vụ của khách sạn rất tốt, tôi và gia đình của tôi đã có những trải nghiệm vô cùng tuyệt vời nơi đây."</p>
                 </div>
             </div>
         </div>
@@ -237,9 +244,9 @@
         <div class="spa-container">
             <div class="spa-content">
                 <div class="spa-text">
-                    <h2>Spa như chưa từng có trước đây</h2>
-                    <p>Ngay từ khi bạn bước vào, mọi cảm giác đều mời bạn thư giãn. Hãy tham gia một cuộc hành trình khám phá và kết nối lại tâm trí, cơ thể và tinh thần - được hướng dẫn bởi các nhà trị liệu Aman giàu kinh nghiệm của chúng tôi. Chúng tôi mong được chào đón bạn.</p>
-                    <button class="contact-btn">LIÊN HỆ</button>
+                    <h2 data-i18n="spa.title">Spa như chưa từng có trước đây</h2>
+                    <p data-i18n="spa.description">Ngay từ khi bạn bước vào, mọi cảm giác đều mời bạn thư giãn. Hãy tham gia một cuộc hành trình khám phá và kết nối lại tâm trí, cơ thể và tinh thần - được hướng dẫn bởi các nhà trị liệu Aman giàu kinh nghiệm của chúng tôi. Chúng tôi mong được chào đón bạn.</p>
+                    <button class="contact-btn" data-i18n="spa.contact">LIÊN HỆ</button>
                     <div class="spa-navigation">
                         <button class="nav-arrow">←</button>
                         <button class="nav-arrow">→</button>
@@ -259,7 +266,7 @@
     <!-- Gallery Section -->
     <section class="gallery-section" id="gallery">
         <div class="container">
-            <h2 class="section-title-center">Hình ảnh</h2>
+            <h2 class="section-title-center" data-i18n="gallery.title">Hình ảnh</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
                     <img src="images/gallery-1.jpg" alt="Hotel Room">
@@ -295,23 +302,23 @@
                     <p class="footer-url">http://3636363636633636363363636363636363a6/</p>
                 </div>
                 <div class="footer-column">
-                    <h3>LIÊN HỆ</h3>
+                    <h3 data-i18n="footer.contact">LIÊN HỆ</h3>
                     <p>3636363636363363</p>
                     <p>3636363636</p>
                     <p>3636363</p>
                 </div>
                 <div class="footer-column">
-                    <h3>ĐƯỜNG DẪN</h3>
+                    <h3 data-i18n="footer.links">ĐƯỜNG DẪN</h3>
                     <ul class="footer-links">
-                        <li><a href="#contact">Liên hệ</a></li>
-                        <li><a href="#about">Về chúng tôi</a></li>
+                        <li><a href="#contact" data-i18n="footer.contactLink">Liên hệ</a></li>
+                        <li><a href="#about" data-i18n="footer.aboutLink">Về chúng tôi</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>ĐỪNG BỎ LỠ BẤT KỲ BẢN CẬP NHẬT NÀO</h3>
+                    <h3 data-i18n="footer.newsletter">ĐỪNG BỎ LỠ BẤT KỲ BẢN CẬP NHẬT NÀO</h3>
                     <form class="newsletter-form">
-                        <input type="email" placeholder="Email" required>
-                        <button type="submit">ĐĂNG KÝ NGAY</button>
+                        <input type="email" id="newsletterEmail" placeholder="Email" required>
+                        <button type="submit" data-i18n="footer.subscribe">ĐĂNG KÝ NGAY</button>
                     </form>
                 </div>
             </div>
@@ -320,6 +327,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const userMenu = document.getElementById('userMenu');

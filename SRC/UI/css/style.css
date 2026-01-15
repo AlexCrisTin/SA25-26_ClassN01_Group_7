@@ -97,6 +97,46 @@ html {
     transition: all 0.3s ease;
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 10px;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.lang-btn:hover {
+    color: #1e3a5f;
+    background-color: #f5f5f5;
+}
+
+.lang-btn.active {
+    color: #d4a574;
+    background-color: #f9f9f9;
+}
+
+.lang-separator {
+    color: #ccc;
+    font-weight: 300;
+}
+
 .user-menu {
     display: flex;
     align-items: center;
