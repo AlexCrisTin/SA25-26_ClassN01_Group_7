@@ -16,29 +16,36 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="admin.html" class="active">ADMIN PANEL</a></li>
-                <li><a href="receptionist.html">RECEPTIONIST PANEL</a></li>
-                <li><a href="admin-messages.html">CONTACT</a></li>
+                <li><a href="admin.html" class="active" data-i18n="nav.adminPanel">ADMIN PANEL</a></li>
+                <li><a href="receptionist.html" data-i18n="admin.receptionistPanel">RECEPTIONIST PANEL</a></li>
+                <li><a href="admin-messages.html" data-i18n="nav.contact">CONTACT</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="adminUserName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
 
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Admin Panel</h1>
-            <p>Quản lý hệ thống khách sạn</p>
+            <h1 data-i18n="admin.title">Admin Panel</h1>
+            <p data-i18n="admin.subtitle">Quản lý hệ thống khách sạn</p>
         </div>
 
         <div class="admin-tabs">
-            <button class="tab-btn active" onclick="switchTab('rooms')">Quản Lý Phòng</button>
-            <button class="tab-btn" onclick="switchTab('staff')">Quản Lý Nhân Viên</button>
-            <button class="tab-btn" onclick="switchTab('users')">Quản Lý Người Dùng</button>
-            <button class="tab-btn" onclick="switchTab('services')">Quản Lý Dịch Vụ</button>
-            <button class="tab-btn" onclick="switchTab('reports')">Báo Cáo & Thống Kê</button>
+            <button class="tab-btn active" onclick="switchTab('rooms')" data-i18n="admin.manageRooms">Quản Lý Phòng</button>
+            <button class="tab-btn" onclick="switchTab('staff')" data-i18n="admin.manageStaff">Quản Lý Nhân Viên</button>
+            <button class="tab-btn" onclick="switchTab('users')" data-i18n="admin.manageUsers">Quản Lý Người Dùng</button>
+            <button class="tab-btn" onclick="switchTab('services')" data-i18n="admin.manageServices">Quản Lý Dịch Vụ</button>
+            <button class="tab-btn" onclick="switchTab('reports')" data-i18n="admin.reports">Báo Cáo & Thống Kê</button>
         </div>
 
         <div id="rooms-tab" class="tab-content active">
@@ -592,6 +599,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/script.js"></script>
 </body>

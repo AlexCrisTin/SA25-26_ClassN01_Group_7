@@ -17,15 +17,22 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html">TRANG CHỦ</a></li>
-                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html" class="active">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html">LIÊN HỆ</a></li>
-                <li><a href="wallet.html">VÍ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" class="active" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
@@ -34,9 +41,9 @@
         <div class="container">
             <div class="rooms-hero-content">
                 <div class="rooms-hero-text">
-                    <span class="rooms-hero-tag">Khám phá</span>
-                    <h1>Khám Phá Phòng Nghỉ</h1>
-                    <p>Danh sách đầy đủ các loại phòng, giá và tình trạng sẵn sàng cho chuyến nghỉ dưỡng của bạn.</p>
+                    <span class="rooms-hero-tag" data-i18n="rooms.explore">Khám phá</span>
+                    <h1 data-i18n="rooms.exploreRooms">Khám Phá Phòng Nghỉ</h1>
+                    <p data-i18n="rooms.exploreDescription">Danh sách đầy đủ các loại phòng, giá và tình trạng sẵn sàng cho chuyến nghỉ dưỡng của bạn.</p>
                 </div>
             </div>
         </div>
@@ -46,13 +53,14 @@
         <div class="container">
             <div class="rooms-header">
                 <div class="rooms-header-text">
-                    <h2>Danh Sách Phòng</h2>
-                    <p>Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.</p>
+                    <h2 data-i18n="rooms.listTitle">Danh Sách Phòng</h2>
+                    <p data-i18n="rooms.listDescription">Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.</p>
                 </div>
                 <div class="rooms-header-search">
                     <input
                         type="text"
                         id="roomSearch"
+                        data-i18n-placeholder="rooms.searchPlaceholder"
                         placeholder="Tìm số phòng, loại phòng, trạng thái..."
                         onkeyup="filterRoomsList()"
                     >
@@ -67,6 +75,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script>
         let allRooms = [];
 

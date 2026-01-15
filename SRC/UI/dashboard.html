@@ -15,23 +15,30 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html">TRANG CHỦ</a></li>
-                <li id="adminNavItem" style="display: none;"><a href="admin.html">ADMIN PANEL</a></li>
-                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html">LIÊN HỆ</a></li>
-                <li><a href="wallet.html">VÍ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li id="adminNavItem" style="display: none;"><a href="admin.html" data-i18n="nav.adminPanel">ADMIN PANEL</a></li>
+                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
 
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <h1>Dashboard</h1>
+            <h1 data-i18n="dashboard.title">Dashboard</h1>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar"></div>
                 <div>
@@ -42,38 +49,39 @@
         </div>
 
         <div class="dashboard-section">
-            <h2>Phòng Đang Sử Dụng</h2>
+            <h2 data-i18n="dashboard.activeRooms">Phòng Đang Sử Dụng</h2>
             <div id="checkedInRooms">
                 <div class="empty-state">
                     <div class="empty-state-icon">🛏️</div>
-                    <h3>Chưa có phòng đang sử dụng</h3>
-                    <p>Bạn chưa check-in vào phòng nào. Vui lòng đến quầy lễ tân để check-in.</p>
+                    <h3 data-i18n="dashboard.noActiveRooms">Chưa có phòng đang sử dụng</h3>
+                    <p data-i18n="dashboard.checkinPrompt">Bạn chưa check-in vào phòng nào. Vui lòng đến quầy lễ tân để check-in.</p>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-section">
-            <h2>Thông Tin Cá Nhân</h2>
+            <h2 data-i18n="dashboard.personalInfo">Thông Tin Cá Nhân</h2>
             <form id="profileForm" class="auth-form" style="max-width: 600px;">
                 <div class="form-group">
-                    <label for="profile_full_name">Họ và tên</label>
+                    <label for="profile_full_name" data-i18n="auth.fullName">Họ và tên</label>
                     <input type="text" id="profile_full_name" name="full_name">
                 </div>
                 <div class="form-group">
-                    <label for="profile_email">Email</label>
+                    <label for="profile_email" data-i18n="auth.email">Email</label>
                     <input type="email" id="profile_email" name="email">
                 </div>
                 <div class="form-group">
-                    <label for="profile_phone">Số điện thoại</label>
+                    <label for="profile_phone" data-i18n="auth.phone">Số điện thoại</label>
                     <input type="tel" id="profile_phone" name="phone">
                 </div>
-                <button type="submit" class="auth-btn" id="updateProfileBtn">Cập Nhật Thông Tin</button>
+                <button type="submit" class="auth-btn" id="updateProfileBtn" data-i18n="dashboard.updateProfile">Cập Nhật Thông Tin</button>
             </form>
         </div>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             // Check authentication

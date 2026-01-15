@@ -17,16 +17,22 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-
-                <li><a href="dashboard.html">TRANG CHỦ</a></li>
-                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html" class="active">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html">LIÊN HỆ</a></li>
-                <li><a href="wallet.html">VÍ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" class="active" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
@@ -34,9 +40,9 @@
     <div class="room-detail-wrapper">
         <div id="roomNotFound" class="empty-state" style="display:none;">
             <div class="empty-state-icon">🛏️</div>
-            <h3>Không tìm thấy phòng</h3>
-            <p>Phòng bạn yêu cầu không tồn tại hoặc đã bị xóa.</p>
-            <a href="rooms.html" class="auth-btn" style="width:auto; text-decoration:none; padding: 10px 24px;">Quay lại danh sách phòng</a>
+            <h3 data-i18n="roomDetail.notFound">Không tìm thấy phòng</h3>
+            <p data-i18n="roomDetail.notFoundDesc">Phòng bạn yêu cầu không tồn tại hoặc đã bị xóa.</p>
+            <a href="rooms.html" class="auth-btn" style="width:auto; text-decoration:none; padding: 10px 24px;" data-i18n="roomDetail.backToList">Quay lại danh sách phòng</a>
         </div>
 
         <div id="roomDetail" style="display:none;">
@@ -91,26 +97,26 @@
                     </div>
 
                     <div class="info-section">
-                        <h2>Mô Tả Căn Phòng</h2>
+                        <h2 data-i18n="roomDetail.description">Mô Tả Căn Phòng</h2>
                         <p id="roomDescription">
                             Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.
                         </p>
                     </div>
 
                     <div class="info-section">
-                        <h2>Tiện Nghi Nổi Bật</h2>
+                        <h2 data-i18n="roomDetail.amenities">Tiện Nghi Nổi Bật</h2>
                         <div id="roomAmenities" class="amenities-grid">
                             <!-- Filled by JS -->
                         </div>
                     </div>
 
                     <div class="info-section">
-                        <h2>An Toàn & Vệ Sinh</h2>
+                        <h2 data-i18n="roomDetail.safety">An Toàn & Vệ Sinh</h2>
                         <div class="amenities-grid">
-                            <div><span class="badge-dot"></span>Dọn phòng hàng ngày</div>
-                            <div><span class="badge-dot"></span>Bình chữa cháy</div>
-                            <div><span class="badge-dot"></span>Báo khói</div>
-                            <div><span class="badge-dot"></span>Khử khuẩn định kỳ</div>
+                            <div><span class="badge-dot"></span><span data-i18n="roomDetail.dailyCleaning">Dọn phòng hàng ngày</span></div>
+                            <div><span class="badge-dot"></span><span data-i18n="roomDetail.fireExtinguisher">Bình chữa cháy</span></div>
+                            <div><span class="badge-dot"></span><span data-i18n="roomDetail.smokeDetector">Báo khói</span></div>
+                            <div><span class="badge-dot"></span><span data-i18n="roomDetail.disinfection">Khử khuẩn định kỳ</span></div>
                         </div>
                     </div>
 
@@ -120,13 +126,13 @@
                 <aside>
                     <div class="sidebar-card">
                         <div class="sidebar-price" id="sidebarPrice">—</div>
-                        <div class="sidebar-sub">Giá mỗi đêm (đã bao gồm thuế và phí cơ bản)</div>
+                        <div class="sidebar-sub" data-i18n="roomDetail.priceNote">Giá mỗi đêm (đã bao gồm thuế và phí cơ bản)</div>
                         <div class="sidebar-meta">
-                            Trạng thái: <strong id="sidebarStatus">Đang cập nhật...</strong>
+                            <span data-i18n="roomDetail.status">Trạng thái:</span> <strong id="sidebarStatus">Đang cập nhật...</strong>
                         </div>
-                        <button class="sidebar-btn" id="reserveBtn">Đặt phòng ngay</button>
-                        <a href="contact.html" class="sidebar-link">Liên hệ tư vấn</a>
-                        <a href="rooms.html" class="sidebar-link">Xem thêm phòng khác</a>
+                        <button class="sidebar-btn" id="reserveBtn" data-i18n="roomDetail.bookNow">Đặt phòng ngay</button>
+                        <a href="contact.html" class="sidebar-link" data-i18n="roomDetail.contact">Liên hệ tư vấn</a>
+                        <a href="rooms.html" class="sidebar-link" data-i18n="roomDetail.viewMore">Xem thêm phòng khác</a>
                     </div>
                 </aside>
             </div>
@@ -136,29 +142,29 @@
     <div id="bookingModal" class="booking-modal">
         <div class="booking-modal-content">
             <div class="booking-modal-header">
-                <h2>Đặt Phòng Nhanh</h2>
+                <h2 data-i18n="roomDetail.quickBook">Đặt Phòng Nhanh</h2>
                 <button class="booking-close" onclick="closeBookingModal()">×</button>
             </div>
             <form id="bookingForm">
                 <div class="booking-form-group">
-                    <label for="checkInDate">Ngày nhận phòng</label>
+                    <label for="checkInDate" data-i18n="roomDetail.checkInDate">Ngày nhận phòng</label>
                     <input type="date" id="checkInDate" required>
                 </div>
                 <div class="booking-form-group">
-                    <label for="checkOutDate">Ngày trả phòng</label>
+                    <label for="checkOutDate" data-i18n="roomDetail.checkOutDate">Ngày trả phòng</label>
                     <input type="date" id="checkOutDate" required>
                 </div>
                 <div class="booking-form-group">
-                    <label for="guestCount">Số lượng khách</label>
+                    <label for="guestCount" data-i18n="roomDetail.guestCount">Số lượng khách</label>
                     <input type="number" id="guestCount" min="1" value="1" required>
                 </div>
                 <div class="booking-form-group">
-                    <label for="specialRequests">Ghi chú đặc biệt (tuỳ chọn)</label>
-                    <textarea id="specialRequests" placeholder="Ví dụ: yêu cầu giường phụ, tầng cao, view đẹp..."></textarea>
+                    <label for="specialRequests" data-i18n="roomDetail.specialRequests">Ghi chú đặc biệt (tuỳ chọn)</label>
+                    <textarea id="specialRequests" data-i18n-placeholder="roomDetail.specialRequestsPlaceholder" placeholder="Ví dụ: yêu cầu giường phụ, tầng cao, view đẹp..."></textarea>
                 </div>
                 <div class="booking-modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeBookingModal()">Hủy</button>
-                    <button type="submit" class="sidebar-btn" style="width:auto; padding:9px 22px;">Xác nhận đặt phòng và thanh toán</button>
+                    <button type="button" class="btn-secondary" onclick="closeBookingModal()" data-i18n="common.cancel">Hủy</button>
+                    <button type="submit" class="sidebar-btn" style="width:auto; padding:9px 22px;" data-i18n="roomDetail.confirmBook">Xác nhận đặt phòng và thanh toán</button>
                 </div>
             </form>
         </div>
@@ -166,6 +172,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script>
         let currentRoomId = null;
         let currentRoom = null;

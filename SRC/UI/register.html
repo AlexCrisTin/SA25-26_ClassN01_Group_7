@@ -14,47 +14,54 @@
                 <div class="logo">
                     <span class="logo-text">Demacia</span>
                 </div>
-                <h2>Đăng Ký</h2>
-                <p>Tạo tài khoản mới để đặt phòng dễ dàng</p>
+                <div style="position: absolute; top: 20px; right: 20px;">
+                    <div class="language-switcher">
+                        <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                        <span class="lang-separator">|</span>
+                        <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                    </div>
+                </div>
+                <h2 data-i18n="auth.registerTitle">Đăng Ký</h2>
+                <p data-i18n="auth.registerSubtitle">Tạo tài khoản mới để đặt phòng dễ dàng</p>
             </div>
 
             <form id="registerForm" class="auth-form">
                 <div class="form-group">
-                    <label for="username">Tên đăng nhập *</label>
+                    <label for="username" data-i18n="auth.usernameRequired">Tên đăng nhập *</label>
                     <input type="text" id="username" name="username" required autocomplete="username">
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email *</label>
+                    <label for="email" data-i18n="auth.emailRequired">Email *</label>
                     <input type="email" id="email" name="email" required autocomplete="email">
                 </div>
 
                 <div class="form-group">
-                    <label for="full_name">Họ và tên *</label>
+                    <label for="full_name" data-i18n="auth.fullNameRequired">Họ và tên *</label>
                     <input type="text" id="full_name" name="full_name" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Số điện thoại *</label>
+                    <label for="phone" data-i18n="auth.phoneRequired">Số điện thoại *</label>
                     <input type="tel" id="phone" name="phone" required autocomplete="tel">
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Mật khẩu *</label>
+                    <label for="password" data-i18n="auth.passwordRequired">Mật khẩu *</label>
                     <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
-                    <small>Mật khẩu tối thiểu 6 ký tự</small>
+                    <small data-i18n="auth.passwordMinLength">Mật khẩu tối thiểu 6 ký tự</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="confirm_password">Xác nhận mật khẩu *</label>
+                    <label for="confirm_password" data-i18n="auth.confirmPasswordRequired">Xác nhận mật khẩu *</label>
                     <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
                 </div>
 
-                <button type="submit" class="auth-btn" id="registerBtn">Đăng Ký</button>
+                <button type="submit" class="auth-btn" id="registerBtn" data-i18n="auth.register">Đăng Ký</button>
 
                 <div class="auth-footer">
-                    <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
-                    <a href="index.html" class="back-home">← Về trang chủ</a>
+                    <p><span data-i18n="auth.haveAccount">Đã có tài khoản?</span> <a href="login.html" data-i18n="auth.loginNow">Đăng nhập ngay</a></p>
+                    <a href="index.html" class="back-home" data-i18n="auth.backHome">← Về trang chủ</a>
                 </div>
             </form>
         </div>
@@ -62,6 +69,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const registerForm = document.getElementById('registerForm');

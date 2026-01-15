@@ -16,28 +16,35 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li id="navAdmin"><a href="admin.html">ADMIN PANEL</a></li>
-                <li><a href="receptionist.html" class="active">RECEPTIONIST PANEL</a></li>
-                <li><a href="admin-messages.html">CONTACT</a></li>
+                <li id="navAdmin"><a href="admin.html" data-i18n="nav.adminPanel">ADMIN PANEL</a></li>
+                <li><a href="receptionist.html" class="active" data-i18n="receptionist.title">RECEPTIONIST PANEL</a></li>
+                <li><a href="admin-messages.html" data-i18n="nav.contact">CONTACT</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="receptionUserName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
 
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Receptionist Panel</h1>
-            <p>Quản lý đặt phòng, check-in, check-out</p>
+            <h1 data-i18n="receptionist.title">Receptionist Panel</h1>
+            <p data-i18n="receptionist.subtitle">Quản lý đặt phòng, check-in, check-out</p>
         </div>
         
         <div class="admin-tabs">
-            <button class="tab-btn active" onclick="switchReceptionTab('bookings')">Quản Lý Đặt Phòng</button>
-            <button class="tab-btn" onclick="switchReceptionTab('checkin')">Check-in</button>
-            <button class="tab-btn" onclick="switchReceptionTab('checkout')">Check-out</button>
-            <button class="tab-btn" onclick="switchReceptionTab('service-requests')">Quản Lý Yêu Cầu Dịch Vụ</button>
+            <button class="tab-btn active" onclick="switchReceptionTab('bookings')" data-i18n="receptionist.manageBookings">Quản Lý Đặt Phòng</button>
+            <button class="tab-btn" onclick="switchReceptionTab('checkin')" data-i18n="receptionist.checkin">Check-in</button>
+            <button class="tab-btn" onclick="switchReceptionTab('checkout')" data-i18n="receptionist.checkout">Check-out</button>
+            <button class="tab-btn" onclick="switchReceptionTab('service-requests')" data-i18n="receptionist.manageServiceRequests">Quản Lý Yêu Cầu Dịch Vụ</button>
         </div>
 
         <div id="reception-bookings-tab" class="tab-content active">
@@ -185,6 +192,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script src="js/receptionist.js"></script>
     <script src="js/script.js"></script>
 </body>

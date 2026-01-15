@@ -16,44 +16,51 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html">TRANG CHỦ</a></li>
-                <li><a href="my-bookings.html" class="active">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html">LIÊN HỆ</a></li>
-                <li><a href="wallet.html">VÍ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="my-bookings.html" class="active" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
 
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <h1>Đặt Phòng Của Tôi</h1>
-            <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Mới</a>
+            <h1 data-i18n="myBookings.title">Đặt Phòng Của Tôi</h1>
+            <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;" data-i18n="myBookings.newBooking">Đặt Phòng Mới</a>
         </div>
 
         <div class="dashboard-section">
             <div style="margin-bottom: 20px;">
-                <label for="filterStatus" style="margin-right: 10px;">Lọc theo trạng thái:</label>
+                <label for="filterStatus" style="margin-right: 10px;" data-i18n="myBookings.filterByStatus">Lọc theo trạng thái:</label>
                 <select id="filterStatus" style="padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 5px;">
-                    <option value="all">Tất cả</option>
-                    <option value="pending">Chờ Xác Nhận</option>
-                    <option value="confirmed">Đã Xác Nhận</option>
-                    <option value="checked_in">Đã Check-in</option>
-                    <option value="checked_out">Đã Check-out</option>
-                    <option value="cancelled">Đã Hủy</option>
+                    <option value="all" data-i18n="common.all">Tất cả</option>
+                    <option value="pending" data-i18n="booking.status.pending">Chờ Xác Nhận</option>
+                    <option value="confirmed" data-i18n="booking.status.confirmed">Đã Xác Nhận</option>
+                    <option value="checked_in" data-i18n="booking.status.checkedIn">Đã Check-in</option>
+                    <option value="checked_out" data-i18n="booking.status.checkedOut">Đã Check-out</option>
+                    <option value="cancelled" data-i18n="booking.status.cancelled">Đã Hủy</option>
                 </select>
             </div>
 
             <div id="bookingsContainer">
                 <div class="empty-state">
                     <div class="empty-state-icon">📋</div>
-                    <h3>Chưa có đặt phòng nào</h3>
-                    <p>Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
-                    <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Ngay</a>
+                    <h3 data-i18n="myBookings.noBookings">Chưa có đặt phòng nào</h3>
+                    <p data-i18n="myBookings.noBookingsDesc">Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
+                    <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;" data-i18n="myBookings.bookNow">Đặt Phòng Ngay</a>
                 </div>
             </div>
         </div>
@@ -61,25 +68,26 @@
 
     <div id="cancelModal" class="cancel-modal-overlay">
         <div class="cancel-modal">
-            <h2>Hủy Đặt Phòng</h2>
-            <p>Vui lòng cho chúng tôi biết lý do hủy phòng. Lưu ý: tiền đặt cọc (nếu có) sẽ không được hoàn lại.</p>
-            <label style="font-size: 13px; font-weight: 500; color:#374151; display:block; margin-bottom:4px;">
+            <h2 data-i18n="myBookings.cancelTitle">Hủy Đặt Phòng</h2>
+            <p data-i18n="myBookings.cancelDesc">Vui lòng cho chúng tôi biết lý do hủy phòng. Lưu ý: tiền đặt cọc (nếu có) sẽ không được hoàn lại.</p>
+            <label style="font-size: 13px; font-weight: 500; color:#374151; display:block; margin-bottom:4px;" data-i18n="myBookings.cancelReason">
                 Lý do hủy phòng
             </label>
-            <textarea id="cancelReasonInput" placeholder="Ví dụ: thay đổi kế hoạch, đặt nhầm ngày, tìm được chỗ khác phù hợp hơn..."></textarea>
+            <textarea id="cancelReasonInput" data-i18n-placeholder="myBookings.cancelReasonPlaceholder" placeholder="Ví dụ: thay đổi kế hoạch, đặt nhầm ngày, tìm được chỗ khác phù hợp hơn..."></textarea>
             <div id="cancelModalError" class="cancel-modal-error"></div>
-            <p style="font-size:12px; color:#9ca3af; margin-top:8px;">
+            <p style="font-size:12px; color:#9ca3af; margin-top:8px;" data-i18n="myBookings.cancelNote">
                 Khi xác nhận hủy, đặt phòng sẽ chuyển sang trạng thái <strong>Đã Hủy</strong> và tiền đặt cọc (nếu có) sẽ bị khấu trừ theo chính sách khách sạn.
             </p>
             <div class="cancel-modal-footer">
-                <button class="action-btn btn-view" type="button" onclick="closeCancelModal()">Quay lại</button>
-                <button class="action-btn btn-cancel" type="button" onclick="confirmCancelBooking()">Xác nhận hủy</button>
+                <button class="action-btn btn-view" type="button" onclick="closeCancelModal()" data-i18n="common.back">Quay lại</button>
+                <button class="action-btn btn-cancel" type="button" onclick="confirmCancelBooking()" data-i18n="myBookings.confirmCancel">Xác nhận hủy</button>
             </div>
         </div>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script>
         let allBookings = [];
         let pendingCancelBookingId = null;

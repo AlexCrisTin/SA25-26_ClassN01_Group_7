@@ -16,10 +16,17 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html">TRANG CHỦ</a></li>
-                <li><a href="dashboard.html">DASHBOARD</a></li>
-                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="index.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.dashboard">DASHBOARD</a></li>
+                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -28,70 +35,70 @@
             <div class="payment-form-container">
                 <div class="auth-box">
                     <div class="auth-header">
-                        <h2>Thanh Toán</h2>
-                        <p>Hoàn tất thanh toán cho đặt phòng của bạn</p>
+                        <h2 data-i18n="payment.title">Thanh Toán</h2>
+                        <p data-i18n="payment.subtitle">Hoàn tất thanh toán cho đặt phòng của bạn</p>
                     </div>
 
                     <div id="paymentFormContainer">
                 <div class="payment-summary" id="bookingSummary" style="display: none;">
-                    <h3>Thông Tin Đặt Phòng</h3>
+                    <h3 data-i18n="payment.bookingInfo">Thông Tin Đặt Phòng</h3>
                     <div class="summary-item">
-                        <span>Mã Đặt Phòng:</span>
+                        <span data-i18n="payment.bookingId">Mã Đặt Phòng:</span>
                         <strong id="bookingId">-</strong>
                     </div>
                     <div class="summary-item">
-                        <span>Tên Khách:</span>
+                        <span data-i18n="payment.guestName">Tên Khách:</span>
                         <strong id="guestName">-</strong>
                     </div>
                     <div class="summary-item">
-                        <span>Loại Phòng:</span>
+                        <span data-i18n="payment.roomType">Loại Phòng:</span>
                         <strong id="roomType">-</strong>
                     </div>
                     <div class="summary-item">
-                        <span>Ngày Nhận:</span>
+                        <span data-i18n="payment.checkInDate">Ngày Nhận:</span>
                         <strong id="checkInDate">-</strong>
                     </div>
                     <div class="summary-item">
-                        <span>Ngày Trả:</span>
+                        <span data-i18n="payment.checkOutDate">Ngày Trả:</span>
                         <strong id="checkOutDate">-</strong>
                     </div>
                     <div class="summary-item">
-                        <span>Số dư ví của bạn:</span>
+                        <span data-i18n="payment.walletBalance">Số dư ví của bạn:</span>
                         <strong id="walletBalance">—</strong>
                     </div>
                     <div class="summary-item total">
-                        <span>Tổng Tiền:</span>
+                        <span data-i18n="payment.total">Tổng Tiền:</span>
                         <strong id="totalAmount">-</strong>
                     </div>
                 </div>
                 
                 <div class="wallet-balance-display" style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #b3d9ff;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #333; font-weight: 500;">Số dư ví của bạn:</span>
+                        <span style="color: #333; font-weight: 500;" data-i18n="payment.walletBalance">Số dư ví của bạn:</span>
                         <strong id="walletBalanceDisplay" style="color: #0066cc; font-size: 18px;">—</strong>
                     </div>
                 </div>
 
                 <form id="paymentForm" class="auth-form">
                     <div class="form-group">
-                        <label>Phương Thức Thanh Toán</label>
+                        <label data-i18n="payment.method">Phương Thức Thanh Toán</label>
                         <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
                             <label style="display: flex; align-items: center; gap: 8px;">
                                 <input type="radio" name="paymentMethod" value="wallet" checked>
-                                <span>Thanh toán bằng ví (trừ vào số dư ngay)</span>
+                                <span data-i18n="payment.walletMethod">Thanh toán bằng ví (trừ vào số dư ngay)</span>
                             </label>
                             <label style="display: flex; align-items: center; gap: 8px;">
                                 <input type="radio" name="paymentMethod" value="cash">
-                                <span>Thanh toán tiền mặt tại quầy (bỏ qua bước trừ tiền ví)</span>
+                                <span data-i18n="payment.cashMethod">Thanh toán tiền mặt tại quầy (bỏ qua bước trừ tiền ví)</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Mã Giảm Giá (Tùy chọn)</label>
+                        <label data-i18n="payment.coupon">Mã Giảm Giá (Tùy chọn)</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="couponCode" placeholder="Nhập mã giảm giá" style="flex: 1;">
-                            <button type="button" class="btn-secondary" onclick="applyCoupon()">Áp Dụng</button>
+                            <input type="text" id="couponCode" data-i18n-placeholder="payment.couponPlaceholder" placeholder="Nhập mã giảm giá" style="flex: 1;">
+                            <button type="button" class="btn-secondary" onclick="applyCoupon()" data-i18n="payment.apply">Áp Dụng</button>
                         </div>
                         <div id="couponMessage" style="margin-top: 5px; font-size: 12px;"></div>
                     </div>

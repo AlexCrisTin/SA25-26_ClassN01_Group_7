@@ -16,16 +16,23 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html">TRANG CHỦ</a></li>
-                <li id="adminNavItem" style="display: none;"><a href="admin.html">ADMIN PANEL</a></li>
-                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html" class="active">LIÊN HỆ</a></li>
-                <li><a href="wallet.html">VÍ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li id="adminNavItem" style="display: none;"><a href="admin.html" data-i18n="nav.adminPanel">ADMIN PANEL</a></li>
+                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html" class="active" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
@@ -33,39 +40,39 @@
     <div class="contact-page">
         <div class="contact-container">
             <div class="contact-header">
-                <h1>Liên Hệ Với Chúng Tôi</h1>
-                <p>Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
+                <h1 data-i18n="contact.title">Liên Hệ Với Chúng Tôi</h1>
+                <p data-i18n="contact.subtitle">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
             </div>
 
             <div class="contact-content">
                 <div class="contact-info-card">
-                    <h2>Thông Tin Liên Hệ</h2>
+                    <h2 data-i18n="contact.info">Thông Tin Liên Hệ</h2>
                     <div class="info-item">
                         <div class="info-icon">📍</div>
                         <div class="info-content">
-                            <h3>Địa Chỉ</h3>
+                            <h3 data-i18n="contact.address">Địa Chỉ</h3>
                             <p>3636363636363363</p>
                         </div>
                     </div>
                     <div class="info-item">
                         <div class="info-icon">📞</div>
                         <div class="info-content">
-                            <h3>Điện Thoại</h3>
+                            <h3 data-i18n="contact.phone">Điện Thoại</h3>
                             <p>3636363636</p>
                         </div>
                     </div>
                     <div class="info-item">
                         <div class="info-icon">✉️</div>
                         <div class="info-content">
-                            <h3>Email</h3>
+                            <h3 data-i18n="contact.email">Email</h3>
                             <p>3636363@demaciahotel.com</p>
                         </div>
                     </div>
                     <div class="info-item">
                         <div class="info-icon">🕒</div>
                         <div class="info-content">
-                            <h3>Giờ Làm Việc</h3>
-                            <p>24/7 - Luôn sẵn sàng phục vụ</p>
+                            <h3 data-i18n="contact.hours">Giờ Làm Việc</h3>
+                            <p data-i18n="contact.hoursDesc">24/7 - Luôn sẵn sàng phục vụ</p>
                         </div>
                     </div>
                 </div>
@@ -110,6 +117,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script src="js/chat.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

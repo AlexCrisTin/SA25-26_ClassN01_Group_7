@@ -15,15 +15,22 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html">TRANG CHỦ</a></li>
-                <li><a href="my-bookings.html">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html">LIÊN HỆ</a></li>
-                <li><a href="wallet.html" class="active">VÍ</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="rooms.html" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="wallet.html" class="active" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                </div>
+            </div>
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
-                <button class="logout-btn" onclick="AuthManager.logout()">Đăng Xuất</button>
+                <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
             </div>
         </div>
     </nav>
@@ -31,26 +38,26 @@
     <div class="auth-container">
         <div class="auth-box" style="max-width: 540px;">
             <div class="auth-header">
-                <h2>Ví</h2>
+                <h2 data-i18n="wallet.title">Ví</h2>
             </div>
 
             <div class="payment-summary" style="margin-bottom: 20px;">
                 <div class="summary-item total">
-                    <span>Số dư hiện tại:</span>
+                    <span data-i18n="wallet.currentBalance">Số dư hiện tại:</span>
                     <strong id="walletBalance">—</strong>
                 </div>
                 <div class="summary-item">
-                    <span>Cập nhật lúc:</span>
+                    <span data-i18n="wallet.updatedAt">Cập nhật lúc:</span>
                     <strong id="walletUpdatedAt">—</strong>
                 </div>
             </div>
 
             <form id="topUpForm" class="auth-form">
                 <div class="form-group">
-                    <label for="topupAmount">Nhập số tiền muốn nạp (VNĐ)</label>
+                    <label for="topupAmount" data-i18n="wallet.topupAmount">Nhập số tiền muốn nạp (VNĐ)</label>
                     <input type="number" id="topupAmount" min="10000" step="1000" required>
                 </div>
-                <button type="submit" class="auth-btn" id="topupBtn">Nạp ví</button>
+                <button type="submit" class="auth-btn" id="topupBtn" data-i18n="wallet.topup">Nạp ví</button>
             </form>
 
          
@@ -59,6 +66,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/language.js"></script>
     <script src="js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {

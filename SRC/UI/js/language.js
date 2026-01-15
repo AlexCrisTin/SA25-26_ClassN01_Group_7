@@ -36,7 +36,12 @@ const LanguageManager = {
                 capacity: 'Sức chứa',
                 people: 'người',
                 noRooms: 'Chưa có phòng nào',
-                loadError: 'Lỗi khi tải danh sách phòng'
+                loadError: 'Lỗi khi tải danh sách phòng',
+                exploreRooms: 'Khám Phá Phòng Nghỉ',
+                exploreDescription: 'Danh sách đầy đủ các loại phòng, giá và tình trạng sẵn sàng cho chuyến nghỉ dưỡng của bạn.',
+                listTitle: 'Danh Sách Phòng',
+                listDescription: 'Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.',
+                searchPlaceholder: 'Tìm số phòng, loại phòng, trạng thái...'
             },
             services: {
                 title: 'Dịch Vụ',
@@ -84,6 +89,148 @@ const LanguageManager = {
                 aboutLink: 'Về chúng tôi',
                 newsletter: 'ĐỪNG BỎ LỠ BẤT KỲ BẢN CẬP NHẬT NÀO',
                 subscribe: 'ĐĂNG KÝ NGAY'
+            },
+            auth: {
+                loginTitle: 'Đăng Nhập',
+                welcomeBack: 'Chào mừng bạn trở lại!',
+                username: 'Tên đăng nhập',
+                password: 'Mật khẩu',
+                rememberMe: 'Ghi nhớ đăng nhập',
+                forgotPassword: 'Quên mật khẩu?',
+                login: 'Đăng Nhập',
+                noAccount: 'Chưa có tài khoản?',
+                registerNow: 'Đăng ký ngay',
+                backHome: '← Về trang chủ',
+                registerTitle: 'Đăng Ký',
+                registerSubtitle: 'Tạo tài khoản mới để đặt phòng dễ dàng',
+                usernameRequired: 'Tên đăng nhập *',
+                emailRequired: 'Email *',
+                fullNameRequired: 'Họ và tên *',
+                phoneRequired: 'Số điện thoại *',
+                passwordRequired: 'Mật khẩu *',
+                passwordMinLength: 'Mật khẩu tối thiểu 6 ký tự',
+                confirmPasswordRequired: 'Xác nhận mật khẩu *',
+                register: 'Đăng Ký',
+                haveAccount: 'Đã có tài khoản?',
+                loginNow: 'Đăng nhập ngay',
+                fullName: 'Họ và tên',
+                email: 'Email',
+                phone: 'Số điện thoại'
+            },
+            dashboard: {
+                title: 'Dashboard',
+                myBookings: 'ĐẶT PHÒNG CỦA TÔI',
+                wallet: 'VÍ',
+                activeRooms: 'Phòng Đang Sử Dụng',
+                noActiveRooms: 'Chưa có phòng đang sử dụng',
+                checkinPrompt: 'Bạn chưa check-in vào phòng nào. Vui lòng đến quầy lễ tân để check-in.',
+                personalInfo: 'Thông Tin Cá Nhân',
+                updateProfile: 'Cập Nhật Thông Tin'
+            },
+            roomDetail: {
+                notFound: 'Không tìm thấy phòng',
+                notFoundDesc: 'Phòng bạn yêu cầu không tồn tại hoặc đã bị xóa.',
+                backToList: 'Quay lại danh sách phòng',
+                description: 'Mô Tả Căn Phòng',
+                amenities: 'Tiện Nghi Nổi Bật',
+                safety: 'An Toàn & Vệ Sinh',
+                dailyCleaning: 'Dọn phòng hàng ngày',
+                fireExtinguisher: 'Bình chữa cháy',
+                smokeDetector: 'Báo khói',
+                disinfection: 'Khử khuẩn định kỳ',
+                priceNote: 'Giá mỗi đêm (đã bao gồm thuế và phí cơ bản)',
+                status: 'Trạng thái:',
+                bookNow: 'Đặt phòng ngay',
+                contact: 'Liên hệ tư vấn',
+                viewMore: 'Xem thêm phòng khác',
+                quickBook: 'Đặt Phòng Nhanh',
+                checkInDate: 'Ngày nhận phòng',
+                checkOutDate: 'Ngày trả phòng',
+                guestCount: 'Số lượng khách',
+                specialRequests: 'Ghi chú đặc biệt (tuỳ chọn)',
+                specialRequestsPlaceholder: 'Ví dụ: yêu cầu giường phụ, tầng cao, view đẹp...',
+                confirmBook: 'Xác nhận đặt phòng và thanh toán'
+            },
+            payment: {
+                title: 'Thanh Toán',
+                subtitle: 'Hoàn tất thanh toán cho đặt phòng của bạn',
+                bookingInfo: 'Thông Tin Đặt Phòng',
+                bookingId: 'Mã Đặt Phòng:',
+                guestName: 'Tên Khách:',
+                roomType: 'Loại Phòng:',
+                checkInDate: 'Ngày Nhận:',
+                checkOutDate: 'Ngày Trả:',
+                walletBalance: 'Số dư ví của bạn:',
+                total: 'Tổng Tiền:',
+                method: 'Phương Thức Thanh Toán',
+                walletMethod: 'Thanh toán bằng ví (trừ vào số dư ngay)',
+                cashMethod: 'Thanh toán tiền mặt tại quầy (bỏ qua bước trừ tiền ví)',
+                coupon: 'Mã Giảm Giá (Tùy chọn)',
+                couponPlaceholder: 'Nhập mã giảm giá',
+                apply: 'Áp Dụng'
+            },
+            myBookings: {
+                title: 'Đặt Phòng Của Tôi',
+                newBooking: 'Đặt Phòng Mới',
+                filterByStatus: 'Lọc theo trạng thái:',
+                noBookings: 'Chưa có đặt phòng nào',
+                noBookingsDesc: 'Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi',
+                bookNow: 'Đặt Phòng Ngay',
+                cancelTitle: 'Hủy Đặt Phòng',
+                cancelDesc: 'Vui lòng cho chúng tôi biết lý do hủy phòng. Lưu ý: tiền đặt cọc (nếu có) sẽ không được hoàn lại.',
+                cancelReason: 'Lý do hủy phòng',
+                cancelReasonPlaceholder: 'Ví dụ: thay đổi kế hoạch, đặt nhầm ngày, tìm được chỗ khác phù hợp hơn...',
+                cancelNote: 'Khi xác nhận hủy, đặt phòng sẽ chuyển sang trạng thái Đã Hủy và tiền đặt cọc (nếu có) sẽ bị khấu trừ theo chính sách khách sạn.',
+                confirmCancel: 'Xác nhận hủy'
+            },
+            wallet: {
+                title: 'Ví',
+                currentBalance: 'Số dư hiện tại:',
+                updatedAt: 'Cập nhật lúc:',
+                topupAmount: 'Nhập số tiền muốn nạp (VNĐ)',
+                topup: 'Nạp ví'
+            },
+            contact: {
+                title: 'Liên Hệ Với Chúng Tôi',
+                subtitle: 'Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7',
+                info: 'Thông Tin Liên Hệ',
+                address: 'Địa Chỉ',
+                phone: 'Điện Thoại',
+                email: 'Email',
+                hours: 'Giờ Làm Việc',
+                hoursDesc: '24/7 - Luôn sẵn sàng phục vụ'
+            },
+            admin: {
+                title: 'Admin Panel',
+                subtitle: 'Quản lý hệ thống khách sạn',
+                receptionistPanel: 'RECEPTIONIST PANEL',
+                manageRooms: 'Quản Lý Phòng',
+                manageStaff: 'Quản Lý Nhân Viên',
+                manageUsers: 'Quản Lý Người Dùng',
+                manageServices: 'Quản Lý Dịch Vụ',
+                reports: 'Báo Cáo & Thống Kê'
+            },
+            receptionist: {
+                title: 'Receptionist Panel',
+                subtitle: 'Quản lý đặt phòng, check-in, check-out',
+                manageBookings: 'Quản Lý Đặt Phòng',
+                checkin: 'Check-in',
+                checkout: 'Check-out',
+                manageServiceRequests: 'Quản Lý Yêu Cầu Dịch Vụ'
+            },
+            common: {
+                all: 'Tất cả',
+                cancel: 'Hủy',
+                back: 'Quay lại'
+            },
+            booking: {
+                status: {
+                    pending: 'Chờ Xác Nhận',
+                    confirmed: 'Đã Xác Nhận',
+                    checkedIn: 'Đã Check-in',
+                    checkedOut: 'Đã Check-out',
+                    cancelled: 'Đã Hủy'
+                }
             }
         },
         en: {
@@ -119,7 +266,12 @@ const LanguageManager = {
                 capacity: 'Capacity',
                 people: 'people',
                 noRooms: 'No rooms available',
-                loadError: 'Error loading room list'
+                loadError: 'Error loading room list',
+                exploreRooms: 'Explore Rooms',
+                exploreDescription: 'Complete list of room types, prices and availability for your stay.',
+                listTitle: 'Room List',
+                listDescription: 'View all available rooms and their current status.',
+                searchPlaceholder: 'Search room number, type, status...'
             },
             services: {
                 title: 'Services',
@@ -167,6 +319,148 @@ const LanguageManager = {
                 aboutLink: 'About Us',
                 newsletter: 'DON\'T MISS ANY UPDATES',
                 subscribe: 'SUBSCRIBE NOW'
+            },
+            auth: {
+                loginTitle: 'Login',
+                welcomeBack: 'Welcome back!',
+                username: 'Username',
+                password: 'Password',
+                rememberMe: 'Remember me',
+                forgotPassword: 'Forgot password?',
+                login: 'Login',
+                noAccount: 'Don\'t have an account?',
+                registerNow: 'Register now',
+                backHome: '← Back to home',
+                registerTitle: 'Register',
+                registerSubtitle: 'Create a new account to book rooms easily',
+                usernameRequired: 'Username *',
+                emailRequired: 'Email *',
+                fullNameRequired: 'Full Name *',
+                phoneRequired: 'Phone Number *',
+                passwordRequired: 'Password *',
+                passwordMinLength: 'Password must be at least 6 characters',
+                confirmPasswordRequired: 'Confirm Password *',
+                register: 'Register',
+                haveAccount: 'Already have an account?',
+                loginNow: 'Login now',
+                fullName: 'Full Name',
+                email: 'Email',
+                phone: 'Phone Number'
+            },
+            dashboard: {
+                title: 'Dashboard',
+                myBookings: 'MY BOOKINGS',
+                wallet: 'WALLET',
+                activeRooms: 'Active Rooms',
+                noActiveRooms: 'No active rooms',
+                checkinPrompt: 'You haven\'t checked in to any room yet. Please go to the reception desk to check in.',
+                personalInfo: 'Personal Information',
+                updateProfile: 'Update Information'
+            },
+            roomDetail: {
+                notFound: 'Room Not Found',
+                notFoundDesc: 'The room you requested does not exist or has been deleted.',
+                backToList: 'Back to Room List',
+                description: 'Room Description',
+                amenities: 'Featured Amenities',
+                safety: 'Safety & Hygiene',
+                dailyCleaning: 'Daily Cleaning',
+                fireExtinguisher: 'Fire Extinguisher',
+                smokeDetector: 'Smoke Detector',
+                disinfection: 'Regular Disinfection',
+                priceNote: 'Price per night (taxes and basic fees included)',
+                status: 'Status:',
+                bookNow: 'Book Now',
+                contact: 'Contact Consultation',
+                viewMore: 'View More Rooms',
+                quickBook: 'Quick Booking',
+                checkInDate: 'Check-in Date',
+                checkOutDate: 'Check-out Date',
+                guestCount: 'Number of Guests',
+                specialRequests: 'Special Notes (Optional)',
+                specialRequestsPlaceholder: 'E.g., extra bed request, high floor, nice view...',
+                confirmBook: 'Confirm Booking and Payment'
+            },
+            payment: {
+                title: 'Payment',
+                subtitle: 'Complete payment for your booking',
+                bookingInfo: 'Booking Information',
+                bookingId: 'Booking ID:',
+                guestName: 'Guest Name:',
+                roomType: 'Room Type:',
+                checkInDate: 'Check-in Date:',
+                checkOutDate: 'Check-out Date:',
+                walletBalance: 'Your Wallet Balance:',
+                total: 'Total Amount:',
+                method: 'Payment Method',
+                walletMethod: 'Pay with wallet (deduct from balance immediately)',
+                cashMethod: 'Pay cash at counter (skip wallet deduction step)',
+                coupon: 'Coupon Code (Optional)',
+                couponPlaceholder: 'Enter coupon code',
+                apply: 'Apply'
+            },
+            myBookings: {
+                title: 'My Bookings',
+                newBooking: 'New Booking',
+                filterByStatus: 'Filter by status:',
+                noBookings: 'No bookings yet',
+                noBookingsDesc: 'Start booking now to experience our services',
+                bookNow: 'Book Now',
+                cancelTitle: 'Cancel Booking',
+                cancelDesc: 'Please let us know the reason for cancellation. Note: deposit (if any) will not be refunded.',
+                cancelReason: 'Cancellation Reason',
+                cancelReasonPlaceholder: 'E.g., change of plans, wrong date, found better place...',
+                cancelNote: 'When confirmed, the booking will change to Cancelled status and the deposit (if any) will be deducted according to hotel policy.',
+                confirmCancel: 'Confirm Cancellation'
+            },
+            wallet: {
+                title: 'Wallet',
+                currentBalance: 'Current Balance:',
+                updatedAt: 'Updated at:',
+                topupAmount: 'Enter amount to top up (VND)',
+                topup: 'Top Up'
+            },
+            contact: {
+                title: 'Contact Us',
+                subtitle: 'We are always ready to support you 24/7',
+                info: 'Contact Information',
+                address: 'Address',
+                phone: 'Phone',
+                email: 'Email',
+                hours: 'Working Hours',
+                hoursDesc: '24/7 - Always ready to serve'
+            },
+            admin: {
+                title: 'Admin Panel',
+                subtitle: 'Hotel system management',
+                receptionistPanel: 'RECEPTIONIST PANEL',
+                manageRooms: 'Manage Rooms',
+                manageStaff: 'Manage Staff',
+                manageUsers: 'Manage Users',
+                manageServices: 'Manage Services',
+                reports: 'Reports & Statistics'
+            },
+            receptionist: {
+                title: 'Receptionist Panel',
+                subtitle: 'Manage bookings, check-in, check-out',
+                manageBookings: 'Manage Bookings',
+                checkin: 'Check-in',
+                checkout: 'Check-out',
+                manageServiceRequests: 'Manage Service Requests'
+            },
+            common: {
+                all: 'All',
+                cancel: 'Cancel',
+                back: 'Back'
+            },
+            booking: {
+                status: {
+                    pending: 'Pending Confirmation',
+                    confirmed: 'Confirmed',
+                    checkedIn: 'Checked In',
+                    checkedOut: 'Checked Out',
+                    cancelled: 'Cancelled'
+                }
             }
         }
     },
@@ -204,6 +498,15 @@ const LanguageManager = {
                 } else {
                     element.textContent = translation;
                 }
+            }
+        });
+        
+        // Update placeholder attributes
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+            const key = element.getAttribute('data-i18n-placeholder');
+            const translation = this.getTranslation(key);
+            if (translation) {
+                element.placeholder = translation;
             }
         });
         
