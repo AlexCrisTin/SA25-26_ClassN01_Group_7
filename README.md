@@ -128,6 +128,9 @@ python app.py
 
 Server will run at `http://localhost:5000`
 
+If you cant connected to MySQL server on "localhost:3306" like this 'mysql.connector.errors.DatabaseError: 2003 (HY000): Can't connect to MySQL server on 'localhost:3306' (10061)'
+You should check Task Manager and go to Services, search for MYSQL80 and start it
+
 ### Step 5: Open Frontend
 Open `SRC/UI/index.html` in browser or use local server:
 ```bash
