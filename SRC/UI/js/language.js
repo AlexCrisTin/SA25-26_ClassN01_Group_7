@@ -32,16 +32,22 @@ const LanguageManager = {
                 title: 'Các Hạng Phòng',
                 roomPrefix: 'Phòng',
                 fromPrice: 'Chỉ từ',
-                perNight: 'VNĐ/Đêm',
+                perNight: 'VNĐ/đêm',
                 capacity: 'Sức chứa',
                 people: 'người',
-                noRooms: 'Chưa có phòng nào',
-                loadError: 'Lỗi khi tải danh sách phòng',
+                noRooms: 'Hiện chưa có phòng nào',
+                noRoomsDesc: 'Vui lòng quay lại sau hoặc thử tìm kiếm khác.',
+                loadError: 'Lỗi khi tải dữ liệu phòng: ',
+                loading: 'Đang tải danh sách phòng...',
                 exploreRooms: 'Khám Phá Phòng Nghỉ',
                 exploreDescription: 'Danh sách đầy đủ các loại phòng, giá và tình trạng sẵn sàng cho chuyến nghỉ dưỡng của bạn.',
                 listTitle: 'Danh Sách Phòng',
                 listDescription: 'Xem toàn bộ các phòng đang mở bán và tình trạng hiện tại.',
-                searchPlaceholder: 'Tìm số phòng, loại phòng, trạng thái...'
+                searchPlaceholder: 'Tìm số phòng, loại phòng, trạng thái...',
+                roomTypeFallback: 'Loại phòng',
+                guests: 'khách',
+                wifiFree: 'Wifi miễn phí',
+                contact: 'Liên hệ'
             },
             services: {
                 title: 'Dịch Vụ',
@@ -181,7 +187,26 @@ const LanguageManager = {
                 cancelReason: 'Lý do hủy phòng',
                 cancelReasonPlaceholder: 'Ví dụ: thay đổi kế hoạch, đặt nhầm ngày, tìm được chỗ khác phù hợp hơn...',
                 cancelNote: 'Khi xác nhận hủy, đặt phòng sẽ chuyển sang trạng thái Đã Hủy và tiền đặt cọc (nếu có) sẽ bị khấu trừ theo chính sách khách sạn.',
-                confirmCancel: 'Xác nhận hủy'
+                confirmCancel: 'Xác nhận hủy',
+                loading: 'Đang tải danh sách đặt phòng...',
+                loadError: 'Lỗi khi tải danh sách đặt phòng: ',
+                noBookingsWithStatus: 'Không có đặt phòng nào với trạng thái này',
+                viewingBooking: 'Đang mở chi tiết đặt phòng #',
+                editFeatureComing: 'Chức năng sửa đặt phòng đang được phát triển',
+                cancelReasonRequired: 'Vui lòng nhập lý do hủy phòng.',
+                cancelling: 'Đang hủy đặt phòng...',
+                cancelSuccess: 'Hủy đặt phòng thành công! Tiền đặt cọc (nếu có) sẽ không được hoàn lại.',
+                cancelError: 'Lỗi khi hủy đặt phòng: ',
+                table: {
+                    bookingId: 'Mã Đặt Phòng',
+                    guestName: 'Tên Khách',
+                    roomType: 'Loại Phòng',
+                    checkInDate: 'Ngày Nhận',
+                    checkOutDate: 'Ngày Trả',
+                    totalPrice: 'Tổng Tiền',
+                    status: 'Trạng Thái',
+                    actions: 'Thao Tác'
+                }
             },
             wallet: {
                 title: 'Ví',
@@ -490,16 +515,22 @@ const LanguageManager = {
                 title: 'Room Categories',
                 roomPrefix: 'Room',
                 fromPrice: 'From',
-                perNight: 'VND/Night',
+                perNight: 'VND/night',
                 capacity: 'Capacity',
                 people: 'people',
                 noRooms: 'No rooms available',
-                loadError: 'Error loading room list',
+                noRoomsDesc: 'Please come back later or try a different search.',
+                loadError: 'Error loading room data: ',
+                loading: 'Loading room list...',
                 exploreRooms: 'Explore Rooms',
                 exploreDescription: 'Complete list of room types, prices and availability for your stay.',
                 listTitle: 'Room List',
                 listDescription: 'View all available rooms and their current status.',
-                searchPlaceholder: 'Search room number, type, status...'
+                searchPlaceholder: 'Search room number, type, status...',
+                roomTypeFallback: 'Room Type',
+                guests: 'guests',
+                wifiFree: 'Free WiFi',
+                contact: 'Contact'
             },
             services: {
                 title: 'Services',
@@ -639,7 +670,26 @@ const LanguageManager = {
                 cancelReason: 'Cancellation Reason',
                 cancelReasonPlaceholder: 'E.g., change of plans, wrong date, found better place...',
                 cancelNote: 'When confirmed, the booking will change to Cancelled status and the deposit (if any) will be deducted according to hotel policy.',
-                confirmCancel: 'Confirm Cancellation'
+                confirmCancel: 'Confirm Cancellation',
+                loading: 'Loading bookings...',
+                loadError: 'Error loading bookings: ',
+                noBookingsWithStatus: 'No bookings with this status',
+                viewingBooking: 'Opening booking details #',
+                editFeatureComing: 'Edit booking feature is under development',
+                cancelReasonRequired: 'Please enter cancellation reason.',
+                cancelling: 'Cancelling booking...',
+                cancelSuccess: 'Booking cancelled successfully! Deposit (if any) will not be refunded.',
+                cancelError: 'Error cancelling booking: ',
+                table: {
+                    bookingId: 'Booking ID',
+                    guestName: 'Guest Name',
+                    roomType: 'Room Type',
+                    checkInDate: 'Check-in Date',
+                    checkOutDate: 'Check-out Date',
+                    totalPrice: 'Total Price',
+                    status: 'Status',
+                    actions: 'Actions'
+                }
             },
             wallet: {
                 title: 'Wallet',
@@ -985,6 +1035,14 @@ const LanguageManager = {
         }
         if (typeof updateRoomCards === 'function' && typeof loadRoomsOnPageLoad === 'function') {
             loadRoomsOnPageLoad();
+        }
+        // Reload rooms list if on rooms.html page
+        if (document.getElementById('roomsGrid')) {
+            if (typeof filterRoomsList === 'function') {
+                filterRoomsList();
+            } else if (window.allRooms && Array.isArray(window.allRooms) && typeof renderRoomsGrid === 'function') {
+                renderRoomsGrid(window.allRooms);
+            }
         }
         
         // Reload admin panel data if on admin page

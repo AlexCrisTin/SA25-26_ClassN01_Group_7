@@ -68,7 +68,7 @@
             </div>
 
             <div id="roomsGrid" class="rooms-grid">
-                <div class="loading">Đang tải danh sách phòng...</div>
+                <div class="loading" data-i18n="rooms.loading">Đang tải danh sách phòng...</div>
             </div>
         </div>
     </main>
@@ -93,12 +93,13 @@
 
         async function loadRoomsList() {
             const grid = document.getElementById('roomsGrid');
-            grid.innerHTML = '<div class="loading">Đang tải danh sách phòng...</div>';
+            grid.innerHTML = `<div class="loading">${LanguageManager.getTranslation('rooms.loading') || 'Đang tải danh sách phòng...'}</div>`;
             try {
                 allRooms = await RoomAPI.getAllRooms();
+                window.allRooms = allRooms; // Expose to window for language switching
                 filterRoomsList();
             } catch (error) {
-                grid.innerHTML = '<div class="loading">Lỗi khi tải dữ liệu phòng: ' + (error.message || error) + '</div>';
+                grid.innerHTML = `<div class="loading">${LanguageManager.getTranslation('rooms.loadError') || 'Lỗi khi tải dữ liệu phòng: '}${error.message || error}</div>`;
             }
         }
 
@@ -126,9 +127,22 @@
         function renderRoomsGrid(rooms) {
             const grid = document.getElementById('roomsGrid');
             if (!rooms || rooms.length === 0) {
-                grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🛏️</div><h3>Hiện chưa có phòng nào</h3><p>Vui lòng quay lại sau hoặc thử tìm kiếm khác.</p></div>';
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🛏️</div>
+                        <h3>${LanguageManager.getTranslation('rooms.noRooms') || 'Hiện chưa có phòng nào'}</h3>
+                        <p>${LanguageManager.getTranslation('rooms.noRoomsDesc') || 'Vui lòng quay lại sau hoặc thử tìm kiếm khác.'}</p>
+                    </div>`;
                 return;
             }
+
+            const locale = LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN';
+            const roomPrefix = LanguageManager.getTranslation('rooms.roomPrefix') || 'Phòng';
+            const perNight = LanguageManager.getTranslation('rooms.perNight') || 'VNĐ/đêm';
+            const contact = LanguageManager.getTranslation('rooms.contact') || 'Liên hệ';
+            const roomTypeFallback = LanguageManager.getTranslation('rooms.roomTypeFallback') || 'Loại phòng';
+            const guests = LanguageManager.getTranslation('rooms.guests') || 'khách';
+            const wifiFree = LanguageManager.getTranslation('rooms.wifiFree') || 'Wifi miễn phí';
 
             grid.innerHTML = rooms.map(room => {
                 const imageUrl = room.image_url
@@ -141,33 +155,36 @@
                     statusLabel === 'maintenance' ? 'room-status-maintenance' :
                     statusLabel === 'reserved' ? 'room-status-reserved' : 'room-status-occupied';
 
+                // Get translated status
+                const statusTranslation = LanguageManager.getTranslation(`admin.rooms.status.${statusLabel}`) || statusLabel;
+
                 const priceText = room.price
-                    ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm'
-                    : 'Liên hệ';
+                    ? room.price.toLocaleString(locale) + ' ' + perNight
+                    : contact;
 
                 const capacity = room.capacity || 0;
-                const roomType = room.room_type || 'Loại phòng';
+                const roomType = room.room_type || roomTypeFallback;
 
                 return `
                     <article class="room-list-card" onclick="goToRoomDetail(${room.id})">
                         <div class="room-card-header">
-                            <img src="${imageUrl}" alt="Phòng ${room.room_number || ''} ${roomType}"
+                            <img src="${imageUrl}" alt="${roomPrefix} ${room.room_number || ''} ${roomType}"
                                  onerror="this.src='images/room-connecting.jpg';">
                         </div>
                         <div class="room-card-body">
                             <div class="room-card-main">
                                 <div class="room-card-title">
-                                    Phòng ${room.room_number || 'N/A'} · ${roomType}
+                                    ${roomPrefix} ${room.room_number || 'N/A'} · ${roomType}
                                 </div>
                                 <div class="room-card-meta">
                                     <div class="room-card-meta-item">
-                                        <span>🛏️</span>${capacity} khách
+                                        <span>🛏️</span>${capacity} ${guests}
                                     </div>
                                     <div class="room-card-meta-item">
-                                        <span>📶</span>Wifi miễn phí
+                                        <span>📶</span>${wifiFree}
                                     </div>
                                     <div class="room-card-meta-item">
-                                        <span class="room-status-pill ${statusClass}">${statusLabel}</span>
+                                        <span class="room-status-pill ${statusClass}">${statusTranslation}</span>
                                     </div>
                                 </div>
                             </div>
@@ -188,6 +205,10 @@
         function goToRoomDetail(roomId) {
             window.location.href = 'room-detail.html?id=' + encodeURIComponent(roomId);
         }
+
+        // Expose functions to window for language switching
+        window.filterRoomsList = filterRoomsList;
+        window.renderRoomsGrid = renderRoomsGrid;
     </script>
 </body>
 </html>

@@ -109,7 +109,7 @@
 
         async function loadBookings() {
             try {
-                showNotification('Đang tải danh sách đặt phòng...', 'info');
+                showNotification(LanguageManager.getTranslation('myBookings.loading') || 'Đang tải danh sách đặt phòng...', 'info');
                 allBookings = await BookingAPI.getMyBookings();
                 
                 if (allBookings && allBookings.length > 0) {
@@ -118,7 +118,7 @@
                     showEmptyState();
                 }
             } catch (error) {
-                showNotification('Lỗi khi tải danh sách đặt phòng: ' + error.message, 'error');
+                showNotification((LanguageManager.getTranslation('myBookings.loadError') || 'Lỗi khi tải danh sách đặt phòng: ') + error.message, 'error');
                 showEmptyState();
             }
         }
@@ -131,7 +131,7 @@
                 if (filtered.length > 0) {
                     displayBookings(filtered);
                 } else {
-                    showEmptyState('Không có đặt phòng nào với trạng thái này');
+                    showEmptyState(LanguageManager.getTranslation('myBookings.noBookingsWithStatus') || 'Không có đặt phòng nào với trạng thái này');
                 }
             }
         }
@@ -143,14 +143,14 @@
                 <table class="bookings-table">
                     <thead>
                         <tr>
-                            <th>Mã Đặt Phòng</th>
-                            <th>Tên Khách</th>
-                            <th>Loại Phòng</th>
-                            <th>Ngày Nhận</th>
-                            <th>Ngày Trả</th>
-                            <th>Tổng Tiền</th>
-                            <th>Trạng Thái</th>
-                            <th>Thao Tác</th>
+                            <th data-i18n="myBookings.table.bookingId">Mã Đặt Phòng</th>
+                            <th data-i18n="myBookings.table.guestName">Tên Khách</th>
+                            <th data-i18n="myBookings.table.roomType">Loại Phòng</th>
+                            <th data-i18n="myBookings.table.checkInDate">Ngày Nhận</th>
+                            <th data-i18n="myBookings.table.checkOutDate">Ngày Trả</th>
+                            <th data-i18n="myBookings.table.totalPrice">Tổng Tiền</th>
+                            <th data-i18n="myBookings.table.status">Trạng Thái</th>
+                            <th data-i18n="myBookings.table.actions">Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -161,30 +161,36 @@
                                 <td>${booking.room_type}</td>
                                 <td>${formatDate(booking.check_in_date)}</td>
                                 <td>${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</td>
-                                <td>${booking.total_price ? booking.total_price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</td>
+                                <td>${booking.total_price ? booking.total_price.toLocaleString(LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN') + ' VNĐ' : 'N/A'}</td>
                                 <td><span class="status-badge status-${booking.status}">${getStatusText(booking.status)}</span></td>
                                 <td>
-                                    <button class="action-btn btn-view" onclick="viewBooking('${booking.id}')">Xem</button>
+                                    <button class="action-btn btn-view" onclick="viewBooking('${booking.id}')">${LanguageManager.getTranslation('common.view') || 'Xem'}</button>
                                     ${canEditBooking(booking.status) ? 
-                                        `<button class="action-btn btn-edit" onclick="editBooking('${booking.id}')">Sửa</button>` : ''}
+                                        `<button class="action-btn btn-edit" onclick="editBooking('${booking.id}')">${LanguageManager.getTranslation('common.edit') || 'Sửa'}</button>` : ''}
                                     ${canCancelBooking(booking.status) ? 
-                                        `<button class="action-btn btn-cancel" onclick="cancelBooking('${booking.id}')">Hủy</button>` : ''}
+                                        `<button class="action-btn btn-cancel" onclick="cancelBooking('${booking.id}')">${LanguageManager.getTranslation('common.cancel') || 'Hủy'}</button>` : ''}
                                 </td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             `;
+            // Update table headers after rendering
+            setTimeout(() => {
+                LanguageManager.setLanguage(LanguageManager.currentLanguage);
+            }, 50);
         }
 
-        function showEmptyState(message = 'Chưa có đặt phòng nào') {
+        function showEmptyState(message = null) {
             const container = document.getElementById('bookingsContainer');
+            const defaultMessage = LanguageManager.getTranslation('myBookings.noBookings') || 'Chưa có đặt phòng nào';
+            const displayMessage = message || defaultMessage;
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">📋</div>
-                    <h3>${message}</h3>
-                    <p>Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
-                    <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">Đặt Phòng Ngay</a>
+                    <h3>${displayMessage}</h3>
+                    <p>${LanguageManager.getTranslation('myBookings.noBookingsDesc') || 'Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi'}</p>
+                    <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">${LanguageManager.getTranslation('myBookings.bookNow') || 'Đặt Phòng Ngay'}</a>
                 </div>
             `;
         }
@@ -192,18 +198,21 @@
         function formatDate(dateString) {
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
-            return date.toLocaleDateString('vi-VN');
+            const locale = LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN';
+            return date.toLocaleDateString(locale);
         }
 
         function getStatusText(status) {
-            const statusMap = {
-                'pending': 'Chờ Xác Nhận',
-                'confirmed': 'Đã Xác Nhận',
-                'cancelled': 'Đã Hủy',
-                'checked_in': 'Đã Check-in',
-                'checked_out': 'Đã Check-out'
+            // Map snake_case status to camelCase for translation keys
+            const statusKeyMap = {
+                'pending': 'pending',
+                'confirmed': 'confirmed',
+                'checked_in': 'checkedIn',
+                'checked_out': 'checkedOut',
+                'cancelled': 'cancelled'
             };
-            return statusMap[status] || status;
+            const translationKey = statusKeyMap[status] || status;
+            return LanguageManager.getTranslation(`booking.status.${translationKey}`) || status;
         }
 
         function canEditBooking(status) {
@@ -215,11 +224,11 @@
         }
 
         function viewBooking(bookingId) {
-            showNotification('Đang mở chi tiết đặt phòng #' + bookingId, 'info');
+            showNotification((LanguageManager.getTranslation('myBookings.viewingBooking') || 'Đang mở chi tiết đặt phòng #') + bookingId, 'info');
         }
 
         function editBooking(bookingId) {
-            showNotification('Chức năng sửa đặt phòng đang được phát triển', 'info');
+            showNotification(LanguageManager.getTranslation('myBookings.editFeatureComing') || 'Chức năng sửa đặt phòng đang được phát triển', 'info');
 
         }
 
@@ -252,21 +261,21 @@
             const reason = reasonInput ? reasonInput.value.trim() : '';
             if (!reason) {
                 if (errorDiv) {
-                    errorDiv.textContent = 'Vui lòng nhập lý do hủy phòng.';
+                    errorDiv.textContent = LanguageManager.getTranslation('myBookings.cancelReasonRequired') || 'Vui lòng nhập lý do hủy phòng.';
                 }
                 return;
             }
 
             try {
-                showNotification('Đang hủy đặt phòng...', 'info');
+                showNotification(LanguageManager.getTranslation('myBookings.cancelling') || 'Đang hủy đặt phòng...', 'info');
                 await BookingAPI.cancelBooking(pendingCancelBookingId);
-                showNotification('Hủy đặt phòng thành công! Tiền đặt cọc (nếu có) sẽ không được hoàn lại.', 'success');
+                showNotification(LanguageManager.getTranslation('myBookings.cancelSuccess') || 'Hủy đặt phòng thành công! Tiền đặt cọc (nếu có) sẽ không được hoàn lại.', 'success');
                 closeCancelModal();
                 setTimeout(() => {
                     loadBookings();
                 }, 800);
             } catch (error) {
-                showNotification('Lỗi khi hủy đặt phòng: ' + error.message, 'error');
+                showNotification((LanguageManager.getTranslation('myBookings.cancelError') || 'Lỗi khi hủy đặt phòng: ') + error.message, 'error');
             }
         }
 
