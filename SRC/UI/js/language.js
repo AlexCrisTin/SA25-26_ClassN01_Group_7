@@ -253,6 +253,36 @@ const LanguageManager = {
                 },
                 services: {
                     addService: '+ Thêm Dịch Vụ',
+                    status: {
+                        available: 'Có Sẵn',
+                        unavailable: 'Không Có Sẵn'
+                    },
+                    view: {
+                        title: 'Thông Tin Dịch Vụ',
+                        name: 'Tên Dịch Vụ:',
+                        description: 'Mô Tả:',
+                        price: 'Giá:',
+                        category: 'Danh Mục:',
+                        status: 'Trạng Thái:'
+                    },
+                    edit: {
+                        title: 'Sửa Thông Tin Dịch Vụ',
+                        name: 'Tên Dịch Vụ *',
+                        description: 'Mô Tả',
+                        price: 'Giá (VNĐ) *',
+                        category: 'Danh Mục',
+                        categoryPlaceholder: 'e.g., Spa, Dining, Transport',
+                        status: 'Trạng Thái'
+                    },
+                    add: {
+                        title: 'Thêm Dịch Vụ Mới',
+                        name: 'Tên Dịch Vụ *',
+                        description: 'Mô Tả',
+                        price: 'Giá (VNĐ) *',
+                        category: 'Danh Mục',
+                        categoryPlaceholder: 'e.g., Spa, Dining, Transport',
+                        submit: 'Thêm Dịch Vụ'
+                    },
                     table: {
                         serviceName: 'Tên Dịch Vụ',
                         description: 'Mô Tả',
@@ -298,7 +328,9 @@ const LanguageManager = {
                 cancel: 'Hủy',
                 back: 'Quay lại',
                 search: 'Tìm kiếm',
-                loading: 'Đang tải dữ liệu...'
+                loading: 'Đang tải dữ liệu...',
+                close: 'Đóng',
+                update: 'Cập Nhật'
             },
             booking: {
                 status: {
@@ -578,6 +610,36 @@ const LanguageManager = {
                 },
                 services: {
                     addService: '+ Add Service',
+                    status: {
+                        available: 'Available',
+                        unavailable: 'Unavailable'
+                    },
+                    view: {
+                        title: 'Service Information',
+                        name: 'Service Name:',
+                        description: 'Description:',
+                        price: 'Price:',
+                        category: 'Category:',
+                        status: 'Status:'
+                    },
+                    edit: {
+                        title: 'Edit Service Information',
+                        name: 'Service Name *',
+                        description: 'Description',
+                        price: 'Price (VND) *',
+                        category: 'Category',
+                        categoryPlaceholder: 'e.g., Spa, Dining, Transport',
+                        status: 'Status'
+                    },
+                    add: {
+                        title: 'Add New Service',
+                        name: 'Service Name *',
+                        description: 'Description',
+                        price: 'Price (VND) *',
+                        category: 'Category',
+                        categoryPlaceholder: 'e.g., Spa, Dining, Transport',
+                        submit: 'Add Service'
+                    },
                     table: {
                         serviceName: 'Service Name',
                         description: 'Description',
@@ -623,7 +685,9 @@ const LanguageManager = {
                 cancel: 'Cancel',
                 back: 'Back',
                 search: 'Search',
-                loading: 'Loading data...'
+                loading: 'Loading data...',
+                close: 'Close',
+                update: 'Update'
             },
             booking: {
                 status: {
