@@ -2,6 +2,10 @@
 let allBookings = [];
 let allServiceRequests = [];
 
+// Expose to window for language manager access
+window.allBookings = allBookings;
+window.allServiceRequests = allServiceRequests;
+
 document.addEventListener('DOMContentLoaded', async function() {
     // Chỉ cho phép receptionist hoặc admin
     if (!AuthManager.requireAuth()) {
@@ -628,8 +632,8 @@ async function processCheckout() {
 window.switchReceptionTab = switchReceptionTab;
 window.filterBookings = filterBookings;
 window.updateBookingStatus = updateBookingStatus;
-        window.searchCheckinBooking = searchCheckinBooking;
-        window.searchCheckoutBooking = searchCheckoutBooking;
+window.searchCheckinBooking = searchCheckinBooking;
+window.searchCheckoutBooking = searchCheckoutBooking;
         window.processCheckin = processCheckin;
         window.processCheckout = processCheckout;
         window.displayCheckinBookingDetails = displayCheckinBookingDetails;
@@ -640,6 +644,7 @@ async function loadServiceRequests() {
     try {
         const requests = await ServiceRequestAPI.getAllServiceRequests();
         allServiceRequests = requests;
+        window.allServiceRequests = allServiceRequests; // Update window reference
         displayServiceRequests(requests);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách yêu cầu dịch vụ: ' + error.message, 'error');

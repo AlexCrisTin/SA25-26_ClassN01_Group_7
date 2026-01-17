@@ -330,9 +330,13 @@ const LanguageManager = {
                 search: 'Tìm kiếm',
                 loading: 'Đang tải dữ liệu...',
                 close: 'Đóng',
-                update: 'Cập Nhật'
+                update: 'Cập Nhật',
+                edit: 'Sửa',
+                delete: 'Xóa',
+                view: 'Xem'
             },
             booking: {
+                confirm: 'Xác Nhận',
                 status: {
                     pending: 'Chờ Xác Nhận',
                     confirmed: 'Đã Xác Nhận',
@@ -689,9 +693,11 @@ const LanguageManager = {
                 close: 'Close',
                 update: 'Update',
                 edit: 'Edit',
-                delete: 'Delete'
+                delete: 'Delete',
+                view: 'View'
             },
             booking: {
+                confirm: 'Confirm',
                 status: {
                     pending: 'Pending Confirmation',
                     confirmed: 'Confirmed',
@@ -786,6 +792,64 @@ const LanguageManager = {
         if (typeof updateRoomCards === 'function' && typeof loadRoomsOnPageLoad === 'function') {
             loadRoomsOnPageLoad();
         }
+        
+        // Reload admin panel data if on admin page
+        // Use setTimeout to ensure the page is ready and variables are accessible
+        setTimeout(() => {
+            // Try to refresh displays with existing data first
+            if (typeof displayRooms === 'function') {
+                if (window.allRooms && Array.isArray(window.allRooms) && window.allRooms.length > 0) {
+                    displayRooms(window.allRooms);
+                } else if (typeof loadRooms === 'function') {
+                    loadRooms();
+                }
+            }
+            
+            if (typeof displayStaff === 'function') {
+                if (window.allStaff && Array.isArray(window.allStaff) && window.allStaff.length > 0) {
+                    displayStaff(window.allStaff);
+                } else if (typeof loadStaff === 'function') {
+                    loadStaff();
+                }
+            }
+            
+            if (typeof displayUsers === 'function') {
+                if (window.allUsers && Array.isArray(window.allUsers) && window.allUsers.length > 0) {
+                    displayUsers(window.allUsers);
+                } else if (typeof loadUsers === 'function') {
+                    loadUsers();
+                }
+            }
+            
+            if (typeof displayServices === 'function') {
+                if (window.allServices && Array.isArray(window.allServices) && window.allServices.length > 0) {
+                    displayServices(window.allServices);
+                } else if (typeof loadServices === 'function') {
+                    loadServices();
+                }
+            }
+            
+            if (typeof displayBookings === 'function') {
+                // Only reload bookings if the bookings table exists (check for bookingsTableBody)
+                const bookingsTableBody = document.getElementById('bookingsTableBody');
+                if (bookingsTableBody) {
+                    if (window.allBookings && Array.isArray(window.allBookings) && window.allBookings.length > 0) {
+                        displayBookings(window.allBookings);
+                    } else if (typeof loadBookings === 'function') {
+                        loadBookings();
+                    }
+                }
+            }
+            
+            // Reload receptionist panel data if on receptionist page
+            if (typeof displayServiceRequests === 'function') {
+                if (window.allServiceRequests && Array.isArray(window.allServiceRequests) && window.allServiceRequests.length > 0) {
+                    displayServiceRequests(window.allServiceRequests);
+                } else if (typeof loadServiceRequests === 'function') {
+                    loadServiceRequests();
+                }
+            }
+        }, 100);
     },
     
     getTranslation: function(key) {

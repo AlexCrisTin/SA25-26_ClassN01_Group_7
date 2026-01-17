@@ -6,6 +6,13 @@ let allStaff = [];
 let allServices = [];
 let allUsers = [];
 
+// Expose to window for language manager access
+window.allRooms = allRooms;
+window.allBookings = allBookings;
+window.allStaff = allStaff;
+window.allServices = allServices;
+window.allUsers = allUsers;
+
 // Check admin access on page load
 document.addEventListener('DOMContentLoaded', function() {
     if (!AuthManager.requireAuth()) {
@@ -53,6 +60,7 @@ function switchTab(tabName) {
 async function loadRooms() {
     try {
         allRooms = await RoomAPI.getAllRooms();
+        window.allRooms = allRooms; // Update window reference
         displayRooms(allRooms);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách phòng: ' + error.message, 'error');
@@ -84,8 +92,8 @@ function displayRooms(rooms) {
             <td>${room.capacity || 'N/A'}</td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-edit" onclick="editRoom(${room.id})">${LanguageManager.getTranslation('common.edit')}</button>
-                    <button class="btn-delete" onclick="deleteRoom(${room.id})">${LanguageManager.getTranslation('common.delete')}</button>
+                    <button class="btn-edit" onclick="editRoom(${room.id})">${LanguageManager.getTranslation('common.edit') || 'Sửa'}</button>
+                    <button class="btn-delete" onclick="deleteRoom(${room.id})">${LanguageManager.getTranslation('common.delete') || 'Xóa'}</button>
                 </div>
             </td>
         </tr>
@@ -245,15 +253,24 @@ async function deleteRoom(roomId) {
 async function loadBookings() {
     try {
         allBookings = await BookingAPI.getAllBookings();
+        window.allBookings = allBookings; // Update window reference
         displayBookings(allBookings);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách đặt phòng: ' + error.message, 'error');
-        document.getElementById('bookingsTableBody').innerHTML = '<tr><td colspan="8" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+        const tbody = document.getElementById('bookingsTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="8" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+        }
     }
 }
 
 function displayBookings(bookings) {
     const tbody = document.getElementById('bookingsTableBody');
+    
+    // Check if element exists (bookings tab might not be in admin panel)
+    if (!tbody) {
+        return;
+    }
     
     if (bookings.length === 0) {
         tbody.innerHTML = '<tr><td colspan="8" class="loading">Chưa có đặt phòng nào</td></tr>';
@@ -271,9 +288,9 @@ function displayBookings(bookings) {
             <td><span class="status-badge status-${booking.status}">${getBookingStatusText(booking.status)}</span></td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-view" onclick="viewBookingDetail(${booking.id})">Xem</button>
+                    <button class="btn-view" onclick="viewBookingDetail(${booking.id})">${LanguageManager.getTranslation('common.view') || 'Xem'}</button>
                     ${booking.status === 'pending' || booking.status === 'confirmed' ? 
-                        `<button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">Xác Nhận</button>` : ''}
+                        `<button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">${LanguageManager.getTranslation('booking.confirm') || 'Xác Nhận'}</button>` : ''}
                 </div>
             </td>
         </tr>
@@ -281,8 +298,16 @@ function displayBookings(bookings) {
 }
 
 function filterBookings() {
-    const searchTerm = document.getElementById('bookingSearch').value.toLowerCase();
-    const statusFilter = document.getElementById('bookingStatusFilter').value;
+    const searchInput = document.getElementById('bookingSearch');
+    const statusFilterEl = document.getElementById('bookingStatusFilter');
+    
+    // Check if elements exist (bookings tab might not be in admin panel)
+    if (!searchInput || !statusFilterEl) {
+        return;
+    }
+    
+    const searchTerm = searchInput.value.toLowerCase();
+    const statusFilter = statusFilterEl.value;
 
     let filtered = allBookings.filter(booking => {
         const matchesSearch = !searchTerm || 
@@ -390,9 +415,9 @@ function displayStaff(staff) {
             <td><span class="status-badge ${s.is_active ? 'status-available' : 'status-maintenance'}">${s.is_active ? 'Hoạt Động' : 'Không Hoạt Động'}</span></td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-view" onclick="viewStaff(${s.id})">Xem</button>
-                    <button class="btn-edit" onclick="editStaff(${s.id})">Sửa</button>
-                    <button class="btn-delete" onclick="deleteStaff(${s.id})">Xóa</button>
+                    <button class="btn-view" onclick="viewStaff(${s.id})">${LanguageManager.getTranslation('common.view') || 'Xem'}</button>
+                    <button class="btn-edit" onclick="editStaff(${s.id})">${LanguageManager.getTranslation('common.edit') || 'Sửa'}</button>
+                    <button class="btn-delete" onclick="deleteStaff(${s.id})">${LanguageManager.getTranslation('common.delete') || 'Xóa'}</button>
                 </div>
             </td>
         </tr>
@@ -457,6 +482,7 @@ async function deleteStaff(staffId) {
 async function loadServices() {
     try {
         allServices = await ServiceAPI.getAllServices();
+        window.allServices = allServices; // Update window reference
         displayServices(allServices);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách dịch vụ: ' + error.message, 'error');
@@ -481,9 +507,9 @@ function displayServices(services) {
             <td>${service.category || 'N/A'}</td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-view" onclick="viewService(${service.id})">Xem</button>
-                    <button class="btn-edit" onclick="editService(${service.id})">Sửa</button>
-                    <button class="btn-delete" onclick="deleteService(${service.id})">Xóa</button>
+                    <button class="btn-view" onclick="viewService(${service.id})">${LanguageManager.getTranslation('common.view') || 'Xem'}</button>
+                    <button class="btn-edit" onclick="editService(${service.id})">${LanguageManager.getTranslation('common.edit') || 'Sửa'}</button>
+                    <button class="btn-delete" onclick="deleteService(${service.id})">${LanguageManager.getTranslation('common.delete') || 'Xóa'}</button>
                 </div>
             </td>
         </tr>
@@ -898,6 +924,7 @@ async function loadUsers() {
         });
         
         allUsers = sortedUsers;
+        window.allUsers = allUsers; // Update window reference
         displayUsers(sortedUsers);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách người dùng: ' + error.message, 'error');
