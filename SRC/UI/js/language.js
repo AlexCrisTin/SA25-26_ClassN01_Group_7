@@ -218,6 +218,28 @@ const LanguageManager = {
                         maintenance: 'Bảo Trì',
                         reserved: 'Đã Đặt'
                     },
+                    add: {
+                        title: 'Thêm Phòng Mới',
+                        roomNumber: 'Số Phòng *',
+                        roomType: 'Loại Phòng *',
+                        roomTypePlaceholder: 'e.g., Triple, Senior, Connecting',
+                        price: 'Giá (VNĐ) *',
+                        status: 'Trạng Thái',
+                        capacity: 'Sức Chứa',
+                        image: 'Ảnh Phòng',
+                        removeImage: 'Xóa ảnh',
+                        submit: 'Thêm Phòng'
+                    },
+                    edit: {
+                        title: 'Sửa Thông Tin Phòng',
+                        roomNumber: 'Số Phòng *',
+                        roomType: 'Loại Phòng *',
+                        price: 'Giá (VNĐ) *',
+                        status: 'Trạng Thái',
+                        capacity: 'Sức Chứa',
+                        image: 'Ảnh Phòng',
+                        removeImage: 'Xóa ảnh'
+                    },
                     table: {
                         roomNumber: 'Số Phòng',
                         roomType: 'Loại Phòng',
@@ -230,6 +252,17 @@ const LanguageManager = {
                 staff: {
                     addStaff: '+ Thêm Nhân Viên',
                     searchPlaceholder: 'Tìm theo tên, email, chức vụ, phòng ban',
+                    add: {
+                        title: 'Thêm Nhân Viên Mới',
+                        fullName: 'Họ Tên *',
+                        email: 'Email *',
+                        phone: 'Số Điện Thoại *',
+                        position: 'Chức Vụ *',
+                        positionPlaceholder: 'e.g., Receptionist, Housekeeper',
+                        department: 'Phòng Ban *',
+                        hireDate: 'Ngày Tuyển Dụng',
+                        submit: 'Thêm Nhân Viên'
+                    },
                     table: {
                         fullName: 'Họ Tên',
                         email: 'Email',
@@ -579,6 +612,28 @@ const LanguageManager = {
                         maintenance: 'Maintenance',
                         reserved: 'Reserved'
                     },
+                    add: {
+                        title: 'Add New Room',
+                        roomNumber: 'Room Number *',
+                        roomType: 'Room Type *',
+                        roomTypePlaceholder: 'e.g., Triple, Senior, Connecting',
+                        price: 'Price (VND) *',
+                        status: 'Status',
+                        capacity: 'Capacity',
+                        image: 'Room Image',
+                        removeImage: 'Remove Image',
+                        submit: 'Add Room'
+                    },
+                    edit: {
+                        title: 'Edit Room Information',
+                        roomNumber: 'Room Number *',
+                        roomType: 'Room Type *',
+                        price: 'Price (VND) *',
+                        status: 'Status',
+                        capacity: 'Capacity',
+                        image: 'Room Image',
+                        removeImage: 'Remove Image'
+                    },
                     table: {
                         roomNumber: 'Room Number',
                         roomType: 'Room Type',
@@ -591,6 +646,17 @@ const LanguageManager = {
                 staff: {
                     addStaff: '+ Add Staff',
                     searchPlaceholder: 'Search by name, email, position, department',
+                    add: {
+                        title: 'Add New Staff',
+                        fullName: 'Full Name *',
+                        email: 'Email *',
+                        phone: 'Phone *',
+                        position: 'Position *',
+                        positionPlaceholder: 'e.g., Receptionist, Housekeeper',
+                        department: 'Department *',
+                        hireDate: 'Hire Date',
+                        submit: 'Add Staff'
+                    },
                     table: {
                         fullName: 'Full Name',
                         email: 'Email',

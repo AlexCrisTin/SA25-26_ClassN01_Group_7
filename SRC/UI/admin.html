@@ -224,41 +224,41 @@
     <div id="addRoomModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('addRoomModal')">&times;</span>
-            <h2>Thêm Phòng Mới</h2>
+            <h2 data-i18n="admin.rooms.add.title">Thêm Phòng Mới</h2>
             <form id="addRoomForm">
                 <div class="form-group">
-                    <label>Số Phòng *</label>
+                    <label data-i18n="admin.rooms.add.roomNumber">Số Phòng *</label>
                     <input type="text" id="room_number" required>
                 </div>
                 <div class="form-group">
-                    <label>Loại Phòng *</label>
-                    <input type="text" id="room_type" required placeholder="e.g., Triple, Senior, Connecting">
+                    <label data-i18n="admin.rooms.add.roomType">Loại Phòng *</label>
+                    <input type="text" id="room_type" required data-i18n-placeholder="admin.rooms.add.roomTypePlaceholder" placeholder="e.g., Triple, Senior, Connecting">
                 </div>
                 <div class="form-group">
-                    <label>Giá (VNĐ) *</label>
+                    <label data-i18n="admin.rooms.add.price">Giá (VNĐ) *</label>
                     <input type="number" id="room_price" required min="0">
                 </div>
                 <div class="form-group">
-                    <label>Trạng Thái</label>
+                    <label data-i18n="admin.rooms.add.status">Trạng Thái</label>
                     <select id="room_status">
-                        <option value="available">Available</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="reserved">Reserved</option>
+                        <option value="available" data-i18n="admin.rooms.status.available">Available</option>
+                        <option value="maintenance" data-i18n="admin.rooms.status.maintenance">Maintenance</option>
+                        <option value="reserved" data-i18n="admin.rooms.status.reserved">Reserved</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Sức Chứa</label>
+                    <label data-i18n="admin.rooms.add.capacity">Sức Chứa</label>
                     <input type="number" id="room_capacity" min="1">
                 </div>
                 <div class="form-group">
-                    <label>Ảnh Phòng</label>
+                    <label data-i18n="admin.rooms.add.image">Ảnh Phòng</label>
                     <input type="file" id="room_image" accept="image/*" onchange="previewRoomImage(event)">
                     <div id="room_image_preview" class="image-preview" style="display: none; margin-top: 10px;">
                         <img id="room_image_preview_img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
-                        <button type="button" onclick="removeRoomImage()" class="btn-remove-image" style="margin-top: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Xóa ảnh</button>
+                        <button type="button" onclick="removeRoomImage()" class="btn-remove-image" style="margin-top: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;" data-i18n="admin.rooms.add.removeImage">Xóa ảnh</button>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary">Thêm Phòng</button>
+                <button type="submit" class="btn-primary" data-i18n="admin.rooms.add.submit">Thêm Phòng</button>
             </form>
         </div>
     </div>
@@ -266,44 +266,44 @@
     <div id="editRoomModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('editRoomModal')">&times;</span>
-            <h2>Sửa Thông Tin Phòng</h2>
+            <h2 data-i18n="admin.rooms.edit.title">Sửa Thông Tin Phòng</h2>
             <form id="editRoomForm">
                 <input type="hidden" id="edit_room_id">
                 <div class="form-group">
-                    <label>Số Phòng *</label>
+                    <label data-i18n="admin.rooms.edit.roomNumber">Số Phòng *</label>
                     <input type="text" id="edit_room_number" required>
                 </div>
                 <div class="form-group">
-                    <label>Loại Phòng *</label>
+                    <label data-i18n="admin.rooms.edit.roomType">Loại Phòng *</label>
                     <input type="text" id="edit_room_type" required>
                 </div>
                 <div class="form-group">
-                    <label>Giá (VNĐ) *</label>
+                    <label data-i18n="admin.rooms.edit.price">Giá (VNĐ) *</label>
                     <input type="number" id="edit_room_price" required min="0">
                 </div>
                 <div class="form-group">
-                    <label>Trạng Thái</label>
+                    <label data-i18n="admin.rooms.edit.status">Trạng Thái</label>
                     <select id="edit_room_status">
-                        <option value="available">Available</option>
-                        <option value="occupied">Occupied</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="reserved">Reserved</option>
+                        <option value="available" data-i18n="admin.rooms.status.available">Available</option>
+                        <option value="occupied" data-i18n="admin.rooms.status.occupied">Occupied</option>
+                        <option value="maintenance" data-i18n="admin.rooms.status.maintenance">Maintenance</option>
+                        <option value="reserved" data-i18n="admin.rooms.status.reserved">Reserved</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Sức Chứa</label>
+                    <label data-i18n="admin.rooms.edit.capacity">Sức Chứa</label>
                     <input type="number" id="edit_room_capacity" min="1">
                 </div>
                 <div class="form-group">
-                    <label>Ảnh Phòng</label>
+                    <label data-i18n="admin.rooms.edit.image">Ảnh Phòng</label>
                     <input type="file" id="edit_room_image" accept="image/*" onchange="previewEditRoomImage(event)">
                     <div id="edit_room_image_preview" class="image-preview" style="display: none; margin-top: 10px;">
                         <img id="edit_room_image_preview_img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
-                        <button type="button" onclick="removeEditRoomImage()" class="btn-remove-image" style="margin-top: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Xóa ảnh</button>
+                        <button type="button" onclick="removeEditRoomImage()" class="btn-remove-image" style="margin-top: 5px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;" data-i18n="admin.rooms.edit.removeImage">Xóa ảnh</button>
                     </div>
                     <div id="edit_room_current_image" class="current-image" style="margin-top: 10px;"></div>
                 </div>
-                <button type="submit" class="btn-primary">Cập Nhật</button>
+                <button type="submit" class="btn-primary" data-i18n="common.update">Cập Nhật</button>
             </form>
         </div>
     </div>
@@ -311,33 +311,33 @@
     <div id="addStaffModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('addStaffModal')">&times;</span>
-            <h2>Thêm Nhân Viên Mới</h2>
+            <h2 data-i18n="admin.staff.add.title">Thêm Nhân Viên Mới</h2>
             <form id="addStaffForm">
                 <div class="form-group">
-                    <label>Họ Tên *</label>
+                    <label data-i18n="admin.staff.add.fullName">Họ Tên *</label>
                     <input type="text" id="staff_full_name" required>
                 </div>
                 <div class="form-group">
-                    <label>Email *</label>
+                    <label data-i18n="admin.staff.add.email">Email *</label>
                     <input type="email" id="staff_email" required>
                 </div>
                 <div class="form-group">
-                    <label>Số Điện Thoại *</label>
+                    <label data-i18n="admin.staff.add.phone">Số Điện Thoại *</label>
                     <input type="tel" id="staff_phone" required>
                 </div>
                 <div class="form-group">
-                    <label>Chức Vụ *</label>
-                    <input type="text" id="staff_position" required placeholder="e.g., Receptionist, Housekeeper">
+                    <label data-i18n="admin.staff.add.position">Chức Vụ *</label>
+                    <input type="text" id="staff_position" required data-i18n-placeholder="admin.staff.add.positionPlaceholder" placeholder="e.g., Receptionist, Housekeeper">
                 </div>
                 <div class="form-group">
-                    <label>Phòng Ban *</label>
+                    <label data-i18n="admin.staff.add.department">Phòng Ban *</label>
                     <input type="text" id="staff_department" required>
                 </div>
                 <div class="form-group">
-                    <label>Ngày Tuyển Dụng</label>
+                    <label data-i18n="admin.staff.add.hireDate">Ngày Tuyển Dụng</label>
                     <input type="date" id="staff_hire_date">
                 </div>
-                <button type="submit" class="btn-primary">Thêm Nhân Viên</button>
+                <button type="submit" class="btn-primary" data-i18n="admin.staff.add.submit">Thêm Nhân Viên</button>
             </form>
         </div>
     </div>
