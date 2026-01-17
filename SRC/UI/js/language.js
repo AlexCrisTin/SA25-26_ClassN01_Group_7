@@ -131,7 +131,39 @@ const LanguageManager = {
                 noActiveRooms: 'Chưa có phòng đang sử dụng',
                 checkinPrompt: 'Bạn chưa check-in vào phòng nào. Vui lòng đến quầy lễ tân để check-in.',
                 personalInfo: 'Thông Tin Cá Nhân',
-                updateProfile: 'Cập Nhật Thông Tin'
+                updateProfile: 'Cập Nhật Thông Tin',
+                loadingRooms: 'Đang tải thông tin phòng...',
+                updateSuccess: 'Cập nhật thông tin thành công!',
+                updateError: 'Lỗi khi cập nhật: ',
+                loadError: 'Lỗi khi tải thông tin phòng',
+                unknownError: 'Đã xảy ra lỗi không xác định',
+                reload: 'Tải Lại',
+                bookingPrefix: 'Đặt phòng',
+                bookingId: 'Mã đặt phòng',
+                inUse: 'Đang sử dụng',
+                checkInDate: 'Ngày nhận',
+                checkOutDate: 'Ngày trả',
+                totalPrice: 'Tổng tiền',
+                room: 'Phòng',
+                service: 'Dịch vụ',
+                orderService: 'Đặt Dịch Vụ',
+                viewOrderedServices: 'Xem Dịch Vụ Đã Đặt',
+                viewDetails: 'Xem Chi Tiết',
+                selectService: 'Chọn dịch vụ bạn muốn sử dụng',
+                loadingServices: 'Đang tải danh sách dịch vụ...',
+                free: 'Miễn phí',
+                orderNow: 'Đặt Ngay',
+                noServices: 'Không có dịch vụ nào',
+                noServicesDesc: 'Hiện tại chưa có dịch vụ nào khả dụng',
+                loadServicesError: 'Lỗi khi tải danh sách dịch vụ',
+                confirmOrderService: 'Bạn có chắc chắn muốn đặt dịch vụ "{serviceName}" với giá {price} VNĐ?',
+                orderServiceSuccess: 'Đặt dịch vụ thành công!',
+                orderServiceError: 'Lỗi khi đặt dịch vụ: ',
+                orderedServices: 'Dịch Vụ Đã Đặt',
+                quantity: 'Số lượng',
+                unitPrice: 'Đơn giá',
+                totalServiceCost: 'Tổng chi phí dịch vụ',
+                noOrderedServices: 'Chưa có dịch vụ nào được đặt'
             },
             roomDetail: {
                 notFound: 'Không tìm thấy phòng',
@@ -155,7 +187,37 @@ const LanguageManager = {
                 guestCount: 'Số lượng khách',
                 specialRequests: 'Ghi chú đặc biệt (tuỳ chọn)',
                 specialRequestsPlaceholder: 'Ví dụ: yêu cầu giường phụ, tầng cao, view đẹp...',
-                confirmBook: 'Xác nhận đặt phòng và thanh toán'
+                confirmBook: 'Xác nhận đặt phòng và thanh toán',
+                morePhotos: 'ảnh khác',
+                roomTypeFallback: 'Phòng Nghỉ',
+                maxCapacity: 'Sức chứa tối đa',
+                capacity: 'Sức chứa',
+                contactPrice: 'Liên hệ để biết giá',
+                cannotBook: 'Không thể đặt phòng',
+                selectOther: 'Vui lòng chọn phòng khác.',
+                defaultDescription: 'Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.',
+                bedroom: 'Phòng ngủ',
+                bedroomSub: 'Tiện nghi và ấm cúng',
+                bathroom: 'Phòng tắm',
+                bathroomSub: 'Sạch sẽ, hiện đại',
+                privateBathroom: 'Phòng tắm riêng',
+                flexiblePolicy: 'Chính sách linh hoạt',
+                capacitySub: 'Phù hợp gia đình/nhóm',
+                policy: 'Chính sách',
+                policySub: 'Thông tin vật nuôi, hút thuốc',
+                defaultAmenity1: 'Wi-Fi miễn phí',
+                defaultAmenity2: 'Điều hòa không khí',
+                defaultAmenity3: 'TV màn hình phẳng',
+                defaultAmenity4: 'Bữa sáng miễn phí',
+                roomNotFoundReload: 'Không tìm thấy thông tin phòng. Vui lòng tải lại trang.',
+                statusOccupied: 'Phòng đang có khách. Vui lòng chọn phòng khác.',
+                statusMaintenance: 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
+                statusReserved: 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.',
+                statusUnavailable: 'Phòng không khả dụng. Vui lòng chọn phòng khác.',
+                selectDates: 'Vui lòng chọn ngày nhận và trả phòng.',
+                checkoutAfterCheckin: 'Ngày trả phòng phải sau ngày nhận phòng.',
+                guest: 'Khách',
+                bookingError: 'Có lỗi xảy ra khi chuẩn bị đặt phòng: '
             },
             payment: {
                 title: 'Thanh Toán',
@@ -614,7 +676,39 @@ const LanguageManager = {
                 noActiveRooms: 'No active rooms',
                 checkinPrompt: 'You haven\'t checked in to any room yet. Please go to the reception desk to check in.',
                 personalInfo: 'Personal Information',
-                updateProfile: 'Update Information'
+                updateProfile: 'Update Information',
+                loadingRooms: 'Loading room information...',
+                updateSuccess: 'Information updated successfully!',
+                updateError: 'Error updating: ',
+                loadError: 'Error loading room information',
+                unknownError: 'An unknown error occurred',
+                reload: 'Reload',
+                bookingPrefix: 'Booking',
+                bookingId: 'Booking ID',
+                inUse: 'In Use',
+                checkInDate: 'Check-in Date',
+                checkOutDate: 'Check-out Date',
+                totalPrice: 'Total Price',
+                room: 'Room',
+                service: 'Service',
+                orderService: 'Order Service',
+                viewOrderedServices: 'View Ordered Services',
+                viewDetails: 'View Details',
+                selectService: 'Select the service you want to use',
+                loadingServices: 'Loading services list...',
+                free: 'Free',
+                orderNow: 'Order Now',
+                noServices: 'No services available',
+                noServicesDesc: 'Currently no services are available',
+                loadServicesError: 'Error loading services list',
+                confirmOrderService: 'Are you sure you want to order service "{serviceName}" for {price} VND?',
+                orderServiceSuccess: 'Service ordered successfully!',
+                orderServiceError: 'Error ordering service: ',
+                orderedServices: 'Ordered Services',
+                quantity: 'Quantity',
+                unitPrice: 'Unit Price',
+                totalServiceCost: 'Total Service Cost',
+                noOrderedServices: 'No services ordered yet'
             },
             roomDetail: {
                 notFound: 'Room Not Found',
@@ -638,7 +732,37 @@ const LanguageManager = {
                 guestCount: 'Number of Guests',
                 specialRequests: 'Special Notes (Optional)',
                 specialRequestsPlaceholder: 'E.g., extra bed request, high floor, nice view...',
-                confirmBook: 'Confirm Booking and Payment'
+                confirmBook: 'Confirm Booking and Payment',
+                morePhotos: 'more photos',
+                roomTypeFallback: 'Room',
+                maxCapacity: 'Max capacity',
+                capacity: 'Capacity',
+                contactPrice: 'Contact for price',
+                cannotBook: 'Cannot book',
+                selectOther: 'Please select another room.',
+                defaultDescription: 'Modern designed room with premium furniture, perfect for comfortable stays.',
+                bedroom: 'Bedroom',
+                bedroomSub: 'Comfortable and cozy',
+                bathroom: 'Bathroom',
+                bathroomSub: 'Clean and modern',
+                privateBathroom: 'Private bathroom',
+                flexiblePolicy: 'Flexible policy',
+                capacitySub: 'Suitable for families/groups',
+                policy: 'Policy',
+                policySub: 'Pet and smoking information',
+                defaultAmenity1: 'Free Wi-Fi',
+                defaultAmenity2: 'Air conditioning',
+                defaultAmenity3: 'Flat screen TV',
+                defaultAmenity4: 'Free breakfast',
+                roomNotFoundReload: 'Room information not found. Please reload the page.',
+                statusOccupied: 'Room is occupied. Please select another room.',
+                statusMaintenance: 'Room is under maintenance. Please select another room.',
+                statusReserved: 'Room is reserved. Please select another room.',
+                statusUnavailable: 'Room is unavailable. Please select another room.',
+                selectDates: 'Please select check-in and check-out dates.',
+                checkoutAfterCheckin: 'Check-out date must be after check-in date.',
+                guest: 'Guest',
+                bookingError: 'Error preparing booking: '
             },
             payment: {
                 title: 'Payment',
@@ -1042,6 +1166,23 @@ const LanguageManager = {
                 filterRoomsList();
             } else if (window.allRooms && Array.isArray(window.allRooms) && typeof renderRoomsGrid === 'function') {
                 renderRoomsGrid(window.allRooms);
+            }
+        }
+        
+        // Reload room detail if on room-detail.html page
+        if (document.getElementById('roomDetail') && window.currentRoom && typeof renderRoomDetail === 'function') {
+            renderRoomDetail(window.currentRoom);
+        }
+        
+        // Reload dashboard checked-in rooms if on dashboard.html page
+        if (document.getElementById('checkedInRooms') && window.currentBookingsData && typeof displayCheckedInRooms === 'function') {
+            const roomsData = Object.values(window.currentBookingsData).map(data => ({
+                booking: data.booking,
+                room: data.room,
+                checkoutSummary: data.checkoutSummary
+            }));
+            if (roomsData.length > 0) {
+                displayCheckedInRooms(roomsData);
             }
         }
         

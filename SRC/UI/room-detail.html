@@ -59,7 +59,7 @@
                             <img id="roomThumb2" src="images/room-senior.jpg" alt="Room Image">
                         </div>
                         <div class="room-gallery-more">
-                            + <span id="roomMorePhotos">2</span> ảnh khác
+                            + <span id="roomMorePhotos">2</span> <span data-i18n="roomDetail.morePhotos">ảnh khác</span>
                         </div>
                     </div>
 
@@ -79,20 +79,20 @@
 
                     <div class="room-highlights">
                         <div class="highlight-card">
-                            <div class="highlight-title" id="hlBedrooms">Phòng ngủ</div>
-                            <div class="highlight-sub">Tiện nghi và ấm cúng</div>
+                            <div class="highlight-title" id="hlBedrooms" data-i18n="roomDetail.bedroom">Phòng ngủ</div>
+                            <div class="highlight-sub" data-i18n="roomDetail.bedroomSub">Tiện nghi và ấm cúng</div>
                         </div>
                         <div class="highlight-card">
-                            <div class="highlight-title" id="hlBathrooms">Phòng tắm</div>
-                            <div class="highlight-sub">Sạch sẽ, hiện đại</div>
+                            <div class="highlight-title" id="hlBathrooms" data-i18n="roomDetail.bathroom">Phòng tắm</div>
+                            <div class="highlight-sub" data-i18n="roomDetail.bathroomSub">Sạch sẽ, hiện đại</div>
                         </div>
                         <div class="highlight-card">
-                            <div class="highlight-title" id="hlCapacity">Sức chứa</div>
-                            <div class="highlight-sub">Phù hợp gia đình/nhóm</div>
+                            <div class="highlight-title" id="hlCapacity" data-i18n="roomDetail.capacity">Sức chứa</div>
+                            <div class="highlight-sub" data-i18n="roomDetail.capacitySub">Phù hợp gia đình/nhóm</div>
                         </div>
                         <div class="highlight-card">
-                            <div class="highlight-title" id="hlPets">Chính sách</div>
-                            <div class="highlight-sub">Thông tin vật nuôi, hút thuốc</div>
+                            <div class="highlight-title" id="hlPets" data-i18n="roomDetail.policy">Chính sách</div>
+                            <div class="highlight-sub" data-i18n="roomDetail.policySub">Thông tin vật nuôi, hút thuốc</div>
                         </div>
                     </div>
 
@@ -217,49 +217,55 @@
 
             document.getElementById('roomDetail').style.display = 'block';
 
-            const title = `Phòng ${room.room_number || ''} - ${room.room_type || 'Phòng Nghỉ'}`;
+            const roomPrefix = LanguageManager.getTranslation('rooms.roomPrefix') || 'Phòng';
+            const roomTypeFallback = LanguageManager.getTranslation('roomDetail.roomTypeFallback') || 'Phòng Nghỉ';
+            const title = `${roomPrefix} ${room.room_number || ''} - ${room.room_type || roomTypeFallback}`;
             document.title = title + ' - Demacia Hotel';
             document.getElementById('roomTitle').textContent = title;
 
-            document.getElementById('roomType').textContent = room.room_type || 'Loại phòng';
-            document.getElementById('roomCapacity').textContent = `Sức chứa tối đa ${room.capacity || 'N/A'} người`;
+            const roomTypeText = room.room_type || LanguageManager.getTranslation('roomDetail.roomTypeFallback') || 'Loại phòng';
+            document.getElementById('roomType').textContent = roomTypeText;
+            
+            const maxCapacity = LanguageManager.getTranslation('roomDetail.maxCapacity') || 'Sức chứa tối đa';
+            const people = LanguageManager.getTranslation('rooms.people') || 'người';
+            document.getElementById('roomCapacity').textContent = `${maxCapacity} ${room.capacity || 'N/A'} ${people}`;
 
-            const priceText = room.price ? room.price.toLocaleString('vi-VN') + ' VNĐ/đêm' : 'Liên hệ để biết giá';
+            const locale = LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN';
+            const perNight = LanguageManager.getTranslation('rooms.perNight') || 'VNĐ/đêm';
+            const contactPrice = LanguageManager.getTranslation('roomDetail.contactPrice') || 'Liên hệ để biết giá';
+            const priceText = room.price ? room.price.toLocaleString(locale) + ' ' + perNight : contactPrice;
             document.getElementById('roomShortPrice').textContent = priceText;
             document.getElementById('sidebarPrice').textContent = priceText;
 
             const statusLabel = room.status || 'available';
-            const statusMap = {
-                available: 'Còn phòng',
-                occupied: 'Đang có khách',
-                maintenance: 'Đang bảo trì',
-                reserved: 'Đã đặt trước'
-            };
-            document.getElementById('sidebarStatus').textContent = statusMap[statusLabel] || statusLabel;
+            const statusTranslation = LanguageManager.getTranslation(`admin.rooms.status.${statusLabel}`) || statusLabel;
+            document.getElementById('sidebarStatus').textContent = statusTranslation;
 
             const reserveBtn = document.getElementById('reserveBtn');
             const isAvailable = statusLabel === 'available';
             if (!isAvailable) {
                 reserveBtn.disabled = true;
-                reserveBtn.textContent = 'Không thể đặt phòng';
+                reserveBtn.textContent = LanguageManager.getTranslation('roomDetail.cannotBook') || 'Không thể đặt phòng';
                 reserveBtn.style.opacity = '0.6';
                 reserveBtn.style.cursor = 'not-allowed';
-                reserveBtn.title = `Phòng ${statusMap[statusLabel]}. Vui lòng chọn phòng khác.`;
+                const selectOther = LanguageManager.getTranslation('roomDetail.selectOther') || 'Vui lòng chọn phòng khác.';
+                reserveBtn.title = `${statusTranslation}. ${selectOther}`;
             } else {
                 reserveBtn.disabled = false;
-                reserveBtn.textContent = 'Đặt phòng ngay';
+                reserveBtn.textContent = LanguageManager.getTranslation('roomDetail.bookNow') || 'Đặt phòng ngay';
                 reserveBtn.style.opacity = '1';
                 reserveBtn.style.cursor = 'pointer';
                 reserveBtn.title = '';
             }
 
-            document.getElementById('roomDescription').textContent =
-                room.description || 'Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.';
+            const defaultDescription = LanguageManager.getTranslation('roomDetail.defaultDescription') || 'Phòng được thiết kế hiện đại, nội thất cao cấp, phù hợp cho các kỳ nghỉ dưỡng thoải mái.';
+            document.getElementById('roomDescription').textContent = room.description || defaultDescription;
 
-            document.getElementById('hlBedrooms').textContent = room.room_type || 'Phòng ngủ';
-            document.getElementById('hlBathrooms').textContent = 'Phòng tắm riêng';
-            document.getElementById('hlCapacity').textContent = `Sức chứa ${room.capacity || 'N/A'} người`;
-            document.getElementById('hlPets').textContent = 'Chính sách linh hoạt';
+            document.getElementById('hlBedrooms').textContent = room.room_type || LanguageManager.getTranslation('roomDetail.bedroom') || 'Phòng ngủ';
+            document.getElementById('hlBathrooms').textContent = LanguageManager.getTranslation('roomDetail.privateBathroom') || 'Phòng tắm riêng';
+            const capacityText = LanguageManager.getTranslation('roomDetail.capacity') || 'Sức chứa';
+            document.getElementById('hlCapacity').textContent = `${capacityText} ${room.capacity || 'N/A'} ${people}`;
+            document.getElementById('hlPets').textContent = LanguageManager.getTranslation('roomDetail.flexiblePolicy') || 'Chính sách linh hoạt';
 
             const imageUrl = room.image_url
                 ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`)
@@ -307,7 +313,13 @@
             }
 
             if (!amenities.length) {
-                amenities = ['Wi-Fi miễn phí', 'Điều hòa không khí', 'TV màn hình phẳng', 'Bữa sáng miễn phí'];
+                const defaultAmenities = [
+                    LanguageManager.getTranslation('roomDetail.defaultAmenity1') || 'Wi-Fi miễn phí',
+                    LanguageManager.getTranslation('roomDetail.defaultAmenity2') || 'Điều hòa không khí',
+                    LanguageManager.getTranslation('roomDetail.defaultAmenity3') || 'TV màn hình phẳng',
+                    LanguageManager.getTranslation('roomDetail.defaultAmenity4') || 'Bữa sáng miễn phí'
+                ];
+                amenities = defaultAmenities;
             }
 
             amenities.forEach(item => {
@@ -318,18 +330,19 @@
 
             reserveBtn.addEventListener('click', function() {
                 if (!currentRoom) {
-                    alert('Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
+                    alert(LanguageManager.getTranslation('roomDetail.roomNotFoundReload') || 'Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
                     return;
                 }
 
                 const roomStatus = currentRoom.status || 'available';
                 if (roomStatus !== 'available') {
                     const statusMessages = {
-                        occupied: 'Phòng đang có khách. Vui lòng chọn phòng khác.',
-                        maintenance: 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
-                        reserved: 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.'
+                        occupied: LanguageManager.getTranslation('roomDetail.statusOccupied') || 'Phòng đang có khách. Vui lòng chọn phòng khác.',
+                        maintenance: LanguageManager.getTranslation('roomDetail.statusMaintenance') || 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
+                        reserved: LanguageManager.getTranslation('roomDetail.statusReserved') || 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.'
                     };
-                    alert(statusMessages[roomStatus] || 'Phòng không khả dụng. Vui lòng chọn phòng khác.');
+                    const defaultMessage = LanguageManager.getTranslation('roomDetail.statusUnavailable') || 'Phòng không khả dụng. Vui lòng chọn phòng khác.';
+                    alert(statusMessages[roomStatus] || defaultMessage);
                     return;
                 }
 
@@ -377,18 +390,19 @@
             }
 
             if (!currentRoom) {
-                alert('Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
+                alert(LanguageManager.getTranslation('roomDetail.roomNotFoundReload') || 'Không tìm thấy thông tin phòng. Vui lòng tải lại trang.');
                 return;
             }
 
             const roomStatus = currentRoom.status || 'available';
             if (roomStatus !== 'available') {
                 const statusMessages = {
-                    occupied: 'Phòng đang có khách. Vui lòng chọn phòng khác.',
-                    maintenance: 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
-                    reserved: 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.'
+                    occupied: LanguageManager.getTranslation('roomDetail.statusOccupied') || 'Phòng đang có khách. Vui lòng chọn phòng khác.',
+                    maintenance: LanguageManager.getTranslation('roomDetail.statusMaintenance') || 'Phòng đang bảo trì. Vui lòng chọn phòng khác.',
+                    reserved: LanguageManager.getTranslation('roomDetail.statusReserved') || 'Phòng đã được đặt trước. Vui lòng chọn phòng khác.'
                 };
-                alert(statusMessages[roomStatus] || 'Phòng không khả dụng. Vui lòng chọn phòng khác.');
+                const defaultMessage = LanguageManager.getTranslation('roomDetail.statusUnavailable') || 'Phòng không khả dụng. Vui lòng chọn phòng khác.';
+                alert(statusMessages[roomStatus] || defaultMessage);
                 closeBookingModal();
                 return;
             }
@@ -399,17 +413,18 @@
             const specialRequests = document.getElementById('specialRequests').value || null;
 
             if (!checkInDate || !checkOutDate) {
-                alert('Vui lòng chọn ngày nhận và trả phòng.');
+                alert(LanguageManager.getTranslation('roomDetail.selectDates') || 'Vui lòng chọn ngày nhận và trả phòng.');
                 return;
             }
 
             if (new Date(checkOutDate) <= new Date(checkInDate)) {
-                alert('Ngày trả phòng phải sau ngày nhận phòng.');
+                alert(LanguageManager.getTranslation('roomDetail.checkoutAfterCheckin') || 'Ngày trả phòng phải sau ngày nhận phòng.');
                 return;
             }
 
             const user = AuthManager.getCurrentUser();
-            const guestName = user && (user.full_name || user.username) ? (user.full_name || user.username) : 'Khách';
+            const guestFallback = LanguageManager.getTranslation('roomDetail.guest') || 'Khách';
+            const guestName = user && (user.full_name || user.username) ? (user.full_name || user.username) : guestFallback;
 
             const checkIn = new Date(checkInDate);
             const checkOut = new Date(checkOutDate);
@@ -436,9 +451,14 @@
                 window.location.href = 'payment.html?mode=draft';
             } catch (error) {
                 console.error('Error preparing booking draft:', error);
-                alert('Có lỗi xảy ra khi chuẩn bị đặt phòng: ' + (error.message || error));
+                const errorMsg = LanguageManager.getTranslation('roomDetail.bookingError') || 'Có lỗi xảy ra khi chuẩn bị đặt phòng: ';
+                alert(errorMsg + (error.message || error));
             }
         }
+
+        // Expose renderRoomDetail to window for language switching
+        window.renderRoomDetail = renderRoomDetail;
+        window.currentRoom = currentRoom;
     </script>
 </body>
 </html>

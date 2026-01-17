@@ -129,7 +129,7 @@
 
                 try {
                     const updated = await UserAPI.updateProfile(user.id, profileData);
-                    showNotification('Cập nhật thông tin thành công!', 'success');
+                    showNotification(LanguageManager.getTranslation('dashboard.updateSuccess') || 'Cập nhật thông tin thành công!', 'success');
                     
                     const updatedUser = { ...user, ...updated.user };
                     AuthManager.setCurrentUser(updatedUser);
@@ -137,7 +137,7 @@
                     document.getElementById('userFullName').textContent = updatedUser.full_name;
                     document.getElementById('userEmail').textContent = updatedUser.email;
                 } catch (error) {
-                    showNotification('Lỗi khi cập nhật: ' + error.message, 'error');
+                    showNotification((LanguageManager.getTranslation('dashboard.updateError') || 'Lỗi khi cập nhật: ') + error.message, 'error');
                 } finally {
                     setLoading(updateBtn, false);
                 }
@@ -150,7 +150,7 @@
             const container = document.getElementById('checkedInRooms');
             
             try {
-                container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Đang tải thông tin phòng...</p>';
+                container.innerHTML = `<p style="text-align: center; color: #999; padding: 20px;">${LanguageManager.getTranslation('dashboard.loadingRooms') || 'Đang tải thông tin phòng...'}</p>`;
                 
                 const bookings = await BookingAPI.getMyBookings();
                 console.log('All bookings:', bookings);
@@ -193,14 +193,14 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">⚠️</div>
-                        <h3>Lỗi khi tải thông tin phòng</h3>
-                        <p>${error.message || 'Đã xảy ra lỗi không xác định'}</p>
+                        <h3>${LanguageManager.getTranslation('dashboard.loadError') || 'Lỗi khi tải thông tin phòng'}</h3>
+                        <p>${error.message || (LanguageManager.getTranslation('dashboard.unknownError') || 'Đã xảy ra lỗi không xác định')}</p>
                         <button onclick="location.reload()" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 10px 24px; margin-top: 10px;">
-                            Tải Lại
+                            ${LanguageManager.getTranslation('dashboard.reload') || 'Tải Lại'}
                         </button>
                     </div>
                 `;
-                showNotification('Lỗi khi tải thông tin phòng: ' + error.message, 'error');
+                showNotification((LanguageManager.getTranslation('dashboard.loadError') || 'Lỗi khi tải thông tin phòng: ') + error.message, 'error');
             }
         }
 
@@ -218,44 +218,58 @@
                 console.warn('Could not load services:', error);
             }
 
+            const roomPrefix = LanguageManager.getTranslation('rooms.roomPrefix') || 'Phòng';
+            const bookingPrefix = LanguageManager.getTranslation('dashboard.bookingPrefix') || 'Đặt phòng';
+            const bookingIdLabel = LanguageManager.getTranslation('dashboard.bookingId') || 'Mã đặt phòng';
+            const inUse = LanguageManager.getTranslation('dashboard.inUse') || 'Đang sử dụng';
+            const checkInDateLabel = LanguageManager.getTranslation('dashboard.checkInDate') || 'Ngày nhận';
+            const checkOutDateLabel = LanguageManager.getTranslation('dashboard.checkOutDate') || 'Ngày trả';
+            const totalPriceLabel = LanguageManager.getTranslation('dashboard.totalPrice') || 'Tổng tiền';
+            const roomLabel = LanguageManager.getTranslation('dashboard.room') || 'Phòng';
+            const serviceLabel = LanguageManager.getTranslation('dashboard.service') || 'Dịch vụ';
+            const orderService = LanguageManager.getTranslation('dashboard.orderService') || 'Đặt Dịch Vụ';
+            const viewOrderedServices = LanguageManager.getTranslation('dashboard.viewOrderedServices') || 'Xem Dịch Vụ Đã Đặt';
+            const viewDetails = LanguageManager.getTranslation('dashboard.viewDetails') || 'Xem Chi Tiết';
+            const locale = LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN';
+            
             container.innerHTML = roomsData.map(({ booking, room, checkoutSummary }) => `
                 <div class="checked-in-room-card" style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
                         <div>
                             <h3 style="margin: 0 0 8px 0; color: #333;">
-                                ${room ? `Phòng ${room.room_number}` : `Đặt phòng #${booking.id}`}
+                                ${room ? `${roomPrefix} ${room.room_number}` : `${bookingPrefix} #${booking.id}`}
                             </h3>
                             <p style="margin: 0; color: #666; font-size: 14px;">
-                                ${booking.room_type} • Mã đặt phòng: #${booking.id}
+                                ${booking.room_type} • ${bookingIdLabel}: #${booking.id}
                             </p>
                         </div>
                         <span class="status-badge status-checked_in" style="background: #4caf50; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">
-                            Đang sử dụng
+                            ${inUse}
                         </span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
                         <div>
-                            <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">Ngày nhận</p>
+                            <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">${checkInDateLabel}</p>
                             <p style="margin: 0; font-weight: 500; color: #333;">${formatDate(booking.check_in_date)}</p>
                         </div>
                         <div>
-                            <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">Ngày trả</p>
+                            <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">${checkOutDateLabel}</p>
                             <p style="margin: 0; font-weight: 500; color: #333;">${booking.check_out_date ? formatDate(booking.check_out_date) : 'N/A'}</p>
                         </div>
                         <div>
-                            <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">Tổng tiền</p>
+                            <p style="margin: 0; color: #999; font-size: 12px; margin-bottom: 4px;">${totalPriceLabel}</p>
                             <p style="margin: 0; font-weight: 500; color: #333;" id="totalPrice-${booking.id}">
                                 ${(() => {
                                     const bookingPrice = booking.total_price || 0;
                                     const serviceCost = checkoutSummary ? (checkoutSummary.service_cost || 0) : 0;
                                     const total = bookingPrice + serviceCost;
-                                    return total.toLocaleString('vi-VN') + ' VNĐ';
+                                    return total.toLocaleString(locale) + ' VNĐ';
                                 })()}
                             </p>
                             ${checkoutSummary && checkoutSummary.service_cost > 0 ? `
                                 <p style="margin: 4px 0 0 0; color: #666; font-size: 11px;">
-                                    (Phòng: ${(booking.total_price || 0).toLocaleString('vi-VN')} VNĐ + Dịch vụ: ${checkoutSummary.service_cost.toLocaleString('vi-VN')} VNĐ)
+                                    (${roomLabel}: ${(booking.total_price || 0).toLocaleString(locale)} VNĐ + ${serviceLabel}: ${checkoutSummary.service_cost.toLocaleString(locale)} VNĐ)
                                 </p>
                             ` : ''}
                         </div>
@@ -263,13 +277,13 @@
 
                     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         <button class="auth-btn" onclick="openServiceOrderModal(${booking.id})" style="background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                             Đặt Dịch Vụ
+                             ${orderService}
                         </button>
                         <button class="auth-btn" onclick="viewOrderedServices(${booking.id})" style="background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                             Xem Dịch Vụ Đã Đặt
+                             ${viewOrderedServices}
                         </button>
                         <button class="auth-btn" onclick="viewRoomDetails(${booking.id})" style="background: #f5f5f5; color: #333; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                             Xem Chi Tiết
+                             ${viewDetails}
                         </button>
                     </div>
                 </div>
@@ -279,7 +293,8 @@
         function formatDate(dateString) {
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
-            return date.toLocaleDateString('vi-VN');
+            const locale = LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN';
+            return date.toLocaleDateString(locale);
         }
 
         async function openServiceOrderModal(bookingId) {
@@ -293,8 +308,8 @@
                     <div style="background: linear-gradient(135deg, #0066cc 0%, #004499 100%); padding: 24px; color: white;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600;">Đặt Dịch Vụ</h2>
-                                <p style="margin: 0; font-size: 14px; opacity: 0.9;">Chọn dịch vụ bạn muốn sử dụng</p>
+                                <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600;">${LanguageManager.getTranslation('dashboard.orderService') || 'Đặt Dịch Vụ'}</h2>
+                                <p style="margin: 0; font-size: 14px; opacity: 0.9;">${LanguageManager.getTranslation('dashboard.selectService') || 'Chọn dịch vụ bạn muốn sử dụng'}</p>
                             </div>
                             <button onclick="closeServiceOrderModal()" style="background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" 
                                 onmouseover="this.style.background='rgba(255,255,255,0.3)'" 
@@ -307,7 +322,7 @@
                         <div id="serviceOrderList">
                             <div style="text-align: center; padding: 40px 20px;">
                                 <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
-                                <p style="color: #666; font-size: 16px; margin: 0;">Đang tải danh sách dịch vụ...</p>
+                                <p style="color: #666; font-size: 16px; margin: 0;">${LanguageManager.getTranslation('dashboard.loadingServices') || 'Đang tải danh sách dịch vụ...'}</p>
                             </div>
                         </div>
                     </div>
@@ -329,9 +344,9 @@
                                     onmouseout="this.style.borderColor='#e8f0fe'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
                                     <div style="flex: 1; min-width: 0;">
                                         <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 8px;">
-                                            <h4 style="margin: 0; font-size: 18px; font-weight: 600; color: #333; line-height: 1.4;">${service.service_name || service.name || 'Dịch vụ'}</h4>
+                                            <h4 style="margin: 0; font-size: 18px; font-weight: 600; color: #333; line-height: 1.4;">${service.service_name || service.name || (LanguageManager.getTranslation('dashboard.service') || 'Dịch vụ')}</h4>
                                             <span style="background: linear-gradient(135deg, #0066cc, #004499); color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; white-space: nowrap; margin-left: 12px;">
-                                                ${service.price && service.price > 0 ? service.price.toLocaleString('vi-VN') + ' VNĐ' : 'Miễn phí'}
+                                                ${service.price && service.price > 0 ? service.price.toLocaleString(LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN') + ' VNĐ' : (LanguageManager.getTranslation('dashboard.free') || 'Miễn phí')}
                                             </span>
                                         </div>
                                         ${service.description ? `<p style="margin: 0; color: #666; font-size: 14px; line-height: 1.5;">${service.description}</p>` : ''}
@@ -341,7 +356,7 @@
                                         style="background: linear-gradient(135deg, #0066cc, #004499); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; margin-left: 16px; white-space: nowrap; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,102,204,0.3);"
                                         onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 12px rgba(0,102,204,0.4)'"
                                         onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0,102,204,0.3)'">
-                                        Đặt Ngay
+                                        ${LanguageManager.getTranslation('dashboard.orderNow') || 'Đặt Ngay'}
                                     </button>
                                 </div>
                             `).join('')}
@@ -351,8 +366,8 @@
                     serviceList.innerHTML = `
                         <div style="text-align: center; padding: 60px 20px;">
                             <div style="font-size: 64px; margin-bottom: 16px;">📭</div>
-                            <h3 style="margin: 0 0 8px 0; color: #333; font-size: 20px;">Không có dịch vụ nào</h3>
-                            <p style="color: #999; font-size: 14px; margin: 0;">Hiện tại chưa có dịch vụ nào khả dụng</p>
+                            <h3 style="margin: 0 0 8px 0; color: #333; font-size: 20px;">${LanguageManager.getTranslation('dashboard.noServices') || 'Không có dịch vụ nào'}</h3>
+                            <p style="color: #999; font-size: 14px; margin: 0;">${LanguageManager.getTranslation('dashboard.noServicesDesc') || 'Hiện tại chưa có dịch vụ nào khả dụng'}</p>
                         </div>
                     `;
                 }
@@ -361,8 +376,8 @@
                 serviceList.innerHTML = `
                     <div style="text-align: center; padding: 60px 20px;">
                         <div style="font-size: 64px; margin-bottom: 16px;">⚠️</div>
-                        <h3 style="margin: 0 0 8px 0; color: #f44336; font-size: 20px;">Lỗi khi tải danh sách dịch vụ</h3>
-                        <p style="color: #666; font-size: 14px; margin: 0;">${error.message || 'Đã xảy ra lỗi không xác định'}</p>
+                        <h3 style="margin: 0 0 8px 0; color: #f44336; font-size: 20px;">${LanguageManager.getTranslation('dashboard.loadServicesError') || 'Lỗi khi tải danh sách dịch vụ'}</h3>
+                        <p style="color: #666; font-size: 14px; margin: 0;">${error.message || (LanguageManager.getTranslation('dashboard.unknownError') || 'Đã xảy ra lỗi không xác định')}</p>
                     </div>
                 `;
             }
@@ -376,7 +391,10 @@
         }
 
         async function orderService(bookingId, serviceId, serviceName, price) {
-            if (!confirm(`Bạn có chắc chắn muốn đặt dịch vụ "${serviceName}" với giá ${price.toLocaleString('vi-VN')} VNĐ?`)) {
+            const confirmMessage = (LanguageManager.getTranslation('dashboard.confirmOrderService') || 'Bạn có chắc chắn muốn đặt dịch vụ "{serviceName}" với giá {price} VNĐ?')
+                .replace('{serviceName}', serviceName)
+                .replace('{price}', price.toLocaleString(LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN'));
+            if (!confirm(confirmMessage)) {
                 return;
             }
 
@@ -386,12 +404,12 @@
                     service_id: serviceId,
                     quantity: 1
                 });
-                showNotification('Đặt dịch vụ thành công!', 'success');
+                showNotification(LanguageManager.getTranslation('dashboard.orderServiceSuccess') || 'Đặt dịch vụ thành công!', 'success');
                 closeServiceOrderModal();
                 
                 await updateBookingTotalPrice(bookingId);
             } catch (error) {
-                showNotification('Lỗi khi đặt dịch vụ: ' + error.message, 'error');
+                showNotification((LanguageManager.getTranslation('dashboard.orderServiceError') || 'Lỗi khi đặt dịch vụ: ') + error.message, 'error');
             }
         }
 
@@ -411,11 +429,14 @@
                         const serviceCost = summary.service_cost || 0;
                         const total = bookingPrice + serviceCost;
                         
+                        const locale = LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN';
+                        const roomLabel = LanguageManager.getTranslation('dashboard.room') || 'Phòng';
+                        const serviceLabel = LanguageManager.getTranslation('dashboard.service') || 'Dịch vụ';
                         totalPriceElement.innerHTML = `
-                            ${total.toLocaleString('vi-VN')} VNĐ
+                            ${total.toLocaleString(locale)} VNĐ
                             ${serviceCost > 0 ? `
                                 <p style="margin: 4px 0 0 0; color: #666; font-size: 11px;">
-                                    (Phòng: ${bookingPrice.toLocaleString('vi-VN')} VNĐ + Dịch vụ: ${serviceCost.toLocaleString('vi-VN')} VNĐ)
+                                    (${roomLabel}: ${bookingPrice.toLocaleString(locale)} VNĐ + ${serviceLabel}: ${serviceCost.toLocaleString(locale)} VNĐ)
                                 </p>
                             ` : ''}
                         `;
@@ -434,11 +455,11 @@
             modal.innerHTML = `
                 <div style="background: white; border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="margin: 0;">Dịch Vụ Đã Đặt</h2>
+                        <h2 style="margin: 0;">${LanguageManager.getTranslation('dashboard.orderedServices') || 'Dịch Vụ Đã Đặt'}</h2>
                         <button onclick="closeOrderedServicesModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
                     </div>
                     <div id="orderedServicesList" style="margin-bottom: 20px;">
-                        <p style="text-align: center; color: #999;">Đang tải danh sách dịch vụ...</p>
+                        <p style="text-align: center; color: #999;">${LanguageManager.getTranslation('dashboard.loadingServices') || 'Đang tải danh sách dịch vụ...'}</p>
                     </div>
                 </div>
             `;
@@ -456,16 +477,16 @@
                         ${summary.service_requests.map(sr => `
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; background: #f9f9f9;">
                                 <div style="flex: 1;">
-                                    <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #333;">${sr.service_name || 'Dịch vụ'}</h4>
+                                    <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #333;">${sr.service_name || (LanguageManager.getTranslation('dashboard.service') || 'Dịch vụ')}</h4>
                                     <p style="margin: 0; color: #666; font-size: 13px;">
-                                        Số lượng: ${sr.quantity || 1} • 
-                                        Đơn giá: ${(sr.unit_price || 0).toLocaleString('vi-VN')} VNĐ
+                                        ${LanguageManager.getTranslation('dashboard.quantity') || 'Số lượng'}: ${sr.quantity || 1} • 
+                                        ${LanguageManager.getTranslation('dashboard.unitPrice') || 'Đơn giá'}: ${(sr.unit_price || 0).toLocaleString(LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN')} VNĐ
                                     </p>
                                     <p style="margin: 4px 0 0 0; font-size: 12px;">
-                                        ${sr.status === 'completed' ? '✅ Đã hoàn thành' : 
-                                          sr.status === 'in_progress' ? '⏳ Đang xử lý' : 
-                                          sr.status === 'pending' ? '⏸️ Chờ xử lý' : 
-                                          '❌ Đã hủy'}
+                                        ${sr.status === 'completed' ? '✅ ' + (LanguageManager.getTranslation('serviceRequest.status.completed') || 'Đã hoàn thành') : 
+                                          sr.status === 'in_progress' ? '⏳ ' + (LanguageManager.getTranslation('serviceRequest.status.inProgress') || 'Đang xử lý') : 
+                                          sr.status === 'pending' ? '⏸️ ' + (LanguageManager.getTranslation('serviceRequest.status.pending') || 'Chờ xử lý') : 
+                                          '❌ ' + (LanguageManager.getTranslation('serviceRequest.status.cancelled') || 'Đã hủy')}
                                     </p>
                                 </div>
                                 <div style="text-align: right;">
@@ -475,17 +496,17 @@
                         `).join('')}
                         <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid #0066cc;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <strong style="font-size: 18px; color: #333;">Tổng chi phí dịch vụ:</strong>
-                                <strong style="font-size: 20px; color: #0066cc;">${totalServiceCost.toLocaleString('vi-VN')} VNĐ</strong>
+                                <strong style="font-size: 18px; color: #333;">${LanguageManager.getTranslation('dashboard.totalServiceCost') || 'Tổng chi phí dịch vụ'}:</strong>
+                                <strong style="font-size: 20px; color: #0066cc;">${totalServiceCost.toLocaleString(LanguageManager.currentLanguage === 'en' ? 'en-US' : 'vi-VN')} VNĐ</strong>
                             </div>
                         </div>
                     `;
                 } else {
-                    serviceList.innerHTML = '<p style="color: #999; text-align: center; padding: 40px 0;">Chưa có dịch vụ nào được đặt</p>';
+                    serviceList.innerHTML = `<p style="color: #999; text-align: center; padding: 40px 0;">${LanguageManager.getTranslation('dashboard.noOrderedServices') || 'Chưa có dịch vụ nào được đặt'}</p>`;
                 }
             } catch (error) {
                 const serviceList = document.getElementById('orderedServicesList');
-                serviceList.innerHTML = '<p style="color: #f44336; text-align: center;">Lỗi khi tải danh sách dịch vụ: ' + error.message + '</p>';
+                serviceList.innerHTML = `<p style="color: #f44336; text-align: center;">${LanguageManager.getTranslation('dashboard.loadServicesError') || 'Lỗi khi tải danh sách dịch vụ'}: ${error.message}</p>`;
             }
         }
 
@@ -506,6 +527,8 @@
         window.viewRoomDetails = viewRoomDetails;
         window.viewOrderedServices = viewOrderedServices;
         window.closeOrderedServicesModal = closeOrderedServicesModal;
+        window.displayCheckedInRooms = displayCheckedInRooms;
+        window.currentBookingsData = currentBookingsData;
 
 
         async function loadUserProfile(userId) {
