@@ -50,18 +50,18 @@
 
         <div id="rooms-tab" class="tab-content active">
             <div class="section-header">
-                <h2>Quản Lý Phòng</h2>
-                <button class="btn-primary" onclick="showAddRoomModal()">+ Thêm Phòng Mới</button>
+                <h2 data-i18n="admin.manageRooms">Quản Lý Phòng</h2>
+                <button class="btn-primary" onclick="showAddRoomModal()" data-i18n="admin.rooms.addRoom">+ Thêm Phòng Mới</button>
             </div>
             
             <div class="search-bar">
-                <input type="text" id="roomSearch" placeholder="Tìm kiếm phòng..." onkeyup="filterRooms()">
+                <input type="text" id="roomSearch" data-i18n-placeholder="admin.rooms.searchPlaceholder" placeholder="Tìm kiếm phòng..." onkeyup="filterRooms()">
                 <select id="roomStatusFilter" onchange="filterRooms()">
-                    <option value="all">Tất cả trạng thái</option>
-                    <option value="available">Available</option>
-                    <option value="occupied">Occupied</option>
-                    <option value="maintenance">Maintenance</option>
-                    <option value="reserved">Reserved</option>
+                    <option value="all" data-i18n="common.all">Tất cả trạng thái</option>
+                    <option value="available" data-i18n="admin.rooms.status.available">Available</option>
+                    <option value="occupied" data-i18n="admin.rooms.status.occupied">Occupied</option>
+                    <option value="maintenance" data-i18n="admin.rooms.status.maintenance">Maintenance</option>
+                    <option value="reserved" data-i18n="admin.rooms.status.reserved">Reserved</option>
                 </select>
             </div>
 
@@ -89,11 +89,11 @@
 
         <div id="staff-tab" class="tab-content">
             <div class="section-header">
-                <h2>Quản Lý Nhân Viên</h2>
+                <h2 data-i18n="admin.manageStaff">Quản Lý Nhân Viên</h2>
                 
                 <div class="search-bar" style="margin-left: auto;">
-                    <button class="btn-primary" onclick="showAddStaffModal()">+ Thêm Nhân Viên</button>
-                    <input type="text" id="staffSearch" placeholder="Tìm theo tên, email, chức vụ, phòng ban" onkeyup="filterStaff()">
+                    <button class="btn-primary" onclick="showAddStaffModal()" data-i18n="admin.staff.addStaff">+ Thêm Nhân Viên</button>
+                    <input type="text" id="staffSearch" data-i18n-placeholder="admin.staff.searchPlaceholder" placeholder="Tìm theo tên, email, chức vụ, phòng ban" onkeyup="filterStaff()">
                 </div>
             </div>
 
@@ -122,9 +122,9 @@
 
         <div id="users-tab" class="tab-content">
             <div class="section-header">
-                <h2>Quản Lý Người Dùng</h2>
+                <h2 data-i18n="admin.manageUsers">Quản Lý Người Dùng</h2>
                 <div class="search-bar" style="margin-left: auto;">
-                    <input type="text" id="userSearch" placeholder="Tìm theo tên, email, username, role" onkeyup="filterUsers()">
+                    <input type="text" id="userSearch" data-i18n-placeholder="admin.users.searchPlaceholder" placeholder="Tìm theo tên, email, username, role" onkeyup="filterUsers()">
                 </div>
             </div>
 
@@ -152,8 +152,8 @@
 
         <div id="services-tab" class="tab-content">
             <div class="section-header">
-                <h2>Quản Lý Dịch Vụ</h2>
-                <button class="btn-primary" onclick="showAddServiceModal()">+ Thêm Dịch Vụ</button>
+                <h2 data-i18n="admin.manageServices">Quản Lý Dịch Vụ</h2>
+                <button class="btn-primary" onclick="showAddServiceModal()" data-i18n="admin.services.addService">+ Thêm Dịch Vụ</button>
             </div>
 
             <div id="servicesTableContainer">
@@ -179,7 +179,7 @@
 
         <div id="reports-tab" class="tab-content">
             <div class="section-header">
-                <h2>Báo Cáo & Thống Kê</h2>
+                <h2 data-i18n="admin.reports">Báo Cáo & Thống Kê</h2>
             </div>
 
             <div class="reports-grid">

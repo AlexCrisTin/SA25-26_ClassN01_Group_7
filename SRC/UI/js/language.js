@@ -210,6 +210,14 @@ const LanguageManager = {
                 manageServices: 'Quản Lý Dịch Vụ',
                 reports: 'Báo Cáo & Thống Kê',
                 rooms: {
+                    addRoom: '+ Thêm Phòng Mới',
+                    searchPlaceholder: 'Tìm kiếm phòng...',
+                    status: {
+                        available: 'Available',
+                        occupied: 'Occupied',
+                        maintenance: 'Maintenance',
+                        reserved: 'Reserved'
+                    },
                     table: {
                         roomNumber: 'Số Phòng',
                         roomType: 'Loại Phòng',
@@ -220,6 +228,8 @@ const LanguageManager = {
                     }
                 },
                 staff: {
+                    addStaff: '+ Thêm Nhân Viên',
+                    searchPlaceholder: 'Tìm theo tên, email, chức vụ, phòng ban',
                     table: {
                         fullName: 'Họ Tên',
                         email: 'Email',
@@ -231,6 +241,7 @@ const LanguageManager = {
                     }
                 },
                 users: {
+                    searchPlaceholder: 'Tìm theo tên, email, username, role',
                     table: {
                         username: 'Username',
                         fullName: 'Họ Tên',
@@ -241,6 +252,7 @@ const LanguageManager = {
                     }
                 },
                 services: {
+                    addService: '+ Thêm Dịch Vụ',
                     table: {
                         serviceName: 'Tên Dịch Vụ',
                         description: 'Mô Tả',
@@ -523,6 +535,14 @@ const LanguageManager = {
                 manageServices: 'Manage Services',
                 reports: 'Reports & Statistics',
                 rooms: {
+                    addRoom: '+ Add New Room',
+                    searchPlaceholder: 'Search rooms...',
+                    status: {
+                        available: 'Available',
+                        occupied: 'Occupied',
+                        maintenance: 'Maintenance',
+                        reserved: 'Reserved'
+                    },
                     table: {
                         roomNumber: 'Room Number',
                         roomType: 'Room Type',
@@ -533,6 +553,8 @@ const LanguageManager = {
                     }
                 },
                 staff: {
+                    addStaff: '+ Add Staff',
+                    searchPlaceholder: 'Search by name, email, position, department',
                     table: {
                         fullName: 'Full Name',
                         email: 'Email',
@@ -544,6 +566,7 @@ const LanguageManager = {
                     }
                 },
                 users: {
+                    searchPlaceholder: 'Search by name, email, username, role',
                     table: {
                         username: 'Username',
                         fullName: 'Full Name',
@@ -554,6 +577,7 @@ const LanguageManager = {
                     }
                 },
                 services: {
+                    addService: '+ Add Service',
                     table: {
                         serviceName: 'Service Name',
                         description: 'Description',
