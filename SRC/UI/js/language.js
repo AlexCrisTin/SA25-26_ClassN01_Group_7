@@ -208,7 +208,47 @@ const LanguageManager = {
                 manageStaff: 'Quản Lý Nhân Viên',
                 manageUsers: 'Quản Lý Người Dùng',
                 manageServices: 'Quản Lý Dịch Vụ',
-                reports: 'Báo Cáo & Thống Kê'
+                reports: 'Báo Cáo & Thống Kê',
+                rooms: {
+                    table: {
+                        roomNumber: 'Số Phòng',
+                        roomType: 'Loại Phòng',
+                        price: 'Giá (VNĐ)',
+                        status: 'Trạng Thái',
+                        capacity: 'Sức Chứa',
+                        actions: 'Thao Tác'
+                    }
+                },
+                staff: {
+                    table: {
+                        fullName: 'Họ Tên',
+                        email: 'Email',
+                        phone: 'SĐT',
+                        position: 'Chức Vụ',
+                        department: 'Phòng Ban',
+                        status: 'Trạng Thái',
+                        actions: 'Thao Tác'
+                    }
+                },
+                users: {
+                    table: {
+                        username: 'Username',
+                        fullName: 'Họ Tên',
+                        email: 'Email',
+                        phone: 'SĐT',
+                        role: 'Vai Trò',
+                        actions: 'Thao Tác'
+                    }
+                },
+                services: {
+                    table: {
+                        serviceName: 'Tên Dịch Vụ',
+                        description: 'Mô Tả',
+                        price: 'Giá (VNĐ)',
+                        category: 'Danh Mục',
+                        actions: 'Thao Tác'
+                    }
+                }
             },
             receptionist: {
                 title: 'Receptionist Panel',
@@ -481,7 +521,47 @@ const LanguageManager = {
                 manageStaff: 'Manage Staff',
                 manageUsers: 'Manage Users',
                 manageServices: 'Manage Services',
-                reports: 'Reports & Statistics'
+                reports: 'Reports & Statistics',
+                rooms: {
+                    table: {
+                        roomNumber: 'Room Number',
+                        roomType: 'Room Type',
+                        price: 'Price (VND)',
+                        status: 'Status',
+                        capacity: 'Capacity',
+                        actions: 'Actions'
+                    }
+                },
+                staff: {
+                    table: {
+                        fullName: 'Full Name',
+                        email: 'Email',
+                        phone: 'Phone',
+                        position: 'Position',
+                        department: 'Department',
+                        status: 'Status',
+                        actions: 'Actions'
+                    }
+                },
+                users: {
+                    table: {
+                        username: 'Username',
+                        fullName: 'Full Name',
+                        email: 'Email',
+                        phone: 'Phone',
+                        role: 'Role',
+                        actions: 'Actions'
+                    }
+                },
+                services: {
+                    table: {
+                        serviceName: 'Service Name',
+                        description: 'Description',
+                        price: 'Price (VND)',
+                        category: 'Category',
+                        actions: 'Actions'
+                    }
+                }
             },
             receptionist: {
                 title: 'Receptionist Panel',
