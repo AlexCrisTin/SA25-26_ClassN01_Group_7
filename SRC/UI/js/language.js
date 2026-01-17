@@ -213,10 +213,10 @@ const LanguageManager = {
                     addRoom: '+ Thêm Phòng Mới',
                     searchPlaceholder: 'Tìm kiếm phòng...',
                     status: {
-                        available: 'Available',
-                        occupied: 'Occupied',
-                        maintenance: 'Maintenance',
-                        reserved: 'Reserved'
+                        available: 'Trống',
+                        occupied: 'Đã Thuê',
+                        maintenance: 'Bảo Trì',
+                        reserved: 'Đã Đặt'
                     },
                     table: {
                         roomNumber: 'Số Phòng',
@@ -687,7 +687,9 @@ const LanguageManager = {
                 search: 'Search',
                 loading: 'Loading data...',
                 close: 'Close',
-                update: 'Update'
+                update: 'Update',
+                edit: 'Edit',
+                delete: 'Delete'
             },
             booking: {
                 status: {

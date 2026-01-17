@@ -84,8 +84,8 @@ function displayRooms(rooms) {
             <td>${room.capacity || 'N/A'}</td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-edit" onclick="editRoom(${room.id})">Sửa</button>
-                    <button class="btn-delete" onclick="deleteRoom(${room.id})">Xóa</button>
+                    <button class="btn-edit" onclick="editRoom(${room.id})">${LanguageManager.getTranslation('common.edit')}</button>
+                    <button class="btn-delete" onclick="deleteRoom(${room.id})">${LanguageManager.getTranslation('common.delete')}</button>
                 </div>
             </td>
         </tr>
@@ -110,13 +110,9 @@ function filterRooms() {
 }
 
 function getRoomStatusText(status) {
-    const statusMap = {
-        'available': 'Trống',
-        'occupied': 'Đã Thuê',
-        'maintenance': 'Bảo Trì',
-        'reserved': 'Đã Đặt'
-    };
-    return statusMap[status] || status;
+    if (!status) return status;
+    const statusKey = `admin.rooms.status.${status}`;
+    return LanguageManager.getTranslation(statusKey) || status;
 }
 
 function showAddRoomModal() {
@@ -303,14 +299,9 @@ function filterBookings() {
 }
 
 function getBookingStatusText(status) {
-    const statusMap = {
-        'pending': 'Chờ Xác Nhận',
-        'confirmed': 'Đã Xác Nhận',
-        'cancelled': 'Đã Hủy',
-        'checked_in': 'Đã Check-in',
-        'checked_out': 'Đã Check-out'
-    };
-    return statusMap[status] || status;
+    if (!status) return status;
+    const statusKey = `booking.status.${status}`;
+    return LanguageManager.getTranslation(statusKey) || status;
 }
 
 function formatDate(dateString) {
