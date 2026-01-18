@@ -288,7 +288,7 @@
                 await updateBookingSummaryCard(bookingDraft);
             } catch (error) {
                 showNotification((LanguageManager.getTranslation('payment.loadDraftError') || 'Lỗi khi tải thông tin đặt phòng tạm: ') + error.message, 'error');
-                setTimeout(() => window.location.href = 'rooms.html', 2000);
+                setTimeout(() => window.location.href = '../public/rooms.html', 2000);
             }
         }
 
