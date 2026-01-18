@@ -23,16 +23,17 @@
                 <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
                 <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
-            <div class="nav-right">
-                <div class="language-switcher">
-                    <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
-                    <span class="lang-separator">|</span>
-                    <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
-                </div>
-            </div>
+            
             <div class="user-menu">
                 <span id="userName" class="user-name"></span>
                 <button class="logout-btn" onclick="AuthManager.logout()" data-i18n="nav.logout">Đăng Xuất</button>
+                <div class="nav-right">
+                    <div class="language-switcher">
+                        <button class="lang-btn" id="langVi" onclick="LanguageManager.setLanguage('vi')">VI</button>
+                        <span class="lang-separator">|</span>
+                        <button class="lang-btn" id="langEn" onclick="LanguageManager.setLanguage('en')">EN</button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>

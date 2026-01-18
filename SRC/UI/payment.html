@@ -497,7 +497,7 @@
                 document.getElementById('taxAmount').textContent = `${tax.toLocaleString(locale)} VNĐ`;
                 document.getElementById('bookingTotalPrice').textContent = `${totalPrice.toLocaleString(locale)} VNĐ`;
 
-                const numGuests = booking.num_guests || booking.num_adults || 2;
+                const numGuests = booking.guests || booking.num_guests || booking.num_adults || 2;
                 document.getElementById('bookingGuests').textContent = `1 ${roomLabel}, ${numGuests} ${adultsLabel}`;
             } catch (error) {
                 console.error('Error updating booking summary card:', error);
