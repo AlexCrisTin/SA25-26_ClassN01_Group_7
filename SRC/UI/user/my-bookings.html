@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt Phòng Của Tôi - Demacia Hotel</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/auth.css">
-    <link rel="stylesheet" href="css/my-bookings.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/my-bookings.css">
 </head>
 <body>
     <nav class="main-nav">
@@ -18,8 +18,8 @@
             <ul class="nav-menu">
                 <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
                 <li><a href="my-bookings.html" class="active" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
-                <li><a href="rooms.html" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
-                <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
+                <li><a href="../public/rooms.html" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
+                <li><a href="../public/contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
                 <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
             
@@ -61,7 +61,7 @@
                     <div class="empty-state-icon">📋</div>
                     <h3 data-i18n="myBookings.noBookings">Chưa có đặt phòng nào</h3>
                     <p data-i18n="myBookings.noBookingsDesc">Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi</p>
-                    <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;" data-i18n="myBookings.bookNow">Đặt Phòng Ngay</a>
+                    <a href="../public/rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;" data-i18n="myBookings.bookNow">Đặt Phòng Ngay</a>
                 </div>
             </div>
         </div>
@@ -86,9 +86,9 @@
         </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/language.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/language.js"></script>
     <script>
         let allBookings = [];
         let pendingCancelBookingId = null;
@@ -191,7 +191,7 @@
                     <div class="empty-state-icon">📋</div>
                     <h3>${displayMessage}</h3>
                     <p>${LanguageManager.getTranslation('myBookings.noBookingsDesc') || 'Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi'}</p>
-                    <a href="rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">${LanguageManager.getTranslation('myBookings.bookNow') || 'Đặt Phòng Ngay'}</a>
+                    <a href="../public/rooms.html" class="auth-btn" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 30px;">${LanguageManager.getTranslation('myBookings.bookNow') || 'Đặt Phòng Ngay'}</a>
                 </div>
             `;
         }
@@ -297,7 +297,7 @@
             }
         });
     </script>
-    <script src="js/script.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>
 

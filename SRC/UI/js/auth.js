@@ -47,25 +47,40 @@ const AuthManager = {
         }
     },
 
+    // Helper: Get path to UI root from current location
+    _getPathToRoot: () => {
+        const path = window.location.pathname;
+        // Check if we're in a subfolder (auth/, user/, admin/, public/)
+        if (path.includes('/auth/') || path.includes('/user/') || 
+            path.includes('/admin/') || path.includes('/public/')) {
+            return '../';
+        }
+        // We're at root level
+        return '';
+    },
+    
     // Get redirect URL based on user role
+    // Automatically calculates correct path based on current location
     getRedirectUrl: () => {
         const user = AuthManager.getCurrentUser();
+        const rootPath = AuthManager._getPathToRoot();
+        
         if (!user) {
-            return 'login.html';
+            return rootPath + 'auth/login.html';
         }
 
         // Admin redirects to admin panel
         if (user.role === 'administrator') {
-            return 'admin.html';
+            return rootPath + 'admin/admin.html';
         }
 
         // Receptionist redirects to receptionist panel
         if (user.role === 'receptionist') {
-            return 'receptionist.html';
+            return rootPath + 'admin/receptionist.html';
         }
 
         // Normal users go to dashboard
-        return 'dashboard.html';
+        return rootPath + 'user/dashboard.html';
     },
 
     // Register function
@@ -86,12 +101,17 @@ const AuthManager = {
     // Logout function
     logout: () => {
         AuthManager.clearCurrentUser();
-        window.location.href = 'index.html';
+        const rootPath = AuthManager._getPathToRoot();
+        window.location.href = rootPath + 'index.html';
     },
 
     // Redirect to login if not authenticated
-    requireAuth: (redirectTo = 'login.html') => {
+    requireAuth: (redirectTo = null) => {
         if (!AuthManager.isLoggedIn()) {
+            if (!redirectTo) {
+                const rootPath = AuthManager._getPathToRoot();
+                redirectTo = rootPath + 'auth/login.html';
+            }
             window.location.href = redirectTo;
             return false;
         }
@@ -99,10 +119,14 @@ const AuthManager = {
     },
 
     // Block admin from accessing user pages (booking, dashboard, etc.)
-    blockAdminAccess: (redirectTo = 'admin.html') => {
+    blockAdminAccess: (redirectTo = null) => {
         if (AuthManager.isAdmin()) {
             showNotification('Admin không có quyền truy cập trang này', 'error');
             setTimeout(() => {
+                if (!redirectTo) {
+                    const rootPath = AuthManager._getPathToRoot();
+                    redirectTo = rootPath + 'admin/admin.html';
+                }
                 window.location.href = redirectTo;
             }, 1500);
             return false;

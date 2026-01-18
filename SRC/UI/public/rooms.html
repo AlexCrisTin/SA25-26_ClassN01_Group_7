@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phòng Nghỉ - Demacia Hotel</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/auth.css">
-    <link rel="stylesheet" href="css/booking.css">
-    <link rel="stylesheet" href="css/rooms.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/booking.css">
+    <link rel="stylesheet" href="../css/rooms.css">
 </head>
 <body>
     <nav class="main-nav">
@@ -17,11 +17,11 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
-                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="../user/dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="../user/my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
                 <li><a href="rooms.html" class="active" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
                 <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
-                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
+                <li><a href="../user/wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
             
             <div class="user-menu">
@@ -74,9 +74,9 @@
         </div>
     </main>
 
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/language.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/language.js"></script>
     <script>
         let allRooms = [];
 
@@ -148,7 +148,7 @@
             grid.innerHTML = rooms.map(room => {
                 const imageUrl = room.image_url
                     ? (room.image_url.startsWith('http') ? room.image_url : `http://localhost:5000${room.image_url}`)
-                    : 'images/room-default.jpg';
+                    : '../images/room-default.jpg';
 
                 const statusLabel = (room.status || 'available').toLowerCase();
                 const statusClass =
@@ -170,7 +170,7 @@
                     <article class="room-list-card" onclick="goToRoomDetail(${room.id})">
                         <div class="room-card-header">
                             <img src="${imageUrl}" alt="${roomPrefix} ${room.room_number || ''} ${roomType}"
-                                 onerror="this.src='images/room-connecting.jpg';">
+                                 onerror="this.src='../images/room-connecting.jpg';">
                         </div>
                         <div class="room-card-body">
                             <div class="room-card-main">

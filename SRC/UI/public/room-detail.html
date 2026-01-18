@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi Tiết Phòng - Demacia Hotel</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/auth.css">
-    <link rel="stylesheet" href="css/booking.css">
-    <link rel="stylesheet" href="css/room-detail.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/booking.css">
+    <link rel="stylesheet" href="../css/room-detail.css">
 </head>
 <body>
     <nav class="main-nav">
@@ -17,11 +17,11 @@
                 <span class="logo-text">Demacia</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
-                <li><a href="my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
+                <li><a href="../user/dashboard.html" data-i18n="nav.home">TRANG CHỦ</a></li>
+                <li><a href="../user/my-bookings.html" data-i18n="dashboard.myBookings">ĐẶT PHÒNG CỦA TÔI</a></li>
                 <li><a href="rooms.html" class="active" data-i18n="nav.rooms">PHÒNG NGHỈ</a></li>
                 <li><a href="contact.html" data-i18n="nav.contact">LIÊN HỆ</a></li>
-                <li><a href="wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
+                <li><a href="../user/wallet.html" data-i18n="dashboard.wallet">VÍ</a></li>
             </ul>
             <div class="nav-right">
                 <div class="language-switcher">
@@ -50,13 +50,13 @@
                 <div>
                     <div class="room-gallery" id="roomGallery">
                         <div class="room-gallery-main">
-                            <img id="roomMainImage" src="images/room-connecting.jpg" alt="Room Image">
+                            <img id="roomMainImage" src="../images/room-connecting.jpg" alt="Room Image">
                         </div>
                         <div class="room-gallery-thumb">
-                            <img id="roomThumb1" src="images/room-triple.jpg" alt="Room Image">
+                            <img id="roomThumb1" src="../images/room-triple.jpg" alt="Room Image">
                         </div>
                         <div class="room-gallery-thumb">
-                            <img id="roomThumb2" src="images/room-senior.jpg" alt="Room Image">
+                            <img id="roomThumb2" src="../images/room-senior.jpg" alt="Room Image">
                         </div>
                         <div class="room-gallery-more">
                             + <span id="roomMorePhotos">2</span> <span data-i18n="roomDetail.morePhotos">ảnh khác</span>
@@ -170,9 +170,9 @@
         </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/language.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/language.js"></script>
     <script>
         let currentRoomId = null;
         let currentRoom = null;
@@ -347,7 +347,7 @@
                 }
 
                 if (!AuthManager.isLoggedIn()) {
-                    window.location.href = 'login.html';
+                    window.location.href = '../auth/login.html';
                     return;
                 }
                 openBookingModal();
@@ -385,7 +385,7 @@
             e.preventDefault();
 
             if (!AuthManager.isLoggedIn()) {
-                window.location.href = 'login.html';
+                window.location.href = '../auth/login.html';
                 return;
             }
 
@@ -448,7 +448,7 @@
             try {
                 localStorage.setItem('pendingBookingDraft', JSON.stringify(bookingDraft));
                 closeBookingModal();
-                window.location.href = 'payment.html?mode=draft';
+                window.location.href = '../user/payment.html?mode=draft';
             } catch (error) {
                 console.error('Error preparing booking draft:', error);
                 const errorMsg = LanguageManager.getTranslation('roomDetail.bookingError') || 'Có lỗi xảy ra khi chuẩn bị đặt phòng: ';
