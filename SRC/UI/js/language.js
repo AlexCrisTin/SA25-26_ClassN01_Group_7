@@ -352,6 +352,9 @@ const LanguageManager = {
                 manageUsers: 'Quản Lý Người Dùng',
                 manageServices: 'Quản Lý Dịch Vụ',
                 reports: 'Báo Cáo & Thống Kê',
+                noAccess: 'Bạn không có quyền truy cập trang này',
+                loadError: 'Lỗi khi tải danh sách: ',
+                dataLoadError: 'Lỗi khi tải dữ liệu',
                 rooms: {
                     addRoom: '+ Thêm Phòng Mới',
                     searchPlaceholder: 'Tìm kiếm phòng...',
@@ -390,7 +393,8 @@ const LanguageManager = {
                         status: 'Trạng Thái',
                         capacity: 'Sức Chứa',
                         actions: 'Thao Tác'
-                    }
+                    },
+                    empty: 'Chưa có phòng nào'
                 },
                 staff: {
                     addStaff: '+ Thêm Nhân Viên',
@@ -414,7 +418,8 @@ const LanguageManager = {
                         department: 'Phòng Ban',
                         status: 'Trạng Thái',
                         actions: 'Thao Tác'
-                    }
+                    },
+                    empty: 'Chưa có nhân viên nào'
                 },
                 users: {
                     searchPlaceholder: 'Tìm theo tên, email, username, role',
@@ -425,10 +430,17 @@ const LanguageManager = {
                         phone: 'SĐT',
                         role: 'Vai Trò',
                         actions: 'Thao Tác'
-                    }
+                    },
+                    empty: 'Không có người dùng nào'
+                },
+                bookings: {
+                    empty: 'Chưa có đặt phòng nào'
                 },
                 services: {
                     addService: '+ Thêm Dịch Vụ',
+                    empty: 'Chưa có dịch vụ nào',
+                    available: 'Có Sẵn',
+                    unavailable: 'Không Có Sẵn',
                     status: {
                         available: 'Có Sẵn',
                         unavailable: 'Không Có Sẵn'
@@ -953,6 +965,9 @@ const LanguageManager = {
                 manageUsers: 'Manage Users',
                 manageServices: 'Manage Services',
                 reports: 'Reports & Statistics',
+                noAccess: 'You do not have access to this page',
+                loadError: 'Error loading list: ',
+                dataLoadError: 'Error loading data',
                 rooms: {
                     addRoom: '+ Add New Room',
                     searchPlaceholder: 'Search rooms...',
@@ -991,7 +1006,8 @@ const LanguageManager = {
                         status: 'Status',
                         capacity: 'Capacity',
                         actions: 'Actions'
-                    }
+                    },
+                    empty: 'No rooms available'
                 },
                 staff: {
                     addStaff: '+ Add Staff',
@@ -1015,7 +1031,8 @@ const LanguageManager = {
                         department: 'Department',
                         status: 'Status',
                         actions: 'Actions'
-                    }
+                    },
+                    empty: 'No staff available'
                 },
                 users: {
                     searchPlaceholder: 'Search by name, email, username, role',
@@ -1026,10 +1043,17 @@ const LanguageManager = {
                         phone: 'Phone',
                         role: 'Role',
                         actions: 'Actions'
-                    }
+                    },
+                    empty: 'No users available'
+                },
+                bookings: {
+                    empty: 'No bookings available'
                 },
                 services: {
                     addService: '+ Add Service',
+                    empty: 'No services available',
+                    available: 'Available',
+                    unavailable: 'Unavailable',
                     status: {
                         available: 'Available',
                         unavailable: 'Unavailable'

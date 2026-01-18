@@ -20,7 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (!AuthManager.isAdmin()) {
-        showNotification('Bạn không có quyền truy cập trang này', 'error');
+        const noAccessMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.noAccess') || 'Bạn không có quyền truy cập trang này'
+            : 'Bạn không có quyền truy cập trang này';
+        showNotification(noAccessMsg, 'error');
         setTimeout(() => {
             window.location.href = AuthManager.getRedirectUrl();
         }, 2000);
@@ -63,8 +66,14 @@ async function loadRooms() {
         window.allRooms = allRooms; // Update window reference
         displayRooms(allRooms);
     } catch (error) {
-        showNotification('Lỗi khi tải danh sách phòng: ' + error.message, 'error');
-        document.getElementById('roomsTableBody').innerHTML = '<tr><td colspan="7" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+        const loadErrorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.loadError') || 'Lỗi khi tải danh sách phòng: '
+            : 'Lỗi khi tải danh sách phòng: ';
+        showNotification(loadErrorMsg + error.message, 'error');
+        const errorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.dataLoadError') || 'Lỗi khi tải dữ liệu'
+            : 'Lỗi khi tải dữ liệu';
+        document.getElementById('roomsTableBody').innerHTML = `<tr><td colspan="7" class="loading">${errorMsg}</td></tr>`;
     }
 }
 
@@ -72,7 +81,10 @@ function displayRooms(rooms) {
     const tbody = document.getElementById('roomsTableBody');
     
     if (rooms.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="loading">Chưa có phòng nào</td></tr>';
+        const emptyMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.rooms.empty') || 'Chưa có phòng nào'
+            : 'Chưa có phòng nào';
+        tbody.innerHTML = `<tr><td colspan="7" class="loading">${emptyMsg}</td></tr>`;
         return;
     }
 
@@ -259,7 +271,10 @@ async function loadBookings() {
         showNotification('Lỗi khi tải danh sách đặt phòng: ' + error.message, 'error');
         const tbody = document.getElementById('bookingsTableBody');
         if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="8" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+            const errorMsg = typeof LanguageManager !== 'undefined'
+                ? LanguageManager.getTranslation('admin.dataLoadError') || 'Lỗi khi tải dữ liệu'
+                : 'Lỗi khi tải dữ liệu';
+            tbody.innerHTML = `<tr><td colspan="8" class="loading">${errorMsg}</td></tr>`;
         }
     }
 }
@@ -273,7 +288,10 @@ function displayBookings(bookings) {
     }
     
     if (bookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="loading">Chưa có đặt phòng nào</td></tr>';
+        const emptyMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.bookings.empty') || 'Chưa có đặt phòng nào'
+            : 'Chưa có đặt phòng nào';
+        tbody.innerHTML = `<tr><td colspan="8" class="loading">${emptyMsg}</td></tr>`;
         return;
     }
 
@@ -356,8 +374,14 @@ async function loadStaff() {
         allStaff = await StaffAPI.getAllStaff();
         filterStaff();
     } catch (error) {
-        showNotification('Lỗi khi tải danh sách nhân viên: ' + error.message, 'error');
-        document.getElementById('staffTableBody').innerHTML = '<tr><td colspan="8" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+        const loadErrorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.loadError') || 'Lỗi khi tải danh sách nhân viên: '
+            : 'Lỗi khi tải danh sách nhân viên: ';
+        showNotification(loadErrorMsg + error.message, 'error');
+        const errorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.dataLoadError') || 'Lỗi khi tải dữ liệu'
+            : 'Lỗi khi tải dữ liệu';
+        document.getElementById('staffTableBody').innerHTML = `<tr><td colspan="8" class="loading">${errorMsg}</td></tr>`;
     }
 }
 
@@ -400,7 +424,10 @@ function displayStaff(staff) {
     const tbody = document.getElementById('staffTableBody');
     
     if (staff.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="loading">Chưa có nhân viên nào</td></tr>';
+        const emptyMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.staff.empty') || 'Chưa có nhân viên nào'
+            : 'Chưa có nhân viên nào';
+        tbody.innerHTML = `<tr><td colspan="8" class="loading">${emptyMsg}</td></tr>`;
         return;
     }
 
@@ -485,8 +512,14 @@ async function loadServices() {
         window.allServices = allServices; // Update window reference
         displayServices(allServices);
     } catch (error) {
-        showNotification('Lỗi khi tải danh sách dịch vụ: ' + error.message, 'error');
-        document.getElementById('servicesTableBody').innerHTML = '<tr><td colspan="6" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+        const loadErrorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.loadError') || 'Lỗi khi tải danh sách dịch vụ: '
+            : 'Lỗi khi tải danh sách dịch vụ: ';
+        showNotification(loadErrorMsg + error.message, 'error');
+        const errorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.dataLoadError') || 'Lỗi khi tải dữ liệu'
+            : 'Lỗi khi tải dữ liệu';
+        document.getElementById('servicesTableBody').innerHTML = `<tr><td colspan="6" class="loading">${errorMsg}</td></tr>`;
     }
 }
 
@@ -494,7 +527,10 @@ function displayServices(services) {
     const tbody = document.getElementById('servicesTableBody');
     
     if (services.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="loading">Chưa có dịch vụ nào</td></tr>';
+        const emptyMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.services.empty') || 'Chưa có dịch vụ nào'
+            : 'Chưa có dịch vụ nào';
+        tbody.innerHTML = `<tr><td colspan="6" class="loading">${emptyMsg}</td></tr>`;
         return;
     }
 
@@ -530,7 +566,13 @@ async function viewService(serviceId) {
         document.getElementById('view_service_description').textContent = service.description || 'N/A';
         document.getElementById('view_service_price').textContent = service.price ? service.price.toLocaleString('vi-VN') + ' VNĐ' : 'N/A';
         document.getElementById('view_service_category').textContent = service.category || 'N/A';
-        document.getElementById('view_service_status').textContent = service.is_available !== false ? 'Có Sẵn' : 'Không Có Sẵn';
+        const availableText = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.services.available') || 'Có Sẵn'
+            : 'Có Sẵn';
+        const unavailableText = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.services.unavailable') || 'Không Có Sẵn'
+            : 'Không Có Sẵn';
+        document.getElementById('view_service_status').textContent = service.is_available !== false ? availableText : unavailableText;
         document.getElementById('viewServiceModal').style.display = 'block';
     } catch (error) {
         showNotification('Lỗi khi tải thông tin dịch vụ: ' + error.message, 'error');
@@ -928,14 +970,20 @@ async function loadUsers() {
         displayUsers(sortedUsers);
     } catch (error) {
         showNotification('Lỗi khi tải danh sách người dùng: ' + error.message, 'error');
-        document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="7" class="error">Lỗi khi tải dữ liệu</td></tr>';
+        const errorMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.dataLoadError') || 'Lỗi khi tải dữ liệu'
+            : 'Lỗi khi tải dữ liệu';
+        document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="7" class="error">${errorMsg}</td></tr>`;
     }
 }
 
 function displayUsers(users) {
     const tbody = document.getElementById('usersTableBody');
     if (!users || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">Không có người dùng nào</td></tr>';
+        const emptyMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.users.empty') || 'Không có người dùng nào'
+            : 'Không có người dùng nào';
+        tbody.innerHTML = `<tr><td colspan="7" class="empty">${emptyMsg}</td></tr>`;
         return;
     }
 
