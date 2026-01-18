@@ -72,7 +72,23 @@ SA25-26_ClassN01_Group_7/
 │   │   ├── middleware/   # Authentication & authorization
 │   │   └── utils/        # Utility functions
 │   └── UI/               # Frontend
-│       ├── *.html        # HTML pages
+│       ├── index.html    # Landing page (root)
+│       ├── auth/         # Authentication pages
+│       │   ├── login.html
+│       │   └── register.html
+│       ├── public/       # Public pages (no login required)
+│       │   ├── rooms.html
+│       │   ├── room-detail.html
+│       │   └── contact.html
+│       ├── user/         # User features (login required)
+│       │   ├── dashboard.html
+│       │   ├── my-bookings.html
+│       │   ├── payment.html
+│       │   └── wallet.html
+│       ├── admin/        # Admin & Staff panels
+│       │   ├── admin.html
+│       │   ├── admin-messages.html
+│       │   └── receptionist.html
 │       ├── css/          # Stylesheets
 │       ├── js/           # JavaScript files
 │       ├── images/       # Images
