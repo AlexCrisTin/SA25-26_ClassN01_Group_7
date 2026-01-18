@@ -235,7 +235,41 @@ const LanguageManager = {
                 cashMethod: 'Thanh toán tiền mặt tại quầy (bỏ qua bước trừ tiền ví)',
                 coupon: 'Mã Giảm Giá (Tùy chọn)',
                 couponPlaceholder: 'Nhập mã giảm giá',
-                apply: 'Áp Dụng'
+                apply: 'Áp Dụng',
+                subtotal: 'Tổng Tiền:',
+                discount: 'Giảm Giá:',
+                finalAmount: 'Thành Tiền:',
+                confirmPayment: 'Xác Nhận Thanh Toán',
+                successTitle: 'Thanh Toán Thành Công!',
+                successDesc: 'Đặt phòng của bạn đã được xác nhận',
+                paymentId: 'Mã Thanh Toán:',
+                viewMyBookings: 'Xem Đặt Phòng Của Tôi',
+                checkIn: 'Nhận phòng',
+                checkOut: 'Trả phòng',
+                roomAndGuests: 'Phòng và Khách',
+                priceDetails: 'Chi tiết giá:',
+                serviceFee: 'Phí dịch vụ',
+                tax: 'Thuế',
+                totalVND: 'Tổng VNĐ',
+                bookingNotFound: 'Không tìm thấy thông tin đặt phòng',
+                loadError: 'Lỗi khi tải thông tin đặt phòng: ',
+                draftNotFound: 'Không tìm thấy dữ liệu đặt phòng tạm.',
+                loadDraftError: 'Lỗi khi tải thông tin đặt phòng tạm: ',
+                guest: 'Khách',
+                notCreated: '(chưa tạo)',
+                walletSuccess: 'Thanh toán bằng ví thành công!',
+                bookingWalletSuccess: 'Đặt phòng và thanh toán bằng ví thành công!',
+                cashRecorded: 'Đã ghi nhận thanh toán tiền mặt. Vui lòng thanh toán tại quầy khi nhận phòng.',
+                bookingCashSuccess: 'Đặt phòng thành công. Vui lòng thanh toán tiền mặt tại quầy khi nhận phòng.',
+                alreadyPaid: 'Đặt phòng này đã được thanh toán trước đó.',
+                paymentError: 'Lỗi khi thanh toán: ',
+                enterCoupon: 'Vui lòng nhập mã giảm giá',
+                couponSuccess: 'Áp dụng mã giảm giá thành công!',
+                invalidCoupon: 'Mã giảm giá không hợp lệ',
+                night: 'đêm',
+                nights: 'đêm',
+                room: 'phòng',
+                adults: 'người lớn'
             },
             myBookings: {
                 title: 'Đặt Phòng Của Tôi',
@@ -780,7 +814,41 @@ const LanguageManager = {
                 cashMethod: 'Pay cash at counter (skip wallet deduction step)',
                 coupon: 'Coupon Code (Optional)',
                 couponPlaceholder: 'Enter coupon code',
-                apply: 'Apply'
+                apply: 'Apply',
+                subtotal: 'Subtotal:',
+                discount: 'Discount:',
+                finalAmount: 'Final Amount:',
+                confirmPayment: 'Confirm Payment',
+                successTitle: 'Payment Successful!',
+                successDesc: 'Your booking has been confirmed',
+                paymentId: 'Payment ID:',
+                viewMyBookings: 'View My Bookings',
+                checkIn: 'Check-in',
+                checkOut: 'Check-out',
+                roomAndGuests: 'Room and Guests',
+                priceDetails: 'Price Details:',
+                serviceFee: 'Service Fee',
+                tax: 'Tax',
+                totalVND: 'Total VND',
+                bookingNotFound: 'Booking information not found',
+                loadError: 'Error loading booking information: ',
+                draftNotFound: 'Draft booking data not found.',
+                loadDraftError: 'Error loading draft booking information: ',
+                guest: 'Guest',
+                notCreated: '(not created)',
+                walletSuccess: 'Wallet payment successful!',
+                bookingWalletSuccess: 'Booking and wallet payment successful!',
+                cashRecorded: 'Cash payment recorded. Please pay at the counter when checking in.',
+                bookingCashSuccess: 'Booking successful. Please pay cash at the counter when checking in.',
+                alreadyPaid: 'This booking has already been paid.',
+                paymentError: 'Payment error: ',
+                enterCoupon: 'Please enter coupon code',
+                couponSuccess: 'Coupon applied successfully!',
+                invalidCoupon: 'Invalid coupon code',
+                night: 'night',
+                nights: 'nights',
+                room: 'room',
+                adults: 'adults'
             },
             myBookings: {
                 title: 'My Bookings',
@@ -1183,6 +1251,18 @@ const LanguageManager = {
             }));
             if (roomsData.length > 0) {
                 displayCheckedInRooms(roomsData);
+            }
+        }
+        
+        // Reload payment page if on payment.html page
+        if (document.getElementById('paymentFormContainer')) {
+            if (window.currentBooking && typeof updateBookingSummaryCard === 'function') {
+                updateBookingSummaryCard(window.currentBooking);
+            } else if (window.bookingDraft && typeof updateBookingSummaryCard === 'function') {
+                updateBookingSummaryCard(window.bookingDraft);
+            }
+            if (typeof loadWalletBalance === 'function') {
+                loadWalletBalance();
             }
         }
         
