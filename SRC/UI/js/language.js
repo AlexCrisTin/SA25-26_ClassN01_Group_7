@@ -319,7 +319,29 @@ const LanguageManager = {
                 phone: 'Điện Thoại',
                 email: 'Email',
                 hours: 'Giờ Làm Việc',
-                hoursDesc: '24/7 - Luôn sẵn sàng phục vụ'
+                hoursDesc: '24/7 - Luôn sẵn sàng phục vụ',
+                adminName: 'Admin Demacia Hotel',
+                customerSupport: 'Hỗ trợ khách hàng',
+                active: 'Đang hoạt động',
+                welcomeMessage: 'Chào mừng bạn đến với dịch vụ hỗ trợ của Demacia Hotel!',
+                startConversation: 'Hãy gửi tin nhắn để bắt đầu cuộc trò chuyện.',
+                messagePlaceholder: 'Nhập tin nhắn của bạn...'
+            },
+            chat: {
+                justNow: 'Vừa xong',
+                minutesAgo: 'phút trước',
+                hoursAgo: 'giờ trước',
+                confirmClear: 'Bạn có chắc chắn muốn xóa lịch sử chat?',
+                adminResponse1: 'Xin chào! Tôi có thể giúp gì cho bạn?',
+                adminResponse2: 'Cảm ơn bạn đã liên hệ với Demacia Hotel. Chúng tôi sẽ hỗ trợ bạn ngay.',
+                adminResponse3: 'Tôi hiểu vấn đề của bạn. Để tôi kiểm tra thông tin và phản hồi lại sau.',
+                adminResponse4: 'Chúng tôi rất vui được phục vụ bạn. Bạn có cần hỗ trợ thêm gì không?',
+                adminResponse5: 'Thông tin của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ lại với bạn sớm nhất có thể.',
+                adminResponse6: 'Cảm ơn bạn đã tin tưởng Demacia Hotel. Chúng tôi luôn sẵn sàng hỗ trợ bạn.',
+                adminResponse7: 'Để được hỗ trợ tốt hơn, bạn có thể cung cấp thêm thông tin chi tiết không?',
+                adminResponse8: 'Chúng tôi đã nhận được yêu cầu của bạn và đang xử lý. Vui lòng chờ trong giây lát.',
+                adminResponse9: 'Nếu bạn có bất kỳ câu hỏi nào khác, đừng ngần ngại hỏi chúng tôi nhé!',
+                adminResponse10: 'Chúng tôi rất trân trọng phản hồi của bạn. Cảm ơn bạn đã dành thời gian.'
             },
             admin: {
                 title: 'Admin Panel',
@@ -898,7 +920,29 @@ const LanguageManager = {
                 phone: 'Phone',
                 email: 'Email',
                 hours: 'Working Hours',
-                hoursDesc: '24/7 - Always ready to serve'
+                hoursDesc: '24/7 - Always ready to serve',
+                adminName: 'Admin Demacia Hotel',
+                customerSupport: 'Customer Support',
+                active: 'Active',
+                welcomeMessage: 'Welcome to Demacia Hotel support service!',
+                startConversation: 'Send a message to start the conversation.',
+                messagePlaceholder: 'Type your message...'
+            },
+            chat: {
+                justNow: 'Just now',
+                minutesAgo: 'minutes ago',
+                hoursAgo: 'hours ago',
+                confirmClear: 'Are you sure you want to clear chat history?',
+                adminResponse1: 'Hello! How can I help you?',
+                adminResponse2: 'Thank you for contacting Demacia Hotel. We will assist you right away.',
+                adminResponse3: 'I understand your issue. Let me check the information and get back to you.',
+                adminResponse4: 'We are happy to serve you. Do you need any additional support?',
+                adminResponse5: 'Your information has been recorded. We will contact you as soon as possible.',
+                adminResponse6: 'Thank you for trusting Demacia Hotel. We are always ready to support you.',
+                adminResponse7: 'To better assist you, could you provide more detailed information?',
+                adminResponse8: 'We have received your request and are processing it. Please wait a moment.',
+                adminResponse9: 'If you have any other questions, please don\'t hesitate to ask us!',
+                adminResponse10: 'We greatly appreciate your feedback. Thank you for your time.'
             },
             admin: {
                 title: 'Admin Panel',

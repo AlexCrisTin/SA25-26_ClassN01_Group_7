@@ -2,18 +2,37 @@
 const ChatManager = {
     currentUser: null,
     messages: [],
-    adminResponses: [
+    
+    // Fallback admin responses (Vietnamese)
+    fallbackAdminResponses: [
         "Xin chào! Tôi có thể giúp gì cho bạn?",
-        "Cảm ơn bạn đã liên hệ với Luxe Hotel. Chúng tôi sẽ hỗ trợ bạn ngay.",
+        "Cảm ơn bạn đã liên hệ với Demacia Hotel. Chúng tôi sẽ hỗ trợ bạn ngay.",
         "Tôi hiểu vấn đề của bạn. Để tôi kiểm tra thông tin và phản hồi lại sau.",
         "Chúng tôi rất vui được phục vụ bạn. Bạn có cần hỗ trợ thêm gì không?",
         "Thông tin của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ lại với bạn sớm nhất có thể.",
-        "Cảm ơn bạn đã tin tưởng Luxe Hotel. Chúng tôi luôn sẵn sàng hỗ trợ bạn.",
+        "Cảm ơn bạn đã tin tưởng Demacia Hotel. Chúng tôi luôn sẵn sàng hỗ trợ bạn.",
         "Để được hỗ trợ tốt hơn, bạn có thể cung cấp thêm thông tin chi tiết không?",
         "Chúng tôi đã nhận được yêu cầu của bạn và đang xử lý. Vui lòng chờ trong giây lát.",
         "Nếu bạn có bất kỳ câu hỏi nào khác, đừng ngần ngại hỏi chúng tôi nhé!",
         "Chúng tôi rất trân trọng phản hồi của bạn. Cảm ơn bạn đã dành thời gian."
     ],
+    
+    // Get admin responses based on current language
+    getAdminResponses: function() {
+        if (typeof LanguageManager === 'undefined') {
+            return this.fallbackAdminResponses;
+        }
+        
+        const responses = [];
+        for (let i = 1; i <= 10; i++) {
+            const key = `chat.adminResponse${i}`;
+            const response = LanguageManager.getTranslation(key);
+            if (response) {
+                responses.push(response);
+            }
+        }
+        return responses.length > 0 ? responses : this.fallbackAdminResponses;
+    },
 
     // Initialize chat
     init: function(user) {
@@ -138,8 +157,9 @@ const ChatManager = {
     getAdminResponse: function() {
         // Simple random response for now
         // In production, this would call a backend API
-        const randomIndex = Math.floor(Math.random() * this.adminResponses.length);
-        return this.adminResponses[randomIndex];
+        const responses = this.getAdminResponses();
+        const randomIndex = Math.floor(Math.random() * responses.length);
+        return responses[randomIndex];
     },
 
     // Render all messages
@@ -148,11 +168,18 @@ const ChatManager = {
         if (!chatMessages) return;
 
         if (this.messages.length === 0) {
+            const welcomeMsg = typeof LanguageManager !== 'undefined' 
+                ? LanguageManager.getTranslation('contact.welcomeMessage') || 'Chào mừng bạn đến với dịch vụ hỗ trợ của Demacia Hotel!'
+                : 'Chào mừng bạn đến với dịch vụ hỗ trợ của Demacia Hotel!';
+            const startMsg = typeof LanguageManager !== 'undefined'
+                ? LanguageManager.getTranslation('contact.startConversation') || 'Hãy gửi tin nhắn để bắt đầu cuộc trò chuyện.'
+                : 'Hãy gửi tin nhắn để bắt đầu cuộc trò chuyện.';
+            
             chatMessages.innerHTML = `
                 <div class="empty-chat">
                     <div class="empty-chat-icon">💬</div>
-                    <p>Chào mừng bạn đến với dịch vụ hỗ trợ của Luxe Hotel!</p>
-                    <p style="font-size: 14px; margin-top: 10px;">Hãy gửi tin nhắn để bắt đầu cuộc trò chuyện.</p>
+                    <p>${welcomeMsg}</p>
+                    <p style="font-size: 14px; margin-top: 10px;">${startMsg}</p>
                 </div>
             `;
             return;
@@ -185,16 +212,30 @@ const ChatManager = {
         const now = new Date();
         const diff = now - date;
         const minutes = Math.floor(diff / 60000);
+        
+        const locale = (typeof LanguageManager !== 'undefined' && LanguageManager.currentLanguage === 'en') 
+            ? 'en-US' 
+            : 'vi-VN';
+        
+        const justNow = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('chat.justNow') || 'Vừa xong'
+            : 'Vừa xong';
+        const minutesAgo = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('chat.minutesAgo') || 'phút trước'
+            : 'phút trước';
+        const hoursAgo = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('chat.hoursAgo') || 'giờ trước'
+            : 'giờ trước';
 
         if (minutes < 1) {
-            return 'Vừa xong';
+            return justNow;
         } else if (minutes < 60) {
-            return `${minutes} phút trước`;
+            return `${minutes} ${minutesAgo}`;
         } else if (minutes < 1440) {
             const hours = Math.floor(minutes / 60);
-            return `${hours} giờ trước`;
+            return `${hours} ${hoursAgo}`;
         } else {
-            return date.toLocaleDateString('vi-VN', { 
+            return date.toLocaleDateString(locale, { 
                 day: '2-digit', 
                 month: '2-digit', 
                 year: 'numeric',
@@ -223,7 +264,11 @@ const ChatManager = {
 
     // Clear chat history
     clearChat: function() {
-        if (confirm('Bạn có chắc chắn muốn xóa lịch sử chat?')) {
+        const confirmMsg = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('chat.confirmClear') || 'Bạn có chắc chắn muốn xóa lịch sử chat?'
+            : 'Bạn có chắc chắn muốn xóa lịch sử chat?';
+        
+        if (confirm(confirmMsg)) {
             this.messages = [];
             localStorage.removeItem(`chat_messages_${this.currentUser.id}`);
             this.renderMessages();
