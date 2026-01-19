@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-01-18
+
+### Changed
+- **UI Structure Reorganization**: Reorganized frontend files into role-based folders for better maintainability
+  - Created `auth/` folder for authentication pages (login.html, register.html)
+  - Created `public/` folder for public pages (rooms.html, room-detail.html, contact.html)
+  - Created `user/` folder for user features (dashboard.html, my-bookings.html, payment.html, wallet.html)
+  - Created `admin/` folder for admin & staff panels (admin.html, admin-messages.html, receptionist.html)
+  - Kept `index.html` at root level as landing page
+- **Path Management**: Updated all HTML files with correct relative paths
+  - CSS/JS paths updated: `css/` → `../css/` for subfolders
+  - Navigation links updated to reflect new folder structure
+  - Image paths updated: `images/` → `../images/` for subfolders
+- **Authentication Redirects**: Enhanced `AuthManager` with automatic path calculation
+  - Added `_getPathToRoot()` helper function to detect current location
+  - `getRedirectUrl()` now automatically calculates correct paths based on current folder
+  - `logout()`, `requireAuth()`, and `blockAdminAccess()` updated to use dynamic paths
+  - Prevents path errors when navigating between different folder levels
+
+### Fixed
+- Fixed incorrect redirect paths in `payment.html` and `my-bookings.html`
+  - Updated `rooms.html` redirects to `../public/rooms.html`
+- Fixed navigation links in `contact.html` pointing to wrong folders
+  - Updated dashboard, my-bookings, wallet links to correct `../user/` paths
+- Fixed `getRedirectUrl()` returning incorrect paths when called from subfolders
+  - Now correctly handles paths from `auth/`, `user/`, `admin/`, and `public/` folders
+- Fixed logout redirect causing "Cannot GET /SRC/index.html" error
+  - Logout now correctly redirects to `index.html` regardless of current folder
+
+### Documentation
+- Updated README.md Project Structure section to reflect new UI organization
+  - Added detailed folder structure showing role-based organization
+  - Documented purpose of each folder (auth, public, user, admin)
+
 ## [0.5.0] - 2026-01-11
 
 ### Added
