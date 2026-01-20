@@ -94,9 +94,16 @@ function displayBookings(bookings) {
     if (!tbody) return;
 
     if (!bookings || bookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="loading">Chưa có đặt phòng nào</td></tr>';
+        const emptyText = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.bookings.empty') || 'Chưa có đặt phòng nào'
+            : 'Chưa có đặt phòng nào';
+        tbody.innerHTML = `<tr><td colspan="8" class="loading">${emptyText}</td></tr>`;
         return;
     }
+
+    const confirmText = typeof LanguageManager !== 'undefined'
+        ? LanguageManager.getTranslation('booking.confirm') || 'Xác Nhận'
+        : 'Xác Nhận';
 
     tbody.innerHTML = bookings.map(booking => `
         <tr>
@@ -109,7 +116,7 @@ function displayBookings(bookings) {
             <td><span class="status-badge status-${booking.status}">${getBookingStatusText(booking.status)}</span></td>
             <td>
                 <div class="action-buttons">
-                    ${booking.status === 'pending' ? `<button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">Xác Nhận</button>` : ''}
+                    ${booking.status === 'pending' ? `<button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">${confirmText}</button>` : ''}
                 </div>
             </td>
         </tr>
@@ -688,7 +695,11 @@ function displayServiceRequests(requests) {
                 <td><span class="badge ${statusClass}">${getStatusLabel(statusLabel)}</span></td>
                 <td>${requestedAt}</td>
                 <td>
-                    <button class="btn-edit" onclick="updateServiceRequestStatus(${req.id})">Cập Nhật</button>
+                    <button class="btn-edit" onclick="updateServiceRequestStatus(${req.id})">
+                        ${typeof LanguageManager !== 'undefined'
+                            ? (LanguageManager.getTranslation('receptionist.update') || 'Cập Nhật')
+                            : 'Cập Nhật'}
+                    </button>
                 </td>
             </tr>
         `;
@@ -696,13 +707,28 @@ function displayServiceRequests(requests) {
 }
 
 function getStatusLabel(status) {
-    const labels = {
+    const keyMap = {
+        'pending': 'pending',
+        'in_progress': 'inProgress',
+        'completed': 'completed',
+        'cancelled': 'cancelled'
+    };
+
+    if (typeof LanguageManager !== 'undefined') {
+        const key = keyMap[status] || status;
+        const translated = LanguageManager.getTranslation(`serviceRequest.status.${key}`);
+        if (translated) {
+            return translated;
+        }
+    }
+
+    const fallbackLabels = {
         'pending': 'Chờ Xử Lý',
         'in_progress': 'Đang Xử Lý',
         'completed': 'Đã Hoàn Thành',
         'cancelled': 'Đã Hủy'
     };
-    return labels[status] || status;
+    return fallbackLabels[status] || status;
 }
 
 async function updateServiceRequestStatus(requestId) {
