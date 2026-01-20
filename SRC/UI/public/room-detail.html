@@ -139,6 +139,14 @@
         </div>
     </div>
 
+    <!-- Image lightbox -->
+    <div id="imageLightbox" class="image-lightbox">
+        <div class="image-lightbox-content">
+            <button class="image-lightbox-close" onclick="closeImageLightbox()">×</button>
+            <img id="lightboxImage" src="" alt="Room image">
+        </div>
+    </div>
+
     <div id="bookingModal" class="booking-modal">
         <div class="booking-modal-content">
             <div class="booking-modal-header">
@@ -193,6 +201,17 @@
                 document.getElementById('roomNotFound').style.display = 'block';
                 return;
             }
+
+            // Enable click-to-zoom for gallery images
+            const mainImg = document.getElementById('roomMainImage');
+            const thumb1 = document.getElementById('roomThumb1');
+            const thumb2 = document.getElementById('roomThumb2');
+            [mainImg, thumb1, thumb2].forEach(img => {
+                if (img) {
+                    img.style.cursor = 'zoom-in';
+                    img.addEventListener('click', () => openImageLightbox(img.src));
+                }
+            });
 
             try {
                 const room = await RoomAPI.getRoom(currentRoomId);
@@ -352,6 +371,20 @@
                 }
                 openBookingModal();
             });
+        }
+
+        function openImageLightbox(src) {
+            const lightbox = document.getElementById('imageLightbox');
+            const img = document.getElementById('lightboxImage');
+            if (!lightbox || !img) return;
+            img.src = src;
+            lightbox.classList.add('open');
+        }
+
+        function closeImageLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            if (!lightbox) return;
+            lightbox.classList.remove('open');
         }
 
         function openBookingModal() {
