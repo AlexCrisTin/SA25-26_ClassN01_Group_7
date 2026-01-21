@@ -79,3 +79,15 @@ class CheckInController:
         except ValueError as e:
             return self.view.error_response(str(e), 400)
 
+    def cancel_checkin(self):
+        #Xử lý POST /api/checkins/cancel
+        data = request.json
+        try:
+            result = self.service.cancel_checkin(
+                data.get('booking_id'),
+                data.get('receptionist_id')
+            )
+            return self.view.success_response(result, 200)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+

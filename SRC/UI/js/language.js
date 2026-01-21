@@ -540,7 +540,12 @@ const LanguageManager = {
                     onlyConfirmed: 'Chỉ những đặt phòng <strong>Đã Xác Nhận</strong> mới có thể check-in.',
                     foundCanCheckin: 'Tìm thấy {count} đặt phòng có thể check-in:',
                     selectBooking: 'Vui lòng chọn đặt phòng muốn check-in:',
-                    selectToCheckin: 'Chọn để Check-in'
+                    selectToCheckin: 'Chọn để Check-in',
+                    cancel: 'Bỏ Check-in',
+                    cancelConfirm: 'Bạn có chắc muốn bỏ check-in cho đặt phòng này?',
+                    cancelProcessing: 'Đang bỏ check-in...',
+                    cancelSuccess: 'Bỏ check-in thành công!',
+                    cancelError: 'Đã xảy ra lỗi khi bỏ check-in.'
                 },
                 checkout: {
                     title: 'Check-out cho đặt phòng',
@@ -1153,7 +1158,12 @@ const LanguageManager = {
                     onlyConfirmed: 'Only <strong>Confirmed</strong> bookings can be checked in.',
                     foundCanCheckin: 'Found {count} booking(s) that can be checked in:',
                     selectBooking: 'Please select the booking you want to check in:',
-                    selectToCheckin: 'Select to Check-in'
+                    selectToCheckin: 'Select to Check-in',
+                    cancel: 'Cancel Check-in',
+                    cancelConfirm: 'Are you sure you want to cancel check-in for this booking?',
+                    cancelProcessing: 'Cancelling check-in...',
+                    cancelSuccess: 'Check-in cancelled successfully!',
+                    cancelError: 'An error occurred while cancelling check-in.'
                 },
                 checkout: {
                     title: 'Check-out for booking',

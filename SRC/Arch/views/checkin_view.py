@@ -29,6 +29,11 @@ class CheckInView:
         }), 200
     
     @staticmethod
+    def success_response(data, status_code=200):
+        #Format response thành công
+        return jsonify(data), status_code
+
+    @staticmethod
     def error_response(message, status_code=400):
         #Format response lỗi
         return jsonify({"error": message}), status_code

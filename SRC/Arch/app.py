@@ -258,9 +258,14 @@ def get_checkin(checkin_id):
     return checkin_controller.get_checkin(checkin_id)
 
 @app.route('/api/checkouts/summary/<booking_id>', methods=['GET'])
-@require_auth 
+@require_auth
 def get_checkout_summary(booking_id):
     return checkin_controller.get_checkout_summary(booking_id)
+
+@app.route('/api/checkins/cancel', methods=['POST'])
+@require_receptionist_or_admin
+def cancel_checkin():
+    return checkin_controller.cancel_checkin()
 
 # ========== STAFF ROUTES ==========
 @app.route('/api/staff', methods=['GET'])

@@ -353,6 +353,11 @@ const CheckInAPI = {
     // Get checkout summary (service requests and total)
     getCheckoutSummary: async (bookingId) => {
         return await apiCall(`/checkouts/summary/${bookingId}`, 'GET');
+    },
+
+    // Cancel check-in
+    cancelCheckIn: async (cancelData) => {
+        return await apiCall('/checkins/cancel', 'POST', cancelData);
     }
 };
 
