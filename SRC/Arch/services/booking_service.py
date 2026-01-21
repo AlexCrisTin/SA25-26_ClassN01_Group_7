@@ -46,8 +46,13 @@ class BookingService:
                 raise
             raise ValueError("Invalid Data: Date format must be YYYY-MM-DD.")
         
-        # Business Logic: Check room availability via RoomService
-        available_rooms = self.room_service.search_rooms(room_type=room_type, status='available')
+        # Business Logic: Check room availability via RoomService with date range
+        available_rooms = self.room_service.search_rooms(
+            room_type=room_type,
+            status='available',
+            check_in_date=check_in_date,
+            check_out_date=check_out_date
+        )
         if not available_rooms:
             raise ValueError(f"Invalid Data: No available rooms of type '{room_type}' for the requested dates.")
         
@@ -207,10 +212,19 @@ class BookingService:
         if total_price is not None and total_price <= 0:
             raise ValueError("Invalid Data: Total price must be positive.")
         
-        # If room_type is being changed, check availability
+        # If room_type is being changed, check availability with date range
         if room_type is not None and room_type != booking.room_type:
-            available_rooms = self.room_service.search_rooms(room_type=room_type, status='available')
+            # Use the current booking dates for availability check
+            current_check_in = check_in_date if check_in_date else booking.check_in_date
+            current_check_out = check_out_date if check_out_date else booking.check_out_date
+
+            available_rooms = self.room_service.search_rooms(
+                room_type=room_type,
+                status='available',
+                check_in_date=current_check_in,
+                check_out_date=current_check_out
+            )
             if not available_rooms:
-                raise ValueError(f"Invalid Data: No available rooms of type '{room_type}'.")
+                raise ValueError(f"Invalid Data: No available rooms of type '{room_type}' for the requested dates.")
         
         return self.repo.update(booking_id, guest_name, room_type, check_in_date, check_out_date, total_price, status)

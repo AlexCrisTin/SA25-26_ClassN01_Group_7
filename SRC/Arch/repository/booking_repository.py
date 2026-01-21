@@ -96,14 +96,54 @@ class BookingRepository:
         try:
             connection = db_config.get_connection()
             cursor = connection.cursor(dictionary=True)
-            
+
             query = "SELECT * FROM bookings WHERE room_id = %s ORDER BY created_at DESC"
             cursor.execute(query, (room_id,))
             rows = cursor.fetchall()
-            
+
             return [self._row_to_booking(row) for row in rows]
         except Error as e:
             raise ValueError(f"Error finding bookings: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+
+    def find_available_rooms_by_date_range(self, room_type, check_in_date, check_out_date):
+        """Tìm phòng trống theo loại phòng và khoảng thời gian (kiểm tra overlap)"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            # Query để tìm phòng trống theo loại và khoảng thời gian
+            # Logic overlap: loại trừ phòng đã có booking overlap
+            query = """
+                SELECT r.*
+                FROM rooms r
+                WHERE r.room_type = %s
+                  AND r.status IN ('available', 'reserved')
+                  AND r.id NOT IN (
+                      SELECT DISTINCT b.room_id
+                      FROM bookings b
+                      WHERE b.room_id IS NOT NULL
+                        AND b.status NOT IN ('cancelled', 'checked_out')
+                        AND (
+                            (b.check_in_date <= %s AND b.check_out_date > %s)
+                            OR (b.check_in_date < %s AND b.check_out_date >= %s)
+                            OR (b.check_in_date >= %s AND b.check_out_date <= %s)
+                        )
+                  )
+                ORDER BY r.room_number
+            """
+            cursor.execute(query, (room_type, check_in_date, check_in_date, check_out_date, check_out_date, check_in_date, check_out_date))
+            rows = cursor.fetchall()
+
+            # Import Room model để convert
+            from models.room import Room
+            return [Room(str(row['id']), row['room_number'], row['room_type'], float(row['price']), row['status'], row['capacity'], row.get('image_url')) for row in rows]
+        except Error as e:
+            raise ValueError(f"Error finding available rooms by date range: {e}")
         finally:
             if connection and connection.is_connected():
                 cursor.close()

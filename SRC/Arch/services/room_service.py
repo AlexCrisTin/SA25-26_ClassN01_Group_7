@@ -1,4 +1,5 @@
 from repository.room_repository import RoomRepository
+from repository.booking_repository import BookingRepository
 from utils.image_handler import save_image_from_base64, delete_image
 
 class RoomService:
@@ -6,6 +7,7 @@ class RoomService:
 
     def __init__(self):
         self.repo = RoomRepository()
+        self.booking_repo = BookingRepository()
 
     def create_room(self, room_number, room_type, price, status, capacity=None, image_base64=None, image_filename=None):
         #Tạo phòng mới với validation
@@ -50,17 +52,23 @@ class RoomService:
         #Lấy tất cả phòng
         return self.repo.find_all()
     
-    def search_rooms(self, room_type=None, status='available'):
+    def search_rooms(self, room_type=None, status='available', check_in_date=None, check_out_date=None):
         #Tìm kiếm phòng theo type và status
-        if room_type:
-            rooms = self.repo.find_by_type(room_type)
+        #Nếu có check_in_date và check_out_date, kiểm tra availability theo khoảng thời gian
+        if room_type and check_in_date and check_out_date:
+            # Sử dụng logic kiểm tra overlap từ BookingRepository
+            return self.booking_repo.find_available_rooms_by_date_range(room_type, check_in_date, check_out_date)
         else:
-            rooms = self.repo.find_all()
-        
-        if status:
-            rooms = [room for room in rooms if room.status == status]
-        
-        return rooms
+            # Logic cũ: chỉ lọc theo status (không kiểm tra ngày)
+            if room_type:
+                rooms = self.repo.find_by_type(room_type)
+            else:
+                rooms = self.repo.find_all()
+
+            if status:
+                rooms = [room for room in rooms if room.status == status]
+
+            return rooms
     
     def assign_room(self, room_id, booking_id):
         #Gán phòng cho booking
