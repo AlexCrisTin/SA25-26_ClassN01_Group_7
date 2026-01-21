@@ -146,11 +146,31 @@ async function cancelBooking(bookingId) {
 
 // Payment History functions
 async function loadPaymentHistory() {
+    const currentUser = AuthManager.getCurrentUser();
+
+    if (!currentUser) {
+        showNotification('Bạn cần đăng nhập để xem lịch sử thanh toán', 'error');
+        const tbody = document.getElementById('paymentHistoryTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="8" class="loading">Vui lòng đăng nhập</td></tr>';
+        }
+        return;
+    }
+
+    if (!AuthManager.isReceptionist()) {
+        showNotification('Bạn không có quyền truy cập chức năng này', 'error');
+        const tbody = document.getElementById('paymentHistoryTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="8" class="loading">Không có quyền truy cập</td></tr>';
+        }
+        return;
+    }
+
     try {
         const payments = await PaymentAPI.getAllPayments();
         displayPaymentHistory(payments);
     } catch (error) {
-        console.error(error);
+        console.error('Error loading payment history:', error);
         showNotification('Lỗi khi tải lịch sử thanh toán: ' + error.message, 'error');
         const tbody = document.getElementById('paymentHistoryTableBody');
         if (tbody) {

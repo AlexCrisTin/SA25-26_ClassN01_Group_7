@@ -42,3 +42,11 @@ class PaymentController:
         except ValueError as e:
             return self.view.error_response(str(e), 400)
 
+    def get_all_payments(self):
+        #Xử lý GET /api/payments
+        try:
+            payments = self.service.get_all_payments()
+            return self.view.payments_found(payments)
+        except ValueError as e:
+            return self.view.error_response(str(e), 400)
+

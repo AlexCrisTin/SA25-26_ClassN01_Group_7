@@ -73,5 +73,9 @@ class PaymentService:
         return self.repo.find_by_booking_id(booking_id)
 
     def get_all_payments(self):
-        #Lấy tất cả payments
+        #Lấy tất cả payments với thông tin booking
         return self.repo.find_all()
+
+    def get_payments_by_booking(self, booking_id):
+        #Lấy tất cả payments của một booking
+        return self.repo.find_by_booking_id(booking_id)

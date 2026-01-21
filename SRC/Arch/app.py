@@ -215,8 +215,13 @@ def update_service_request_status(request_id):
 def process_payment():
     return payment_controller.process_payment()
 
+@app.route('/api/payments', methods=['GET'])
+@require_receptionist_or_admin
+def get_all_payments():
+    return payment_controller.get_all_payments()
+
 @app.route('/api/payments/<payment_id>', methods=['GET'])
-@require_auth 
+@require_auth
 def get_payment(payment_id):
     return payment_controller.get_payment(payment_id)
 
