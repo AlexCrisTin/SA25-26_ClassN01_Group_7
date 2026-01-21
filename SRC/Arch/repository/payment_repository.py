@@ -72,17 +72,32 @@ class PaymentRepository:
                 connection.close()
 
     def find_all(self):
-        """Lấy tất cả payments"""
+        """Lấy tất cả payments với thông tin booking"""
         connection = None
         try:
             connection = db_config.get_connection()
             cursor = connection.cursor(dictionary=True)
-            
-            query = "SELECT * FROM payments ORDER BY created_at DESC"
+
+            query = """
+                SELECT p.*, b.guest_name, b.room_type
+                FROM payments p
+                LEFT JOIN bookings b ON p.booking_id = b.id
+                ORDER BY p.created_at DESC
+            """
             cursor.execute(query)
             rows = cursor.fetchall()
-            
-            return [self._row_to_payment(row) for row in rows]
+
+            # Convert rows to payment objects with booking info
+            payments = []
+            for row in rows:
+                payment = self._row_to_payment(row)
+                payment.booking = {
+                    'guest_name': row.get('guest_name'),
+                    'room_type': row.get('room_type')
+                } if row.get('guest_name') else None
+                payments.append(payment)
+
+            return payments
         except Error as e:
             raise ValueError(f"Error finding payments: {e}")
         finally:

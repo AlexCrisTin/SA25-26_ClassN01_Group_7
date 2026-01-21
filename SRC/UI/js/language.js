@@ -488,6 +488,7 @@ const LanguageManager = {
                 checkin: 'Check-in',
                 checkout: 'Check-out',
                 manageServiceRequests: 'Quản Lý Yêu Cầu Dịch Vụ',
+                paymentHistory: 'Lịch Sử Thanh Toán',
                 guestName: 'Tên Khách',
                 roomType: 'Loại Phòng',
                 checkInDate: 'Ngày Nhận',
@@ -505,6 +506,23 @@ const LanguageManager = {
                 quantity: 'Số Lượng',
                 price: 'Giá',
                 requestTime: 'Thời Gian Yêu Cầu',
+                bookingId: 'ID Đặt Phòng',
+                paymentAmount: 'Số Tiền',
+                paymentMethod: 'Phương Thức',
+                paymentDate: 'Ngày Thanh Toán',
+                transactionId: 'Mã Giao Dịch',
+                searchPaymentHistory: 'Tìm theo tên khách, ID đặt phòng...',
+                paymentMethods: {
+                    cash: 'Ví Điện Tử',
+                    credit_card: 'Thẻ Tín Dụng',
+                    bank_transfer: 'Chuyển Khoản'
+                },
+                paymentStatuses: {
+                    completed: 'Hoàn Thành',
+                    pending: 'Chờ Xử Lý',
+                    failed: 'Thất Bại',
+                    refunded: 'Đã Hoàn Tiền'
+                },
                 searchServiceRequests: 'Tìm theo tên dịch vụ, tên khách, số phòng...',
                 updateServiceRequestStatus: 'Cập Nhật Trạng Thái Yêu Cầu Dịch Vụ',
                 statusRequired: 'Trạng Thái *',
@@ -1101,6 +1119,7 @@ const LanguageManager = {
                 checkin: 'Check-in',
                 checkout: 'Check-out',
                 manageServiceRequests: 'Manage Service Requests',
+                paymentHistory: 'Payment History',
                 guestName: 'Guest Name',
                 roomType: 'Room Type',
                 checkInDate: 'Check-in Date',
@@ -1118,6 +1137,23 @@ const LanguageManager = {
                 quantity: 'Quantity',
                 price: 'Price',
                 requestTime: 'Request Time',
+                bookingId: 'Booking ID',
+                paymentAmount: 'Amount',
+                paymentMethod: 'Method',
+                paymentDate: 'Payment Date',
+                transactionId: 'Transaction ID',
+                searchPaymentHistory: 'Search by guest name, booking ID...',
+                paymentMethods: {
+                    cash: 'Digital Wallet',
+                    credit_card: 'Credit Card',
+                    bank_transfer: 'Bank Transfer'
+                },
+                paymentStatuses: {
+                    completed: 'Completed',
+                    pending: 'Pending',
+                    failed: 'Failed',
+                    refunded: 'Refunded'
+                },
                 searchServiceRequests: 'Search by service name, guest name, room number...',
                 updateServiceRequestStatus: 'Update Service Request Status',
                 statusRequired: 'Status *',

@@ -228,6 +228,11 @@ const PaymentAPI = {
     // Get payments by booking ID
     getPaymentsByBooking: async (bookingId) => {
         return await apiCall(`/bookings/${bookingId}/payments`, 'GET');
+    },
+
+    // Get all payments
+    getAllPayments: async () => {
+        return await apiCall('/payments', 'GET');
     }
 };
 

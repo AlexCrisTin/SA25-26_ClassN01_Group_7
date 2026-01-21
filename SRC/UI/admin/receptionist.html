@@ -46,6 +46,7 @@
             <button class="tab-btn" onclick="switchReceptionTab('checkin')" data-i18n="receptionist.checkin">Check-in</button>
             <button class="tab-btn" onclick="switchReceptionTab('checkout')" data-i18n="receptionist.checkout">Check-out</button>
             <button class="tab-btn" onclick="switchReceptionTab('service-requests')" data-i18n="receptionist.manageServiceRequests">Quản Lý Yêu Cầu Dịch Vụ</button>
+            <button class="tab-btn" onclick="switchReceptionTab('payment-history')" data-i18n="receptionist.paymentHistory">Lịch Sử Thanh Toán</button>
         </div>
 
         <div id="reception-bookings-tab" class="tab-content active">
@@ -148,6 +149,51 @@
                     <tbody id="serviceRequestsTableBody">
                         <tr>
                             <td colspan="9" class="loading" data-i18n="common.loading">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="reception-payment-history-tab" class="tab-content">
+            <div class="section-header">
+                <h2 data-i18n="receptionist.paymentHistory">Lịch Sử Thanh Toán</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="paymentHistorySearch" data-i18n-placeholder="receptionist.searchPaymentHistory" placeholder="Tìm theo tên khách, ID đặt phòng..." onkeyup="filterPaymentHistory()">
+                <select id="paymentMethodFilter" onchange="filterPaymentHistory()">
+                    <option value="all" data-i18n="common.all">Tất cả phương thức</option>
+                    <option value="cash" data-i18n="payment.method.cash">Ví Điện Tử</option>
+                    <option value="credit_card" data-i18n="payment.method.creditCard">Thẻ Tín Dụng</option>
+                    <option value="bank_transfer" data-i18n="payment.method.bankTransfer">Chuyển Khoản</option>
+                </select>
+                <select id="paymentStatusFilter" onchange="filterPaymentHistory()">
+                    <option value="all" data-i18n="common.all">Tất cả trạng thái</option>
+                    <option value="completed" data-i18n="payment.status.completed">Hoàn Thành</option>
+                    <option value="pending" data-i18n="payment.status.pending">Chờ Xử Lý</option>
+                    <option value="failed" data-i18n="payment.status.failed">Thất Bại</option>
+                    <option value="refunded" data-i18n="payment.status.refunded">Đã Hoàn Tiền</option>
+                </select>
+            </div>
+
+            <div id="paymentHistoryTableContainer">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th data-i18n="receptionist.bookingId">ID Đặt Phòng</th>
+                            <th data-i18n="receptionist.guestName">Tên Khách</th>
+                            <th data-i18n="receptionist.paymentAmount">Số Tiền</th>
+                            <th data-i18n="receptionist.paymentMethod">Phương Thức</th>
+                            <th data-i18n="receptionist.status">Trạng Thái</th>
+                            <th data-i18n="receptionist.paymentDate">Ngày Thanh Toán</th>
+                            <th data-i18n="receptionist.transactionId">Mã Giao Dịch</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentHistoryTableBody">
+                        <tr>
+                            <td colspan="8" class="loading" data-i18n="common.loading">Đang tải dữ liệu...</td>
                         </tr>
                     </tbody>
                 </table>

@@ -68,9 +68,11 @@ function switchReceptionTab(tabName) {
     document.getElementById(tabId).classList.add('active');
     event.target.classList.add('active');
     
-    // Load service requests when switching to service-requests tab
+    // Load data when switching tabs
     if (tabName === 'service-requests') {
         loadServiceRequests();
+    } else if (tabName === 'payment-history') {
+        loadPaymentHistory();
     }
 }
 
@@ -140,6 +142,112 @@ async function cancelBooking(bookingId) {
     } catch (error) {
         showNotification('Lỗi khi hủy đặt phòng: ' + error.message, 'error');
     }
+}
+
+// Payment History functions
+async function loadPaymentHistory() {
+    try {
+        const payments = await PaymentAPI.getAllPayments();
+        displayPaymentHistory(payments);
+    } catch (error) {
+        console.error(error);
+        showNotification('Lỗi khi tải lịch sử thanh toán: ' + error.message, 'error');
+        const tbody = document.getElementById('paymentHistoryTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="8" class="loading">Lỗi khi tải dữ liệu</td></tr>';
+        }
+    }
+}
+
+function displayPaymentHistory(payments) {
+    const tbody = document.getElementById('paymentHistoryTableBody');
+    if (!tbody) return;
+
+    if (!payments || payments.length === 0) {
+        const emptyText = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('admin.bookings.empty') || 'Chưa có thanh toán nào'
+            : 'Chưa có thanh toán nào';
+        tbody.innerHTML = `<tr><td colspan="8" class="loading">${emptyText}</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = payments.map(payment => {
+        const paymentMethodText = getPaymentMethodText(payment.payment_method);
+        const paymentStatusText = getPaymentStatusText(payment.status);
+
+        return `
+            <tr>
+                <td>${payment.id}</td>
+                <td>${payment.booking_id || 'N/A'}</td>
+                <td>${payment.booking ? payment.booking.guest_name : 'N/A'}</td>
+                <td>${payment.amount ? payment.amount.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</td>
+                <td>${paymentMethodText}</td>
+                <td><span class="status-badge status-${payment.status}">${paymentStatusText}</span></td>
+                <td>${payment.payment_date ? formatDate(payment.payment_date) : 'N/A'}</td>
+                <td>${payment.transaction_id || 'N/A'}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function getPaymentMethodText(method) {
+    if (typeof LanguageManager === 'undefined') {
+        const methodMap = {
+            'cash': 'Ví Điện Tử',
+            'credit_card': 'Thẻ Tín Dụng',
+            'bank_transfer': 'Chuyển Khoản'
+        };
+        return methodMap[method] || method;
+    }
+
+    const translations = LanguageManager.getTranslation('receptionist.paymentMethods') || {};
+    return translations[method] || method;
+}
+
+function getPaymentStatusText(status) {
+    if (typeof LanguageManager === 'undefined') {
+        const statusMap = {
+            'completed': 'Hoàn Thành',
+            'pending': 'Chờ Xử Lý',
+            'failed': 'Thất Bại',
+            'refunded': 'Đã Hoàn Tiền'
+        };
+        return statusMap[status] || status;
+    }
+
+    const translations = LanguageManager.getTranslation('receptionist.paymentStatuses') || {};
+    return translations[status] || status;
+}
+
+function filterPaymentHistory() {
+    const searchTerm = document.getElementById('paymentHistorySearch').value.toLowerCase();
+    const methodFilter = document.getElementById('paymentMethodFilter').value;
+    const statusFilter = document.getElementById('paymentStatusFilter').value;
+    const tbody = document.getElementById('paymentHistoryTableBody');
+
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 8) return; // Skip header or invalid rows
+
+        const paymentId = cells[0].textContent.toLowerCase();
+        const bookingId = cells[1].textContent.toLowerCase();
+        const guestName = cells[2].textContent.toLowerCase();
+        const method = cells[4].textContent.toLowerCase();
+        const status = cells[5].textContent.toLowerCase();
+
+        const matchesSearch = paymentId.includes(searchTerm) ||
+                             bookingId.includes(searchTerm) ||
+                             guestName.includes(searchTerm);
+
+        const matchesMethod = methodFilter === 'all' || method.includes(methodFilter.toLowerCase());
+        const matchesStatus = statusFilter === 'all' || status.includes(statusFilter.toLowerCase());
+
+        row.style.display = matchesSearch && matchesMethod && matchesStatus ? '' : 'none';
+    });
 }
 
 function filterBookings() {
