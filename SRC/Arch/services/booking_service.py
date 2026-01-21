@@ -190,11 +190,12 @@ class BookingService:
                         # Refund to wallet
                         self.payment_service.wallet_service.top_up(booking.user_id, total_wallet_payment)
 
-                        # Update payment status to refunded
+                        # Update payment status to refunded (để lịch sử thanh toán hiển thị "Đã Hoàn Tiền")
                         for payment in wallet_payments:
-                            # Note: In a real system, you might want to create a refund record
-                            # For now, we'll just mark as refunded
-                            pass
+                            try:
+                                self.payment_service.repo.update_status(payment.id, 'refunded')
+                            except Exception as e:
+                                print(f"Warning: Could not update payment {payment.id} to refunded: {e}")
 
                         refund_message = f" Đã hoàn tiền {total_wallet_payment.toLocaleString('vi-VN')} VNĐ vào ví điện tử."
                     else:

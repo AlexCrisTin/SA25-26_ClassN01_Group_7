@@ -123,7 +123,9 @@ function displayBookings(bookings) {
             <td>
                 <div class="action-buttons">
                     ${booking.status === 'pending' ? `<button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">${confirmText}</button>` : ''}
-                    ${(booking.status === 'pending' || booking.status === 'confirmed') ? `<button class="btn-danger" onclick="cancelBooking(${booking.id})">${cancelText}</button>` : ''}
+                    ${(booking.status === 'pending' || booking.status === 'confirmed')
+                        ? `<button class="btn-delete" onclick="cancelBooking(${booking.id})" title="${cancelText}">${cancelText}</button>`
+                        : ''}
                 </div>
             </td>
         </tr>
@@ -245,7 +247,6 @@ function getPaymentStatusText(status) {
 
 function filterPaymentHistory() {
     const searchTerm = document.getElementById('paymentHistorySearch').value.toLowerCase();
-    const methodFilter = document.getElementById('paymentMethodFilter').value;
     const statusFilter = document.getElementById('paymentStatusFilter').value;
     const tbody = document.getElementById('paymentHistoryTableBody');
 
@@ -260,17 +261,15 @@ function filterPaymentHistory() {
         const paymentId = cells[0].textContent.toLowerCase();
         const bookingId = cells[1].textContent.toLowerCase();
         const guestName = cells[2].textContent.toLowerCase();
-        const method = cells[4].textContent.toLowerCase();
         const status = cells[5].textContent.toLowerCase();
 
         const matchesSearch = paymentId.includes(searchTerm) ||
                              bookingId.includes(searchTerm) ||
                              guestName.includes(searchTerm);
 
-        const matchesMethod = methodFilter === 'all' || method.includes(methodFilter.toLowerCase());
         const matchesStatus = statusFilter === 'all' || status.includes(statusFilter.toLowerCase());
 
-        row.style.display = matchesSearch && matchesMethod && matchesStatus ? '' : 'none';
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
     });
 }
 

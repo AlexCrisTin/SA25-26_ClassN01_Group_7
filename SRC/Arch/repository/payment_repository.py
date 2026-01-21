@@ -104,6 +104,27 @@ class PaymentRepository:
             if connection and connection.is_connected():
                 cursor.close()
                 connection.close()
+
+    def update_status(self, payment_id, status):
+        """Cập nhật status của payment (ví dụ: completed -> refunded)"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor()
+
+            query = "UPDATE payments SET status = %s, updated_at = CURRENT_TIMESTAMP WHERE id = %s"
+            cursor.execute(query, (status, payment_id))
+            connection.commit()
+
+            return cursor.rowcount > 0
+        except Error as e:
+            if connection:
+                connection.rollback()
+            raise ValueError(f"Error updating payment status: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
     
     def _row_to_payment(self, row):
         """Chuyển đổi database row thành Payment object"""

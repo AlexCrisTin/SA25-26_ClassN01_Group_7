@@ -162,12 +162,6 @@
 
             <div class="search-bar">
                 <input type="text" id="paymentHistorySearch" data-i18n-placeholder="receptionist.searchPaymentHistory" placeholder="Tìm theo tên khách, ID đặt phòng..." onkeyup="filterPaymentHistory()">
-                <select id="paymentMethodFilter" onchange="filterPaymentHistory()">
-                    <option value="all" data-i18n="common.all">Tất cả phương thức</option>
-                    <option value="cash" data-i18n="payment.method.cash">Ví Điện Tử</option>
-                    <option value="credit_card" data-i18n="payment.method.creditCard">Thẻ Tín Dụng</option>
-                    <option value="bank_transfer" data-i18n="payment.method.bankTransfer">Chuyển Khoản</option>
-                </select>
                 <select id="paymentStatusFilter" onchange="filterPaymentHistory()">
                     <option value="all" data-i18n="common.all">Tất cả trạng thái</option>
                     <option value="completed" data-i18n="payment.status.completed">Hoàn Thành</option>
