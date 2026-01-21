@@ -1,5 +1,6 @@
 from repository.room_repository import RoomRepository
 from repository.booking_repository import BookingRepository
+from repository.checkin_repository import CheckInRepository
 from utils.image_handler import save_image_from_base64, delete_image
 
 class RoomService:
@@ -8,6 +9,7 @@ class RoomService:
     def __init__(self):
         self.repo = RoomRepository()
         self.booking_repo = BookingRepository()
+        self.checkin_repo = CheckInRepository()
 
     def create_room(self, room_number, room_type, price, status, capacity=None, image_base64=None, image_filename=None):
         #Tạo phòng mới với validation
@@ -137,18 +139,31 @@ class RoomService:
         room = self.repo.find_by_id(room_id)
         if not room:
             raise ValueError(f"Room with ID {room_id} not found.")
-        
+
         # Business Rule: Cannot delete room if it's occupied or reserved
         if room.status == 'occupied':
             raise ValueError(f"Cannot delete room {room_id}: Room is currently occupied.")
         if room.status == 'reserved':
             raise ValueError(f"Cannot delete room {room_id}: Room is reserved for a booking.")
-        
+
+        # Business Rule: Check if room has any check-in records
+        # This prevents foreign key constraint violation
+        checkins = self.checkin_repo.find_checkins_by_room_id(room_id)
+        if checkins and len(checkins) > 0:
+            raise ValueError(f"Cannot delete room {room_id}: Room has {len(checkins)} check-in record(s). Room must be checked out first.")
+
+        # Business Rule: Check if room has any future bookings
+        # This prevents orphaned booking records
+        bookings = self.booking_repo.find_by_room_id(room_id)
+        active_bookings = [b for b in bookings if b.status in ['pending', 'confirmed', 'checked_in']]
+        if active_bookings:
+            raise ValueError(f"Cannot delete room {room_id}: Room has {len(active_bookings)} active booking(s). All bookings must be cancelled or completed first.")
+
         # In a real system, you might also check if there are any active bookings
         # For now, we'll allow deletion if status is 'available' or 'maintenance'
-        
+
         result = self.repo.delete(room_id)
         if not result:
             raise ValueError(f"Failed to delete room {room_id}.")
-        
+
         return {"message": f"Room {room_id} has been deleted successfully."}

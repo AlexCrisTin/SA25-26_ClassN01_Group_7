@@ -131,16 +131,35 @@ class CheckInRepository:
         try:
             connection = db_config.get_connection()
             cursor = connection.cursor(dictionary=True)
-            
+
             query = "SELECT * FROM checkouts WHERE booking_id = %s"
             cursor.execute(query, (booking_id,))
             row = cursor.fetchone()
-            
+
             if row:
                 return self._row_to_checkout(row)
             return None
         except Error as e:
             raise ValueError(f"Error finding checkout: {e}")
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+
+    def find_checkins_by_room_id(self, room_id):
+        """Tìm tất cả check-ins theo room_id"""
+        connection = None
+        try:
+            connection = db_config.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            query = "SELECT * FROM checkins WHERE room_id = %s ORDER BY checkin_time DESC"
+            cursor.execute(query, (room_id,))
+            rows = cursor.fetchall()
+
+            return [self._row_to_checkin(row) for row in rows]
+        except Error as e:
+            raise ValueError(f"Error finding checkins by room: {e}")
         finally:
             if connection and connection.is_connected():
                 cursor.close()
