@@ -194,16 +194,20 @@ function displayPaymentHistory(payments) {
     tbody.innerHTML = payments.map(payment => {
         const paymentMethodText = getPaymentMethodText(payment.payment_method);
         const paymentStatusText = getPaymentStatusText(payment.status);
+        // Ưu tiên guest_name trả về trực tiếp, fallback booking.guest_name hoặc 'N/A'
+        const guestName = payment.guest_name
+            || (payment.booking && payment.booking.guest_name)
+            || 'N/A';
 
         return `
             <tr>
                 <td>${payment.id}</td>
                 <td>${payment.booking_id || 'N/A'}</td>
-                <td>${payment.booking ? payment.booking.guest_name : 'N/A'}</td>
+                <td>${guestName}</td>
                 <td>${payment.amount ? payment.amount.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</td>
                 <td>${paymentMethodText}</td>
                 <td><span class="status-badge status-${payment.status}">${paymentStatusText}</span></td>
-                <td>${payment.payment_date ? formatDate(payment.payment_date) : 'N/A'}</td>
+                <td>${(payment.payment_date || payment.created_at) ? formatDate(payment.payment_date || payment.created_at) : 'N/A'}</td>
                 <td>${payment.transaction_id || 'N/A'}</td>
             </tr>
         `;

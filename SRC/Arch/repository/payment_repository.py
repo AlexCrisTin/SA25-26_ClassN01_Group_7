@@ -107,12 +107,26 @@ class PaymentRepository:
     
     def _row_to_payment(self, row):
         """Chuyển đổi database row thành Payment object"""
+        # Convert datetime/date objects to ISO strings for JSON serialization
+        payment_date = row.get('payment_date')
+        created_at = row.get('created_at')
+        try:
+            from datetime import datetime, date
+            if isinstance(payment_date, (datetime, date)):
+                payment_date = payment_date.isoformat()
+            if isinstance(created_at, (datetime, date)):
+                created_at = created_at.isoformat()
+        except Exception:
+            pass
+
         return Payment(
             str(row['id']),
             row['booking_id'],
             float(row['amount']),
             row['payment_method'],
             row['status'],
-            row['transaction_id']
+            row['transaction_id'],
+            payment_date,
+            created_at
         )
 

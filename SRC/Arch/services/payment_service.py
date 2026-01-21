@@ -1,6 +1,8 @@
 from repository.payment_repository import PaymentRepository
 from repository.booking_repository import BookingRepository
 from services.wallet_service import WalletService
+from datetime import datetime
+import uuid
 
 class PaymentService:
     #Service: Xử lý logic nghiệp vụ cho Payment.
@@ -50,10 +52,17 @@ class PaymentService:
             # Trừ ví
             self.wallet_service.deduct(user_id, amount)
 
+        # Nếu không truyền transaction_id, tự sinh
+        if not transaction_id:
+            transaction_id = f"TX-{booking_id}-{uuid.uuid4().hex[:8]}"
+
+        # Ghi nhận thời gian thanh toán nếu chưa cung cấp
+        payment_date = datetime.now().isoformat()
+
         # Process payment (giả lập)
         status = 'completed'  # Trong thực tế sẽ gọi payment gateway
 
-        payment = self.repo.save(booking_id, amount, payment_method, status, transaction_id)
+        payment = self.repo.save(booking_id, amount, payment_method, status, transaction_id, payment_date)
 
         # Note: Payment completion does NOT automatically confirm booking
         # Receptionist must manually confirm booking after verifying payment

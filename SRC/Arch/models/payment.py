@@ -1,13 +1,15 @@
 class Payment:
     #Model: Định nghĩa cấu trúc dữ liệu Payment
     
-    def __init__(self, payment_id, booking_id, amount, payment_method, status, transaction_id=None):
+    def __init__(self, payment_id, booking_id, amount, payment_method, status, transaction_id=None, payment_date=None, created_at=None):
         self.id = payment_id
         self.booking_id = booking_id
         self.amount = amount
         self.payment_method = payment_method  # credit_card, cash, bank_transfer
         self.status = status  # pending, completed, failed, refunded
         self.transaction_id = transaction_id
+        self.payment_date = payment_date
+        self.created_at = created_at
         
         # Validation
         if amount <= 0:
@@ -23,12 +25,19 @@ class Payment:
 
     def to_dict(self):
         #Chuyển đổi Payment object thành dictionary
-        return {
+        data = {
             "id": self.id,
             "booking_id": self.booking_id,
             "amount": self.amount,
             "payment_method": self.payment_method,
             "status": self.status,
-            "transaction_id": self.transaction_id
+            "transaction_id": self.transaction_id,
+            "payment_date": self.payment_date,
+            "created_at": self.created_at,
         }
+        # Bổ sung thông tin booking nếu repository đã gán (JOIN với bookings)
+        if hasattr(self, "booking") and self.booking:
+            data["guest_name"] = self.booking.get("guest_name")
+            data["room_type"] = self.booking.get("room_type")
+        return data
 
