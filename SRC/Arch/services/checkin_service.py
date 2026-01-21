@@ -160,30 +160,3 @@ class CheckInService:
             raise ValueError(f"Check-out with ID {checkout_id} not found.")
         return checkout
 
-    def cancel_checkin(self, booking_id, receptionist_id=None):
-        """Hủy check-in: reset room về available, booking về confirmed, xóa check-in record"""
-        # Check if check-in exists
-        checkin = self.checkin_repo.find_checkin_by_booking_id(booking_id)
-        if not checkin:
-            raise ValueError(f"No check-in found for booking {booking_id}.")
-
-        # Check if booking is still checked in
-        booking = self.booking_repo.find_by_id(booking_id)
-        if not booking:
-            raise ValueError(f"Booking with ID {booking_id} not found.")
-        if booking.status != 'checked_in':
-            raise ValueError(f"Cannot cancel check-in: Booking {booking_id} is not checked in (status: {booking.status}).")
-
-        # Reset room status to available
-        room = self.room_repo.find_by_id(checkin.room_id)
-        if room:
-            self.room_repo.update(room.id, status='available')
-
-        # Reset booking status to confirmed
-        self.booking_repo.update(booking_id, status='confirmed')
-
-        # Delete check-in record (có thể cần log cho audit trail)
-        # Note: Trong thực tế có thể cần lưu log thay vì xóa hoàn toàn
-        # self.checkin_repo.delete_checkin(checkin.id)
-
-        return {"message": f"Check-in for booking {booking_id} has been cancelled successfully."}

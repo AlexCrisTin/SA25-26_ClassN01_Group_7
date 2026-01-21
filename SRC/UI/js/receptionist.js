@@ -311,7 +311,7 @@ async function displayCheckinBooking(booking) {
     } else {
         roomInfoHtml = `
             <p style="color: #666; font-size: 13px; margin-top: 10px;">
-                ${LanguageManager.getTranslation('receptionist.checkin.autoAssign')} 
+                ${LanguageManager.getTranslation('receptionist.checkin.autoAssign')}
                 <strong>${booking.room_type}</strong> ${LanguageManager.getTranslation('receptionist.checkin.forGuest')}
             </p>
         `;
@@ -329,9 +329,6 @@ async function displayCheckinBooking(booking) {
             <div style="margin-top: 20px; display:flex; gap:10px; justify-content:flex-end;">
                 <button class="btn-secondary" onclick="searchCheckinBooking()" style="background: #f5f5f5; color: #333; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
                     ${LanguageManager.getTranslation('receptionist.checkin.back')}
-                </button>
-                <button class="btn-danger" onclick="cancelCheckin(${booking.id})" style="background: #dc3545; color: white; border: 1px solid #dc3545; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                    ${LanguageManager.getTranslation('receptionist.checkin.cancel')}
                 </button>
                 <button class="btn-primary" onclick="processCheckin(${booking.id})">
                     ${LanguageManager.getTranslation('receptionist.checkin.process')}
@@ -368,36 +365,6 @@ async function processCheckin(bookingId) {
     }
 }
 
-async function cancelCheckin(bookingId) {
-    const resultDiv = document.getElementById('checkinBookingResult');
-    const currentUser = AuthManager.getCurrentUser();
-
-    if (!currentUser) {
-        showNotification('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', 'error');
-        return;
-    }
-
-    // Xác nhận từ user
-    if (!confirm(LanguageManager.getTranslation('receptionist.checkin.cancelConfirm'))) {
-        return;
-    }
-
-    resultDiv.innerHTML = `<p class="loading">${LanguageManager.getTranslation('receptionist.checkin.cancelProcessing')}</p>`;
-
-    try {
-        await CheckInAPI.cancelCheckIn({
-            booking_id: bookingId,
-            receptionist_id: currentUser.id
-        });
-
-        showNotification(LanguageManager.getTranslation('receptionist.checkin.cancelSuccess'), 'success');
-        resultDiv.innerHTML = '';
-        await loadBookings(); // Cập nhật lại danh sách đặt phòng và trạng thái
-    } catch (error) {
-        showNotification(LanguageManager.getTranslation('receptionist.checkin.cancelError') + ' ' + error.message, 'error');
-        resultDiv.innerHTML = `<p class="loading">${LanguageManager.getTranslation('receptionist.checkin.cancelError')}</p>`;
-    }
-}
 
 let currentCheckoutBooking = null;
 

@@ -540,12 +540,7 @@ const LanguageManager = {
                     onlyConfirmed: 'Chỉ những đặt phòng <strong>Đã Xác Nhận</strong> mới có thể check-in.',
                     foundCanCheckin: 'Tìm thấy {count} đặt phòng có thể check-in:',
                     selectBooking: 'Vui lòng chọn đặt phòng muốn check-in:',
-                    selectToCheckin: 'Chọn để Check-in',
-                    cancel: 'Bỏ Check-in',
-                    cancelConfirm: 'Bạn có chắc muốn bỏ check-in cho đặt phòng này?',
-                    cancelProcessing: 'Đang bỏ check-in...',
-                    cancelSuccess: 'Bỏ check-in thành công!',
-                    cancelError: 'Đã xảy ra lỗi khi bỏ check-in.'
+                    selectToCheckin: 'Chọn để Check-in'
                 },
                 checkout: {
                     title: 'Check-out cho đặt phòng',
@@ -1154,16 +1149,11 @@ const LanguageManager = {
                     searchError: 'An error occurred during search.',
                     bookingNotFound: 'Booking not found',
                     loadError: 'Error loading booking information:',
-                    foundButCannotCheckin: 'Found {count} booking(s) but none can be checked in.',
-                    onlyConfirmed: 'Only <strong>Confirmed</strong> bookings can be checked in.',
+                    foundButCannotCheckin: 'Found {count} booking(s) but none can be checked in or cancelled.',
+                    onlyConfirmedOrCheckedIn: 'Only <strong>Confirmed</strong> bookings (for check-in) or <strong>Checked-in</strong> bookings (for cancel check-in) are shown.',
                     foundCanCheckin: 'Found {count} booking(s) that can be checked in:',
                     selectBooking: 'Please select the booking you want to check in:',
-                    selectToCheckin: 'Select to Check-in',
-                    cancel: 'Cancel Check-in',
-                    cancelConfirm: 'Are you sure you want to cancel check-in for this booking?',
-                    cancelProcessing: 'Cancelling check-in...',
-                    cancelSuccess: 'Check-in cancelled successfully!',
-                    cancelError: 'An error occurred while cancelling check-in.'
+                    selectToCheckin: 'Select to Check-in'
                 },
                 checkout: {
                     title: 'Check-out for booking',
