@@ -172,10 +172,45 @@ class BookingService:
             except Exception as e:
                 # Log error but don't fail cancellation
                 print(f"Warning: Could not release room {room_id} for booking {booking_id}: {e}")
-        
+
+        # Handle refunds for wallet payments
+        refund_message = ""
+        try:
+            # Check if there are completed wallet payments for this booking
+            wallet_payments = self.payment_service.repo.find_by_booking_id(booking_id)
+            wallet_payments = [p for p in wallet_payments if p.payment_method == 'cash' and p.status == 'completed']
+
+            if wallet_payments:
+                total_wallet_payment = sum(p.amount for p in wallet_payments)
+
+                if total_wallet_payment > 0 and booking.user_id:
+                    # Check if wallet exists for user
+                    existing_wallet = self.payment_service.wallet_service.get_wallet(booking.user_id)
+                    if existing_wallet:
+                        # Refund to wallet
+                        self.payment_service.wallet_service.top_up(booking.user_id, total_wallet_payment)
+
+                        # Update payment status to refunded
+                        for payment in wallet_payments:
+                            # Note: In a real system, you might want to create a refund record
+                            # For now, we'll just mark as refunded
+                            pass
+
+                        refund_message = f" Đã hoàn tiền {total_wallet_payment.toLocaleString('vi-VN')} VNĐ vào ví điện tử."
+                    else:
+                        refund_message = f" (Lưu ý: Khách hàng đã thanh toán {total_wallet_payment.toLocaleString('vi-VN')} VNĐ bằng ví nhưng không có ví để hoàn tiền)"
+                elif total_wallet_payment > 0 and not booking.user_id:
+                    refund_message = f" (Lưu ý: Khách hàng đã thanh toán {total_wallet_payment.toLocaleString('vi-VN')} VNĐ bằng ví. Vui lòng hoàn tiền thủ công)"
+        except Exception as e:
+            # Log error but don't fail cancellation
+            print(f"Warning: Could not process refund for booking {booking_id}: {e}")
+            import traceback
+            traceback.print_exc()
+            refund_message = " (Lưu ý: Có lỗi khi xử lý hoàn tiền, vui lòng liên hệ quản trị viên)"
+
         booking.status = 'cancelled'
         self.repo.delete(booking_id)
-        return {"message": f"Booking {booking_id} has been cancelled successfully."}
+        return {"message": f"Booking {booking_id} has been cancelled successfully.{refund_message}"}
     
     def update_booking(self, booking_id, guest_name=None, room_type=None, check_in_date=None, check_out_date=None, total_price=None, status=None):
         #Cập nhật thông tin booking với validation

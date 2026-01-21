@@ -278,6 +278,7 @@ const LanguageManager = {
                 noBookings: 'Chưa có đặt phòng nào',
                 noBookingsDesc: 'Bắt đầu đặt phòng ngay để trải nghiệm dịch vụ của chúng tôi',
                 bookNow: 'Đặt Phòng Ngay',
+                cancel: 'Hủy Phòng',
                 cancelTitle: 'Hủy Đặt Phòng',
                 cancelDesc: 'Vui lòng cho chúng tôi biết lý do hủy phòng. Lưu ý: tiền đặt cọc (nếu có) sẽ không được hoàn lại.',
                 cancelReason: 'Lý do hủy phòng',
@@ -1191,6 +1192,7 @@ const LanguageManager = {
             common: {
                 all: 'All',
                 cancel: 'Cancel',
+                cancelBooking: 'Cancel Booking',
                 back: 'Back',
                 search: 'Search',
                 loading: 'Loading data...',

@@ -105,6 +105,10 @@ function displayBookings(bookings) {
         ? LanguageManager.getTranslation('booking.confirm') || 'Xác Nhận'
         : 'Xác Nhận';
 
+    const cancelText = typeof LanguageManager !== 'undefined'
+        ? LanguageManager.getTranslation('booking.cancelBooking') || 'Hủy Phòng'
+        : 'Hủy Phòng';
+
     tbody.innerHTML = bookings.map(booking => `
         <tr>
             <td>#${booking.id}</td>
@@ -117,10 +121,25 @@ function displayBookings(bookings) {
             <td>
                 <div class="action-buttons">
                     ${booking.status === 'pending' ? `<button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">${confirmText}</button>` : ''}
+                    ${(booking.status === 'pending' || booking.status === 'confirmed') ? `<button class="btn-danger" onclick="cancelBooking(${booking.id})">${cancelText}</button>` : ''}
                 </div>
             </td>
         </tr>
     `).join('');
+}
+
+async function cancelBooking(bookingId) {
+    if (!confirm('Bạn có chắc muốn hủy đặt phòng này? Nếu đã thanh toán bằng ví điện tử, tiền sẽ được hoàn lại.')) {
+        return;
+    }
+
+    try {
+        const result = await BookingAPI.cancelBooking(bookingId);
+        showNotification(result.message || 'Đã hủy đặt phòng thành công!', 'success');
+        await loadBookings(); // Reload danh sách bookings
+    } catch (error) {
+        showNotification('Lỗi khi hủy đặt phòng: ' + error.message, 'error');
+    }
 }
 
 function filterBookings() {
