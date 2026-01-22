@@ -458,6 +458,29 @@ const LanguageManager = {
                         role: 'Vai Trò',
                         actions: 'Thao Tác'
                     },
+                    view: {
+                        title: 'Thông Tin Người Dùng',
+                        id: 'ID:',
+                        username: 'Username:',
+                        fullName: 'Họ Tên:',
+                        email: 'Email:',
+                        phone: 'Số Điện Thoại:',
+                        role: 'Vai Trò:'
+                    },
+                    edit: {
+                        title: 'Sửa Thông Tin Người Dùng',
+                        username: 'Username',
+                        fullName: 'Họ Tên *',
+                        email: 'Email *',
+                        phone: 'Số Điện Thoại',
+                        role: 'Vai Trò *',
+                        submit: 'Cập Nhật'
+                    },
+                    roles: {
+                        user: 'User',
+                        receptionist: 'Receptionist',
+                        administrator: 'Administrator'
+                    },
                     empty: 'Không có người dùng nào'
                 },
                 bookings: {
@@ -1114,6 +1137,29 @@ const LanguageManager = {
                         phone: 'Phone',
                         role: 'Role',
                         actions: 'Actions'
+                    },
+                    view: {
+                        title: 'User Information',
+                        id: 'ID:',
+                        username: 'Username:',
+                        fullName: 'Full Name:',
+                        email: 'Email:',
+                        phone: 'Phone:',
+                        role: 'Role:'
+                    },
+                    edit: {
+                        title: 'Edit User Information',
+                        username: 'Username',
+                        fullName: 'Full Name *',
+                        email: 'Email *',
+                        phone: 'Phone',
+                        role: 'Role *',
+                        submit: 'Update'
+                    },
+                    roles: {
+                        user: 'User',
+                        receptionist: 'Receptionist',
+                        administrator: 'Administrator'
                     },
                     empty: 'No users available'
                 },
