@@ -996,9 +996,9 @@ function displayUsers(users) {
             <td>${u.phone || 'N/A'}</td>
             <td><span class="badge badge-${u.role === 'administrator' ? 'admin' : u.role === 'receptionist' ? 'receptionist' : 'user'}">${u.role || 'user'}</span></td>
             <td>
-                <button class="btn-view" onclick="viewUser(${u.id})">Xem</button>
-                <button class="btn-edit" onclick="editUser(${u.id})">Sửa</button>
-                <button class="btn-delete" onclick="deleteUser(${u.id})">Xóa</button>
+                <button class="btn-view" onclick="viewUser(${u.id})">${LanguageManager.getTranslation('common.view') || 'Xem'}</button>
+                <button class="btn-edit" onclick="editUser(${u.id})">${LanguageManager.getTranslation('common.edit') || 'Sửa'}</button>
+                <button class="btn-delete" onclick="deleteUser(${u.id})">${LanguageManager.getTranslation('common.delete') || 'Xóa'}</button>
             </td>
         </tr>
     `).join('');
