@@ -821,7 +821,10 @@ async function loadServiceRequests() {
 function displayServiceRequests(requests) {
     const tbody = document.getElementById('serviceRequestsTableBody');
     if (!requests || requests.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="empty">Không có yêu cầu dịch vụ nào</td></tr>';
+        const emptyText = typeof LanguageManager !== 'undefined'
+            ? LanguageManager.getTranslation('receptionist.serviceRequests.empty') || 'Không có yêu cầu dịch vụ nào'
+            : 'Không có yêu cầu dịch vụ nào';
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">${emptyText}</td></tr>`;
         return;
     }
 

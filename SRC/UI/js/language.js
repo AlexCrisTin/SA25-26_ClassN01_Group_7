@@ -581,6 +581,7 @@ const LanguageManager = {
                 updateStatusSuccess: 'Cập nhật trạng thái thành công!',
                 updateStatusError: 'Lỗi khi cập nhật: ',
                 serviceRequests: {
+                    empty: 'Không có yêu cầu dịch vụ nào',
                     updateSuccess: 'Cập nhật trạng thái yêu cầu dịch vụ thành công!',
                     updateError: 'Lỗi khi cập nhật trạng thái: '
                 },
@@ -1261,6 +1262,7 @@ const LanguageManager = {
                 updateStatusSuccess: 'Status updated successfully!',
                 updateStatusError: 'Error updating status: ',
                 serviceRequests: {
+                    empty: 'No service requests available',
                     updateSuccess: 'Service request status updated successfully!',
                     updateError: 'Error updating status: '
                 },
