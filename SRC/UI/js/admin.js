@@ -439,7 +439,7 @@ function displayStaff(staff) {
             <td>${s.phone || 'N/A'}</td>
             <td>${s.position || s.role || 'N/A'}</td>
             <td>${s.department || 'N/A'}</td>
-            <td><span class="status-badge ${s.is_active ? 'status-available' : 'status-maintenance'}">${s.is_active ? 'Hoạt Động' : 'Không Hoạt Động'}</span></td>
+            <td><span class="status-badge ${s.is_active ? 'status-available' : 'status-maintenance'}">${LanguageManager.getTranslation(s.is_active ? 'admin.staff.isActive.true' : 'admin.staff.isActive.false') || (s.is_active ? 'Hoạt Động' : 'Không Hoạt Động')}</span></td>
             <td>
                 <div class="action-buttons">
                     <button class="btn-view" onclick="viewStaff(${s.id})">${LanguageManager.getTranslation('common.view') || 'Xem'}</button>
@@ -467,7 +467,7 @@ async function viewStaff(staffId) {
         document.getElementById('view_staff_position').textContent = staff.position || 'N/A';
         document.getElementById('view_staff_department').textContent = staff.department || 'N/A';
         document.getElementById('view_staff_hire_date').textContent = staff.hire_date || 'N/A';
-        document.getElementById('view_staff_status').textContent = staff.is_active ? 'Hoạt Động' : 'Không Hoạt Động';
+        document.getElementById('view_staff_status').textContent = LanguageManager.getTranslation(staff.is_active ? 'admin.staff.isActive.true' : 'admin.staff.isActive.false') || (staff.is_active ? 'Hoạt Động' : 'Không Hoạt Động');
         document.getElementById('viewStaffModal').style.display = 'block';
     } catch (error) {
         showNotification('Lỗi khi tải thông tin nhân viên: ' + error.message, 'error');

@@ -420,6 +420,10 @@ const LanguageManager = {
                         status: 'Trạng Thái',
                         actions: 'Thao Tác'
                     },
+                    isActive: {
+                        true: 'Hoạt Động',
+                        false: 'Không Hoạt Động'
+                    },
                     empty: 'Chưa có nhân viên nào'
                 },
                 users: {
@@ -1050,6 +1054,10 @@ const LanguageManager = {
                         department: 'Department',
                         status: 'Status',
                         actions: 'Actions'
+                    },
+                    isActive: {
+                        true: 'Active',
+                        false: 'Inactive'
                     },
                     empty: 'No staff available'
                 },
