@@ -376,6 +376,24 @@
     margin-bottom: 15px;
 }
 
+.chart-container {
+    height: 300px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.report-stats {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.report-stats p {
+    margin: 8px 0;
+    color: #333;
+}
+
 .report-controls {
     display: flex;
     flex-direction: column;

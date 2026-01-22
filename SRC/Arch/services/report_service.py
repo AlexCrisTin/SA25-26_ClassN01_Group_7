@@ -29,7 +29,7 @@ class ReportService:
             "payments": [p.to_dict() for p in payments if p.status == 'completed']
         }
         
-        return self.repo.save('revenue', datetime.now().isoformat(), data, period_start, period_end)
+        return self.repo.save('revenue', data, period_start, period_end)
 
     def generate_occupancy_report(self, period_start=None, period_end=None):
         #Tạo báo cáo tỷ lệ lấp đầy phòng
@@ -43,7 +43,7 @@ class ReportService:
             "bookings": [b.to_dict() for b in bookings]
         }
         
-        return self.repo.save('occupancy', datetime.now().isoformat(), data, period_start, period_end)
+        return self.repo.save('occupancy', data, period_start, period_end)
 
     def generate_booking_report(self, period_start=None, period_end=None):
         #Tạo báo cáo booking
@@ -54,7 +54,7 @@ class ReportService:
             "bookings": [b.to_dict() for b in bookings]
         }
         
-        return self.repo.save('booking', datetime.now().isoformat(), data, period_start, period_end)
+        return self.repo.save('booking', data, period_start, period_end)
 
     def get_report_details(self, report_id):
         #Lấy thông tin report theo ID

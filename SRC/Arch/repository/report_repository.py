@@ -18,8 +18,19 @@ class ReportRepository:
                 INSERT INTO reports (report_type, period_start, period_end, data, generated_by, file_path)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """
-            # Convert data to JSON string
-            data_json = json.dumps(data) if isinstance(data, dict) else data
+            # Convert data to JSON string - MySQL JSON type requires string
+            if isinstance(data, dict) or isinstance(data, list):
+                data_json = json.dumps(data, ensure_ascii=False)
+            elif isinstance(data, str):
+                # Already a string, try to parse and re-serialize to ensure valid JSON
+                try:
+                    parsed = json.loads(data)
+                    data_json = json.dumps(parsed, ensure_ascii=False)
+                except:
+                    data_json = data
+            else:
+                data_json = json.dumps(data, ensure_ascii=False) if data is not None else None
+            
             values = (report_type, period_start, period_end, data_json, generated_by, file_path)
             cursor.execute(query, values)
             connection.commit()

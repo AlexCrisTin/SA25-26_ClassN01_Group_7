@@ -184,40 +184,29 @@
 
             <div class="reports-grid">
                 <div class="report-card">
-                    <h3>Tổng Doanh Thu</h3>
-                    <div class="report-controls">
-                        <input type="date" id="revenueStartDate">
-                        <span>đến</span>
-                        <input type="date" id="revenueEndDate">
-                        <button class="btn-primary" onclick="generateRevenueReport()">Tạo Báo Cáo</button>
+                    <h3 data-i18n="admin.reports.revenue">Tổng Doanh Thu</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
                     </div>
-                    <div id="revenueReportResult"></div>
+                    <div id="revenueReportResult" class="report-stats"></div>
                 </div>
 
                 <div class="report-card">
-                    <h3>Tỷ Lệ Lấp Đầy</h3>
-                    <div class="report-controls">
-                        <input type="date" id="occupancyStartDate">
-                        <span>đến</span>
-                        <input type="date" id="occupancyEndDate">
-                        <button class="btn-primary" onclick="generateOccupancyReport()">Tạo Báo Cáo</button>
+                    <h3 data-i18n="admin.reports.occupancy">Tỷ Lệ Lấp Đầy</h3>
+                    <div class="chart-container">
+                        <canvas id="occupancyChart"></canvas>
                     </div>
-                    <div id="occupancyReportResult"></div>
+                    <div id="occupancyReportResult" class="report-stats"></div>
                 </div>
 
                 <div class="report-card">
-                    <h3>Báo Cáo Đặt Phòng</h3>
-                    <div class="report-controls">
-                        <input type="date" id="bookingStartDate">
-                        <span>đến</span>
-                        <input type="date" id="bookingEndDate">
-                        <button class="btn-primary" onclick="generateBookingReport()">Tạo Báo Cáo</button>
+                    <h3 data-i18n="admin.reports.bookings">Báo Cáo Đặt Phòng</h3>
+                    <div class="chart-container">
+                        <canvas id="bookingChart"></canvas>
                     </div>
-                    <div id="bookingReportResult"></div>
+                    <div id="bookingReportResult" class="report-stats"></div>
                 </div>
             </div>
-
-            <div id="reportsList" class="reports-list"></div>
         </div>
     </div>
 
@@ -597,6 +586,8 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/language.js"></script>

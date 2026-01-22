@@ -57,6 +57,11 @@ function switchTab(tabName) {
     // Show selected tab
     document.getElementById(`${tabName}-tab`).classList.add('active');
     event.target.classList.add('active');
+    
+    // Load reports if reports tab is selected
+    if (tabName === 'reports') {
+        loadReports();
+    }
 }
 
 // ========== ROOM MANAGEMENT ==========
@@ -610,97 +615,225 @@ async function deleteService(serviceId) {
 }
 
 // ========== REPORTS ==========
-async function generateRevenueReport() {
-    const startDate = document.getElementById('revenueStartDate').value;
-    const endDate = document.getElementById('revenueEndDate').value;
+let revenueChart = null;
+let occupancyChart = null;
+let bookingChart = null;
 
-    if (!startDate || !endDate) {
-        showNotification('Vui lòng chọn khoảng thời gian', 'error');
-        return;
-    }
-
+async function loadReports() {
     try {
-        showNotification('Đang tạo báo cáo doanh thu...', 'info');
-        const report = await ReportAPI.generateRevenueReport(startDate, endDate);
-        displayRevenueReport(report);
+        // Load all reports data
+        const today = new Date().toISOString().split('T')[0];
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const startDate = thirtyDaysAgo.toISOString().split('T')[0];
+
+        // Load revenue report
+        try {
+            const revenueReport = await ReportAPI.generateRevenueReport(startDate, today);
+            displayRevenueReport(revenueReport);
+        } catch (error) {
+            console.error('Error loading revenue report:', error);
+        }
+
+        // Load occupancy report
+        try {
+            const occupancyReport = await ReportAPI.generateOccupancyReport(startDate, today);
+            displayOccupancyReport(occupancyReport);
+        } catch (error) {
+            console.error('Error loading occupancy report:', error);
+        }
+
+        // Load booking report
+        try {
+            const bookingReport = await ReportAPI.generateBookingReport(startDate, today);
+            displayBookingReport(bookingReport);
+        } catch (error) {
+            console.error('Error loading booking report:', error);
+        }
     } catch (error) {
-        showNotification('Lỗi khi tạo báo cáo: ' + error.message, 'error');
+        console.error('Error loading reports:', error);
     }
 }
 
 function displayRevenueReport(report) {
     const container = document.getElementById('revenueReportResult');
+    const totalRevenue = report.data?.total_revenue || report.total_revenue || 0;
+    const totalPayments = report.data?.total_payments || report.total_payments || 0;
+    const averageRevenue = totalPayments > 0 ? totalRevenue / totalPayments : 0;
+
     container.innerHTML = `
-        <div class="report-result">
-            <h4>Báo Cáo Doanh Thu</h4>
-            <p><strong>Tổng Doanh Thu:</strong> ${report.total_revenue ? report.total_revenue.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</p>
-            <p><strong>Số Lượng Đặt Phòng:</strong> ${report.total_bookings || 0}</p>
-            <p><strong>Trung Bình/Đặt Phòng:</strong> ${report.average_revenue ? report.average_revenue.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</p>
+        <div class="report-stats">
+            <p><strong>Tổng Doanh Thu:</strong> ${totalRevenue.toLocaleString('vi-VN')} VNĐ</p>
+            <p><strong>Số Lượng Thanh Toán:</strong> ${totalPayments}</p>
+            <p><strong>Trung Bình/Thanh Toán:</strong> ${averageRevenue.toLocaleString('vi-VN')} VNĐ</p>
         </div>
     `;
-}
 
-async function generateOccupancyReport() {
-    const startDate = document.getElementById('occupancyStartDate').value;
-    const endDate = document.getElementById('occupancyEndDate').value;
-
-    if (!startDate || !endDate) {
-        showNotification('Vui lòng chọn khoảng thời gian', 'error');
-        return;
-    }
-
-    try {
-        showNotification('Đang tạo báo cáo tỷ lệ lấp đầy...', 'info');
-        const report = await ReportAPI.generateOccupancyReport(startDate, endDate);
-        displayOccupancyReport(report);
-    } catch (error) {
-        showNotification('Lỗi khi tạo báo cáo: ' + error.message, 'error');
+    // Create or update chart
+    const ctx = document.getElementById('revenueChart');
+    if (ctx) {
+        if (revenueChart) {
+            revenueChart.destroy();
+        }
+        revenueChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Doanh Thu', 'Còn lại'],
+                datasets: [{
+                    data: [totalRevenue, Math.max(0, 1000000 - totalRevenue)],
+                    backgroundColor: ['#4CAF50', '#E0E0E0']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tổng Doanh Thu'
+                    }
+                }
+            }
+        });
     }
 }
 
 function displayOccupancyReport(report) {
     const container = document.getElementById('occupancyReportResult');
-    const occupancyRate = report.occupancy_rate ? (report.occupancy_rate * 100).toFixed(2) : 0;
+    const bookings = report.data?.bookings || report.bookings || [];
+    const totalBookings = bookings.length;
+    
+    // Calculate occupancy stats
+    const confirmed = bookings.filter(b => b.status === 'confirmed' || b.status === 'checked_in').length;
+    const pending = bookings.filter(b => b.status === 'pending').length;
+    const cancelled = bookings.filter(b => b.status === 'cancelled').length;
+    const checkedOut = bookings.filter(b => b.status === 'checked_out').length;
+
     container.innerHTML = `
-        <div class="report-result">
-            <h4>Báo Cáo Tỷ Lệ Lấp Đầy</h4>
-            <p><strong>Tỷ Lệ Lấp Đầy:</strong> ${occupancyRate}%</p>
-            <p><strong>Tổng Phòng:</strong> ${report.total_rooms || 0}</p>
-            <p><strong>Phòng Đã Thuê:</strong> ${report.occupied_rooms || 0}</p>
-            <p><strong>Phòng Trống:</strong> ${report.available_rooms || 0}</p>
+        <div class="report-stats">
+            <p><strong>Tổng Đặt Phòng:</strong> ${totalBookings}</p>
+            <p><strong>Đã Xác Nhận:</strong> ${confirmed}</p>
+            <p><strong>Chờ Xác Nhận:</strong> ${pending}</p>
+            <p><strong>Đã Check-out:</strong> ${checkedOut}</p>
+            <p><strong>Đã Hủy:</strong> ${cancelled}</p>
         </div>
     `;
-}
 
-async function generateBookingReport() {
-    const startDate = document.getElementById('bookingStartDate').value;
-    const endDate = document.getElementById('bookingEndDate').value;
-
-    if (!startDate || !endDate) {
-        showNotification('Vui lòng chọn khoảng thời gian', 'error');
-        return;
-    }
-
-    try {
-        showNotification('Đang tạo báo cáo đặt phòng...', 'info');
-        const report = await ReportAPI.generateBookingReport(startDate, endDate);
-        displayBookingReport(report);
-    } catch (error) {
-        showNotification('Lỗi khi tạo báo cáo: ' + error.message, 'error');
+    // Create or update chart
+    const ctx = document.getElementById('occupancyChart');
+    if (ctx) {
+        if (occupancyChart) {
+            occupancyChart.destroy();
+        }
+        occupancyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Đã Xác Nhận', 'Chờ Xác Nhận', 'Đã Check-out', 'Đã Hủy'],
+                datasets: [{
+                    label: 'Số Lượng',
+                    data: [confirmed, pending, checkedOut, cancelled],
+                    backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#F44336']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tỷ Lệ Lấp Đầy'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     }
 }
 
 function displayBookingReport(report) {
     const container = document.getElementById('bookingReportResult');
+    const bookings = report.data?.bookings || report.bookings || [];
+    const totalBookings = bookings.length;
+    
+    // Count by status
+    const statusCounts = {
+        pending: 0,
+        confirmed: 0,
+        checked_in: 0,
+        checked_out: 0,
+        cancelled: 0
+    };
+    
+    bookings.forEach(booking => {
+        const status = booking.status || 'pending';
+        if (statusCounts.hasOwnProperty(status)) {
+            statusCounts[status]++;
+        }
+    });
+
     container.innerHTML = `
-        <div class="report-result">
-            <h4>Báo Cáo Đặt Phòng</h4>
-            <p><strong>Tổng Đặt Phòng:</strong> ${report.total_bookings || 0}</p>
-            <p><strong>Đã Xác Nhận:</strong> ${report.confirmed || 0}</p>
-            <p><strong>Chờ Xác Nhận:</strong> ${report.pending || 0}</p>
-            <p><strong>Đã Hủy:</strong> ${report.cancelled || 0}</p>
+        <div class="report-stats">
+            <p><strong>Tổng Đặt Phòng:</strong> ${totalBookings}</p>
+            <p><strong>Chờ Xác Nhận:</strong> ${statusCounts.pending}</p>
+            <p><strong>Đã Xác Nhận:</strong> ${statusCounts.confirmed}</p>
+            <p><strong>Đã Check-in:</strong> ${statusCounts.checked_in}</p>
+            <p><strong>Đã Check-out:</strong> ${statusCounts.checked_out}</p>
+            <p><strong>Đã Hủy:</strong> ${statusCounts.cancelled}</p>
         </div>
     `;
+
+    // Create or update chart
+    const ctx = document.getElementById('bookingChart');
+    if (ctx) {
+        if (bookingChart) {
+            bookingChart.destroy();
+        }
+        bookingChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Chờ Xác Nhận', 'Đã Xác Nhận', 'Đã Check-in', 'Đã Check-out', 'Đã Hủy'],
+                datasets: [{
+                    data: [
+                        statusCounts.pending,
+                        statusCounts.confirmed,
+                        statusCounts.checked_in,
+                        statusCounts.checked_out,
+                        statusCounts.cancelled
+                    ],
+                    backgroundColor: [
+                        '#FF9800',
+                        '#2196F3',
+                        '#4CAF50',
+                        '#9C27B0',
+                        '#F44336'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Báo Cáo Đặt Phòng'
+                    }
+                }
+            }
+        });
+    }
 }
 
 // ========== FORM HANDLERS ==========
@@ -940,9 +1073,7 @@ window.showAddServiceModal = showAddServiceModal;
 window.viewService = viewService;
 window.editService = editService;
 window.deleteService = deleteService;
-window.generateRevenueReport = generateRevenueReport;
-window.generateOccupancyReport = generateOccupancyReport;
-window.generateBookingReport = generateBookingReport;
+window.loadReports = loadReports;
 window.previewRoomImage = previewRoomImage;
 window.removeRoomImage = removeRoomImage;
 window.previewEditRoomImage = previewEditRoomImage;
