@@ -345,43 +345,43 @@
     <div id="viewStaffModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('viewStaffModal')">&times;</span>
-            <h2>Thông Tin Nhân Viên</h2>
+            <h2 data-i18n="admin.staff.view.title">Thông Tin Nhân Viên</h2>
             <div id="viewStaffContent" class="view-content">
                 <div class="info-group">
-                    <label>ID:</label>
+                    <label data-i18n="admin.staff.view.id">ID:</label>
                     <span id="view_staff_id"></span>
                 </div>
                 <div class="info-group">
-                    <label>Họ Tên:</label>
+                    <label data-i18n="admin.staff.view.fullName">Họ Tên:</label>
                     <span id="view_staff_full_name"></span>
                 </div>
                 <div class="info-group">
-                    <label>Email:</label>
+                    <label data-i18n="admin.staff.view.email">Email:</label>
                     <span id="view_staff_email"></span>
                 </div>
                 <div class="info-group">
-                    <label>Số Điện Thoại:</label>
+                    <label data-i18n="admin.staff.view.phone">Số Điện Thoại:</label>
                     <span id="view_staff_phone"></span>
                 </div>
                 <div class="info-group">
-                    <label>Chức Vụ:</label>
+                    <label data-i18n="admin.staff.view.position">Chức Vụ:</label>
                     <span id="view_staff_position"></span>
                 </div>
                 <div class="info-group">
-                    <label>Phòng Ban:</label>
+                    <label data-i18n="admin.staff.view.department">Phòng Ban:</label>
                     <span id="view_staff_department"></span>
                 </div>
                 <div class="info-group">
-                    <label>Ngày Tuyển Dụng:</label>
+                    <label data-i18n="admin.staff.view.hireDate">Ngày Tuyển Dụng:</label>
                     <span id="view_staff_hire_date"></span>
                 </div>
                 <div class="info-group">
-                    <label>Trạng Thái:</label>
+                    <label data-i18n="admin.staff.view.status">Trạng Thái:</label>
                     <span id="view_staff_status"></span>
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeModal('viewStaffModal')">Đóng</button>
+                <button class="btn-secondary" onclick="closeModal('viewStaffModal')" data-i18n="common.close">Đóng</button>
             </div>
         </div>
     </div>
@@ -390,37 +390,37 @@
     <div id="editStaffModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('editStaffModal')">&times;</span>
-            <h2>Sửa Thông Tin Nhân Viên</h2>
+            <h2 data-i18n="admin.staff.edit.title">Sửa Thông Tin Nhân Viên</h2>
             <form id="editStaffForm">
                 <input type="hidden" id="edit_staff_id">
                 <div class="form-group">
-                    <label>Họ Tên *</label>
+                    <label data-i18n="admin.staff.edit.fullName">Họ Tên *</label>
                     <input type="text" id="edit_staff_full_name" required>
                 </div>
                 <div class="form-group">
-                    <label>Email *</label>
+                    <label data-i18n="admin.staff.edit.email">Email *</label>
                     <input type="email" id="edit_staff_email" required>
                 </div>
                 <div class="form-group">
-                    <label>Số Điện Thoại *</label>
+                    <label data-i18n="admin.staff.edit.phone">Số Điện Thoại *</label>
                     <input type="tel" id="edit_staff_phone" required>
                 </div>
                 <div class="form-group">
-                    <label>Chức Vụ *</label>
-                    <input type="text" id="edit_staff_position" required placeholder="e.g., Receptionist, Housekeeper">
+                    <label data-i18n="admin.staff.edit.position">Chức Vụ *</label>
+                    <input type="text" id="edit_staff_position" required data-i18n-placeholder="admin.staff.edit.positionPlaceholder" placeholder="e.g., Receptionist, Housekeeper">
                 </div>
                 <div class="form-group">
-                    <label>Phòng Ban *</label>
+                    <label data-i18n="admin.staff.edit.department">Phòng Ban *</label>
                     <input type="text" id="edit_staff_department" required>
                 </div>
                 <div class="form-group">
-                    <label>Trạng Thái</label>
+                    <label data-i18n="admin.staff.edit.status">Trạng Thái</label>
                     <select id="edit_staff_is_active">
                         <option value="true" data-i18n="admin.staff.isActive.true">Hoạt Động</option>
                         <option value="false" data-i18n="admin.staff.isActive.false">Không Hoạt Động</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-primary">Cập Nhật</button>
+                <button type="submit" class="btn-primary" data-i18n="admin.staff.edit.submit">Cập Nhật</button>
             </form>
         </div>
     </div>

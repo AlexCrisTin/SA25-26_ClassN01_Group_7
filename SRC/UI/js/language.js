@@ -411,6 +411,28 @@ const LanguageManager = {
                         hireDate: 'Ngày Tuyển Dụng',
                         submit: 'Thêm Nhân Viên'
                     },
+                    edit: {
+                        title: 'Sửa Thông Tin Nhân Viên',
+                        fullName: 'Họ Tên *',
+                        email: 'Email *',
+                        phone: 'Số Điện Thoại *',
+                        position: 'Chức Vụ *',
+                        positionPlaceholder: 'e.g., Receptionist, Housekeeper',
+                        department: 'Phòng Ban *',
+                        status: 'Trạng Thái',
+                        submit: 'Cập Nhật'
+                    },
+                    view: {
+                        title: 'Thông Tin Nhân Viên',
+                        id: 'ID:',
+                        fullName: 'Họ Tên:',
+                        email: 'Email:',
+                        phone: 'Số Điện Thoại:',
+                        position: 'Chức Vụ:',
+                        department: 'Phòng Ban:',
+                        hireDate: 'Ngày Tuyển Dụng:',
+                        status: 'Trạng Thái:'
+                    },
                     table: {
                         fullName: 'Họ Tên',
                         email: 'Email',
@@ -1045,6 +1067,28 @@ const LanguageManager = {
                         department: 'Department *',
                         hireDate: 'Hire Date',
                         submit: 'Add Staff'
+                    },
+                    edit: {
+                        title: 'Edit Staff Information',
+                        fullName: 'Full Name *',
+                        email: 'Email *',
+                        phone: 'Phone *',
+                        position: 'Position *',
+                        positionPlaceholder: 'e.g., Receptionist, Housekeeper',
+                        department: 'Department *',
+                        status: 'Status',
+                        submit: 'Update'
+                    },
+                    view: {
+                        title: 'Staff Information',
+                        id: 'ID:',
+                        fullName: 'Full Name:',
+                        email: 'Email:',
+                        phone: 'Phone:',
+                        position: 'Position:',
+                        department: 'Department:',
+                        hireDate: 'Hire Date:',
+                        status: 'Status:'
                     },
                     table: {
                         fullName: 'Full Name',
