@@ -5,6 +5,68 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-01-22
+
+### Added
+- **Internationalization (i18n) Support for Admin Panel**
+  - Added English translations for staff management section
+    - Staff status labels (Active/Inactive) with `data-i18n` attributes
+    - Edit staff form labels and fields (Full Name, Email, Phone, Position, Department, Status)
+    - View staff modal labels (ID, Full Name, Email, Phone, Position, Department, Hire Date, Status)
+  - Added English translations for user management section
+    - View user modal labels (ID, Username, Full Name, Email, Phone, Role)
+    - Edit user form labels and fields (Username, Full Name, Email, Phone, Role)
+    - User role options (User, Receptionist, Administrator)
+    - Action buttons (View, Edit, Delete) in users table
+  - Added English translations for service requests in receptionist panel
+    - Empty state message for service requests table
+- **Reports Dashboard Enhancement**
+  - Integrated Chart.js library for data visualization
+  - Automatic report generation and display when opening Reports tab
+    - Revenue report with doughnut chart showing total revenue
+    - Occupancy report with bar chart showing booking status distribution
+    - Booking report with pie chart showing booking status breakdown
+  - Removed date range input controls - reports now automatically show last 30 days
+  - Real-time statistics display below each chart
+    - Revenue: Total revenue, number of payments, average per payment
+    - Occupancy: Total bookings, confirmed, pending, checked-out, cancelled
+    - Bookings: Detailed status breakdown with counts
+
+### Changed
+- **Reports Tab UI/UX**
+  - Replaced manual report generation with automatic loading
+  - Charts now display immediately when Reports tab is opened
+  - Removed date picker inputs and "Generate Report" buttons
+  - Added responsive chart containers with fixed height (300px)
+  - Statistics displayed in styled cards below charts
+- **Report Service Implementation**
+  - Updated `generate_revenue_report()`, `generate_occupancy_report()`, and `generate_booking_report()` 
+    to work without date parameters (uses last 30 days by default)
+  - Improved data structure returned from report services for better chart rendering
+
+### Fixed
+- **Report Repository JSON Serialization**
+  - Fixed `MySQLInterfaceError: Python type dict cannot be converted` error
+  - Improved JSON serialization in `ReportRepository.save()` method
+    - Properly converts dictionaries and lists to JSON strings before database insertion
+    - Handles string, dict, list, and None values correctly
+    - Uses `json.dumps()` with `ensure_ascii=False` for proper Unicode support
+- **Report Service Parameter Order**
+  - Fixed incorrect parameter order in `ReportService` methods
+    - Removed incorrect `datetime.now().isoformat()` parameter from `save()` calls
+    - Corrected parameter order: `save(report_type, data, period_start, period_end)`
+- **Staff Status Display**
+  - Fixed hardcoded Vietnamese text "Hoạt Động"/"Không Hoạt Động" in staff table
+  - Now uses `LanguageManager.getTranslation()` for proper i18n support
+  - Status displays correctly in both Vietnamese and English
+
+### Technical Details
+- Added Chart.js CDN (v4.4.0) to `admin.html`
+- Created `loadReports()` function that automatically loads all reports on tab switch
+- Updated `switchTab()` to call `loadReports()` when Reports tab is activated
+- Chart instances are properly destroyed and recreated to prevent memory leaks
+- Report data structure supports both `report.data` and direct `report` properties for backward compatibility
+
 ## [0.6.0] - 2026-01-18
 
 ### Changed
