@@ -616,7 +616,6 @@ async function deleteService(serviceId) {
 
 // ========== REPORTS ==========
 let revenueChart = null;
-let occupancyChart = null;
 let bookingChart = null;
 
 async function loadReports() {
@@ -633,14 +632,6 @@ async function loadReports() {
             displayRevenueReport(revenueReport);
         } catch (error) {
             console.error('Error loading revenue report:', error);
-        }
-
-        // Load occupancy report
-        try {
-            const occupancyReport = await ReportAPI.generateOccupancyReport(startDate, today);
-            displayOccupancyReport(occupancyReport);
-        } catch (error) {
-            console.error('Error loading occupancy report:', error);
         }
 
         // Load booking report
@@ -686,7 +677,13 @@ function displayRevenueReport(report) {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    }
+                },
                 plugins: {
                     legend: {
                         position: 'bottom'
@@ -694,65 +691,6 @@ function displayRevenueReport(report) {
                     title: {
                         display: true,
                         text: 'Tổng Doanh Thu'
-                    }
-                }
-            }
-        });
-    }
-}
-
-function displayOccupancyReport(report) {
-    const container = document.getElementById('occupancyReportResult');
-    const bookings = report.data?.bookings || report.bookings || [];
-    const totalBookings = bookings.length;
-    
-    // Calculate occupancy stats
-    const confirmed = bookings.filter(b => b.status === 'confirmed' || b.status === 'checked_in').length;
-    const pending = bookings.filter(b => b.status === 'pending').length;
-    const cancelled = bookings.filter(b => b.status === 'cancelled').length;
-    const checkedOut = bookings.filter(b => b.status === 'checked_out').length;
-
-    container.innerHTML = `
-        <div class="report-stats">
-            <p><strong>Tổng Đặt Phòng:</strong> ${totalBookings}</p>
-            <p><strong>Đã Xác Nhận:</strong> ${confirmed}</p>
-            <p><strong>Chờ Xác Nhận:</strong> ${pending}</p>
-            <p><strong>Đã Check-out:</strong> ${checkedOut}</p>
-            <p><strong>Đã Hủy:</strong> ${cancelled}</p>
-        </div>
-    `;
-
-    // Create or update chart
-    const ctx = document.getElementById('occupancyChart');
-    if (ctx) {
-        if (occupancyChart) {
-            occupancyChart.destroy();
-        }
-        occupancyChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Đã Xác Nhận', 'Chờ Xác Nhận', 'Đã Check-out', 'Đã Hủy'],
-                datasets: [{
-                    label: 'Số Lượng',
-                    data: [confirmed, pending, checkedOut, cancelled],
-                    backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#F44336']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'Tỷ Lệ Lấp Đầy'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
                     }
                 }
             }
@@ -821,7 +759,13 @@ function displayBookingReport(report) {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    }
+                },
                 plugins: {
                     legend: {
                         position: 'bottom'
