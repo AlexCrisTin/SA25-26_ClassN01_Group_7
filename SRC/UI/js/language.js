@@ -352,7 +352,12 @@ const LanguageManager = {
                 manageStaff: 'Quản Lý Nhân Viên',
                 manageUsers: 'Quản Lý Người Dùng',
                 manageServices: 'Quản Lý Dịch Vụ',
-                reports: 'Báo Cáo & Thống Kê',
+                reports: {
+                    title: 'Báo Cáo & Thống Kê',
+                    revenue: 'Tổng Doanh Thu',
+                    occupancy: 'Tỷ Lệ Lấp Đầy',
+                    bookings: 'Báo Cáo Đặt Phòng'
+                },
                 noAccess: 'Bạn không có quyền truy cập trang này',
                 loadError: 'Lỗi khi tải danh sách: ',
                 dataLoadError: 'Lỗi khi tải dữ liệu',
@@ -1033,7 +1038,12 @@ const LanguageManager = {
                 manageStaff: 'Manage Staff',
                 manageUsers: 'Manage Users',
                 manageServices: 'Manage Services',
-                reports: 'Reports & Statistics',
+                reports: {
+                    title: 'Reports & Statistics',
+                    revenue: 'Total Revenue',
+                    occupancy: 'Occupancy Rate',
+                    bookings: 'Booking Report'
+                },
                 noAccess: 'You do not have access to this page',
                 loadError: 'Error loading list: ',
                 dataLoadError: 'Error loading data',
