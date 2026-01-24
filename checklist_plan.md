@@ -8,7 +8,7 @@ This document tracks the progress of all labs in the Software Architecture cours
 -  **Lab 2**: Layered Architecture Design - **COMPLETED**
 -  **Lab 3**: Layered Architecture Implementation - **COMPLETED**
 -  **Lab 4**: Microservices Decomposition & Communication - **COMPLETED**
--  **Lab 5**: Implementing a Microservice - **PENDING**
+-  **Lab 5**: Implementing a Microservice - **IN PROGRESS**
 -  **Lab 6**: API Gateway Pattern - **PENDING**
 -  **Lab 7**: Event-Driven Architecture (EDA) & Integration - **PENDING**
 -  **Lab 8**: Deployment View & Quality Attribute Analysis (ATAM) - **PENDING**
@@ -159,42 +159,59 @@ This document tracks the progress of all labs in the Software Architecture cours
 ## Lab 5: Implementing a Microservice 
 
 ### Objectives
-- [ ] Set up standalone Flask application for a microservice
-- [ ] Implement service logic and persistence
-- [ ] Expose Service Contract (REST API)
+- [x] Set up standalone Flask application for a microservice
+- [x] Implement service logic and persistence
+- [x] Expose Service Contract (REST API)
 - [ ] Test the service in isolation
 
+### Completed Tasks
+- [x] Chose Room Service as the microservice to implement
+- [x] Created standalone project structure in `Documents/Lab 5/`
+- [x] Set up Flask application with mysql-connector-python (MySQL)
+- [x] Defined database schema for the microservice (`room_service_schema.sql`)
+- [x] Implemented service logic:
+  - [x] Repository layer (`repository/room_repository.py`)
+  - [x] Service layer (`services/room_service.py`)
+  - [x] Controller/API layer (`controllers/room_controller.py`)
+  - [x] View layer (`views/room_view.py`)
+- [x] Implemented REST API endpoints:
+  - [x] GET /api/rooms - List all rooms
+  - [x] GET /api/rooms/search - Search rooms (by type, status)
+  - [x] GET /api/rooms/<id> - Get room details
+  - [x] POST /api/rooms - Create new room
+  - [x] PUT /api/rooms/<id> - Update room
+  - [x] DELETE /api/rooms/<id> - Delete room
+  - [x] GET /health - Health check endpoint
+- [x] Configured dedicated port (5001) for the service
+- [x] Created database configuration with separate database (`room_service`)
+- [x] Documented service API contract (README.md)
+
 ### Tasks to Complete
-- [ ] Choose a microservice to implement (e.g., Room Service, Booking Service)
-- [ ] Create standalone project structure
-- [ ] Set up Flask application with SQLAlchemy
-- [ ] Define database schema for the microservice
-- [ ] Implement service logic:
-  - [ ] Repository layer
-  - [ ] Service layer
-  - [ ] Controller/API layer
-- [ ] Implement REST API endpoints:
-  - [ ] GET /api/{resource} - List/Search
-  - [ ] GET /api/{resource}/{id} - Get details
-  - [ ] POST /api/{resource} - Create (if applicable)
-  - [ ] PUT /api/{resource}/{id} - Update (if applicable)
-  - [ ] DELETE /api/{resource}/{id} - Delete (if applicable)
-- [ ] Configure dedicated port for the service
 - [ ] Test service in isolation using Postman/cURL
-- [ ] Document service API contract
+- [ ] Verify service independence (run alongside monolith)
 
 ### Technology Stack
 - Python 3.x
-- Flask
-- SQLAlchemy / Flask-SQLAlchemy
-- SQLite or MySQL (dedicated database for service)
+- Flask 3.1.2
+- mysql-connector-python 9.5.0 (MySQL database)
+- flask-cors 6.0.2
+- python-dotenv 1.2.1
 - Postman / cURL for testing
 
+### Deliverables
+- Standalone Room Service microservice (`Documents/Lab 5/`)
+- Database schema (`room_service_schema.sql`)
+- Complete REST API implementation
+- Service documentation (README.md)
+- Requirements file (`requirements.txt`)
+
 ### Notes
-- Service should be completely independent
-- Own its data (separate database)
-- Expose RESTful API
-- Run on dedicated port (e.g., 5001, 5002, etc.)
+- Service is completely independent from monolith
+- Owns its data (separate database: `room_service`)
+- Exposes RESTful API
+- Runs on dedicated port 5001 (monolith runs on 5000)
+- Uses same architectural pattern as monolith (Model → Repository → Service → Controller → View)
+- Ready for API Gateway integration (Lab 6)
 
 ---
 
