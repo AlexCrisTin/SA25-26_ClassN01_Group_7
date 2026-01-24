@@ -356,7 +356,33 @@ const LanguageManager = {
                     title: 'Báo Cáo & Thống Kê',
                     revenue: 'Tổng Doanh Thu',
                     occupancy: 'Tỷ Lệ Lấp Đầy',
-                    bookings: 'Báo Cáo Đặt Phòng'
+                    bookings: 'Báo Cáo Đặt Phòng',
+                    revenueStats: {
+                        totalRevenue: 'Tổng Doanh Thu:',
+                        totalPayments: 'Số Lượng Thanh Toán:',
+                        averagePerPayment: 'Trung Bình/Thanh Toán:',
+                        chartTitle: 'Tổng Doanh Thu',
+                        chartLabels: {
+                            revenue: 'Doanh Thu',
+                            remaining: 'Còn lại'
+                        }
+                    },
+                    bookingStats: {
+                        totalBookings: 'Tổng Đặt Phòng:',
+                        pending: 'Chờ Xác Nhận:',
+                        confirmed: 'Đã Xác Nhận:',
+                        checkedIn: 'Đã Check-in:',
+                        checkedOut: 'Đã Check-out:',
+                        cancelled: 'Đã Hủy:',
+                        chartTitle: 'Báo Cáo Đặt Phòng',
+                        chartLabels: {
+                            pending: 'Chờ Xác Nhận',
+                            confirmed: 'Đã Xác Nhận',
+                            checkedIn: 'Đã Check-in',
+                            checkedOut: 'Đã Check-out',
+                            cancelled: 'Đã Hủy'
+                        }
+                    }
                 },
                 noAccess: 'Bạn không có quyền truy cập trang này',
                 loadError: 'Lỗi khi tải danh sách: ',
@@ -1042,7 +1068,33 @@ const LanguageManager = {
                     title: 'Reports & Statistics',
                     revenue: 'Total Revenue',
                     occupancy: 'Occupancy Rate',
-                    bookings: 'Booking Report'
+                    bookings: 'Booking Report',
+                    revenueStats: {
+                        totalRevenue: 'Total Revenue:',
+                        totalPayments: 'Number of Payments:',
+                        averagePerPayment: 'Average per Payment:',
+                        chartTitle: 'Total Revenue',
+                        chartLabels: {
+                            revenue: 'Revenue',
+                            remaining: 'Remaining'
+                        }
+                    },
+                    bookingStats: {
+                        totalBookings: 'Total Bookings:',
+                        pending: 'Pending:',
+                        confirmed: 'Confirmed:',
+                        checkedIn: 'Checked-in:',
+                        checkedOut: 'Checked-out:',
+                        cancelled: 'Cancelled:',
+                        chartTitle: 'Booking Report',
+                        chartLabels: {
+                            pending: 'Pending',
+                            confirmed: 'Confirmed',
+                            checkedIn: 'Checked-in',
+                            checkedOut: 'Checked-out',
+                            cancelled: 'Cancelled'
+                        }
+                    }
                 },
                 noAccess: 'You do not have access to this page',
                 loadError: 'Error loading list: ',

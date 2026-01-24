@@ -652,11 +652,15 @@ function displayRevenueReport(report) {
     const totalPayments = report.data?.total_payments || report.total_payments || 0;
     const averageRevenue = totalPayments > 0 ? totalRevenue / totalPayments : 0;
 
+    const totalRevenueLabel = LanguageManager.getTranslation('admin.reports.revenueStats.totalRevenue') || 'Tổng Doanh Thu:';
+    const totalPaymentsLabel = LanguageManager.getTranslation('admin.reports.revenueStats.totalPayments') || 'Số Lượng Thanh Toán:';
+    const averageLabel = LanguageManager.getTranslation('admin.reports.revenueStats.averagePerPayment') || 'Trung Bình/Thanh Toán:';
+    
     container.innerHTML = `
         <div class="report-stats">
-            <p><strong>Tổng Doanh Thu:</strong> ${totalRevenue.toLocaleString('vi-VN')} VNĐ</p>
-            <p><strong>Số Lượng Thanh Toán:</strong> ${totalPayments}</p>
-            <p><strong>Trung Bình/Thanh Toán:</strong> ${averageRevenue.toLocaleString('vi-VN')} VNĐ</p>
+            <p><strong>${totalRevenueLabel}</strong> ${totalRevenue.toLocaleString('vi-VN')} VNĐ</p>
+            <p><strong>${totalPaymentsLabel}</strong> ${totalPayments}</p>
+            <p><strong>${averageLabel}</strong> ${averageRevenue.toLocaleString('vi-VN')} VNĐ</p>
         </div>
     `;
 
@@ -666,10 +670,14 @@ function displayRevenueReport(report) {
         if (revenueChart) {
             revenueChart.destroy();
         }
+        const revenueLabel = LanguageManager.getTranslation('admin.reports.revenueStats.chartLabels.revenue') || 'Doanh Thu';
+        const remainingLabel = LanguageManager.getTranslation('admin.reports.revenueStats.chartLabels.remaining') || 'Còn lại';
+        const chartTitle = LanguageManager.getTranslation('admin.reports.revenueStats.chartTitle') || 'Tổng Doanh Thu';
+        
         revenueChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Doanh Thu', 'Còn lại'],
+                labels: [revenueLabel, remainingLabel],
                 datasets: [{
                     data: [totalRevenue, Math.max(0, 1000000 - totalRevenue)],
                     backgroundColor: ['#4CAF50', '#E0E0E0']
@@ -690,7 +698,7 @@ function displayRevenueReport(report) {
                     },
                     title: {
                         display: true,
-                        text: 'Tổng Doanh Thu'
+                        text: chartTitle
                     }
                 }
             }
@@ -719,14 +727,21 @@ function displayBookingReport(report) {
         }
     });
 
+    const totalBookingsLabel = LanguageManager.getTranslation('admin.reports.bookingStats.totalBookings') || 'Tổng Đặt Phòng:';
+    const pendingLabel = LanguageManager.getTranslation('admin.reports.bookingStats.pending') || 'Chờ Xác Nhận:';
+    const confirmedLabel = LanguageManager.getTranslation('admin.reports.bookingStats.confirmed') || 'Đã Xác Nhận:';
+    const checkedInLabel = LanguageManager.getTranslation('admin.reports.bookingStats.checkedIn') || 'Đã Check-in:';
+    const checkedOutLabel = LanguageManager.getTranslation('admin.reports.bookingStats.checkedOut') || 'Đã Check-out:';
+    const cancelledLabel = LanguageManager.getTranslation('admin.reports.bookingStats.cancelled') || 'Đã Hủy:';
+    
     container.innerHTML = `
         <div class="report-stats">
-            <p><strong>Tổng Đặt Phòng:</strong> ${totalBookings}</p>
-            <p><strong>Chờ Xác Nhận:</strong> ${statusCounts.pending}</p>
-            <p><strong>Đã Xác Nhận:</strong> ${statusCounts.confirmed}</p>
-            <p><strong>Đã Check-in:</strong> ${statusCounts.checked_in}</p>
-            <p><strong>Đã Check-out:</strong> ${statusCounts.checked_out}</p>
-            <p><strong>Đã Hủy:</strong> ${statusCounts.cancelled}</p>
+            <p><strong>${totalBookingsLabel}</strong> ${totalBookings}</p>
+            <p><strong>${pendingLabel}</strong> ${statusCounts.pending}</p>
+            <p><strong>${confirmedLabel}</strong> ${statusCounts.confirmed}</p>
+            <p><strong>${checkedInLabel}</strong> ${statusCounts.checked_in}</p>
+            <p><strong>${checkedOutLabel}</strong> ${statusCounts.checked_out}</p>
+            <p><strong>${cancelledLabel}</strong> ${statusCounts.cancelled}</p>
         </div>
     `;
 
@@ -736,10 +751,17 @@ function displayBookingReport(report) {
         if (bookingChart) {
             bookingChart.destroy();
         }
+        const chartPendingLabel = LanguageManager.getTranslation('admin.reports.bookingStats.chartLabels.pending') || 'Chờ Xác Nhận';
+        const chartConfirmedLabel = LanguageManager.getTranslation('admin.reports.bookingStats.chartLabels.confirmed') || 'Đã Xác Nhận';
+        const chartCheckedInLabel = LanguageManager.getTranslation('admin.reports.bookingStats.chartLabels.checkedIn') || 'Đã Check-in';
+        const chartCheckedOutLabel = LanguageManager.getTranslation('admin.reports.bookingStats.chartLabels.checkedOut') || 'Đã Check-out';
+        const chartCancelledLabel = LanguageManager.getTranslation('admin.reports.bookingStats.chartLabels.cancelled') || 'Đã Hủy';
+        const bookingChartTitle = LanguageManager.getTranslation('admin.reports.bookingStats.chartTitle') || 'Báo Cáo Đặt Phòng';
+        
         bookingChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Chờ Xác Nhận', 'Đã Xác Nhận', 'Đã Check-in', 'Đã Check-out', 'Đã Hủy'],
+                labels: [chartPendingLabel, chartConfirmedLabel, chartCheckedInLabel, chartCheckedOutLabel, chartCancelledLabel],
                 datasets: [{
                     data: [
                         statusCounts.pending,
@@ -772,7 +794,7 @@ function displayBookingReport(report) {
                     },
                     title: {
                         display: true,
-                        text: 'Báo Cáo Đặt Phòng'
+                        text: bookingChartTitle
                     }
                 }
             }
