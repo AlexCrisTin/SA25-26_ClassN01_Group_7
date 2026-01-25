@@ -9,7 +9,7 @@ This document tracks the progress of all labs in the Software Architecture cours
 -  **Lab 3**: Layered Architecture Implementation - **COMPLETED**
 -  **Lab 4**: Microservices Decomposition & Communication - **COMPLETED**
 -  **Lab 5**: Implementing a Microservice - **IN PROGRESS**
--  **Lab 6**: API Gateway Pattern - **PENDING**
+-  **Lab 6**: API Gateway Pattern - **IN PROGRESS**
 -  **Lab 7**: Event-Driven Architecture (EDA) & Integration - **PENDING**
 -  **Lab 8**: Deployment View & Quality Attribute Analysis (ATAM) - **PENDING**
 
@@ -218,42 +218,55 @@ This document tracks the progress of all labs in the Software Architecture cours
 ## Lab 6: API Gateway Pattern 
 
 ### Objectives
-- [ ] Understand API Gateway role in microservices
-- [ ] Implement reverse proxy/router using Flask
-- [ ] Configure Gateway to route requests to microservices
-- [ ] Implement basic security check (token validation)
+- [x] Understand API Gateway role in microservices
+- [x] Implement reverse proxy/router using Flask
+- [x] Configure Gateway to route requests to microservices
+- [x] Implement basic security check (token validation)
+
+### Completed Tasks
+- [x] Created API Gateway project structure in `Documents/Lab 6/`
+- [x] Installed Flask and requests library (`requirements.txt`)
+- [x] Defined service configuration (URLs for backend services) in `gateway_config.py`
+- [x] Implemented security stub (`auth.py`):
+  - [x] Token validation function
+  - [x] Admin/user role checking
+- [x] Implemented routing logic (`app.py`):
+  - [x] Route requests to appropriate microservices
+  - [x] Forward headers and query parameters
+  - [x] Handle service failures (503 errors)
+- [x] Implemented cross-cutting concerns:
+  - [x] Authentication/Authorization (stub)
+  - [ ] Request logging
+  - [x] Error handling for upstream failures
+- [x] Configured dedicated port for the gateway (5000)
+- [x] Added health check endpoint (`GET /health`)
 
 ### Tasks to Complete
-- [ ] Create API Gateway project structure
-- [ ] Install Flask and requests library
-- [ ] Define service configuration (URLs for backend services)
-- [ ] Implement security stub:
-  - [ ] Token validation function
-  - [ ] Admin/user role checking
-- [ ] Implement routing logic:
-  - [ ] Route requests to appropriate microservices
-  - [ ] Forward headers and query parameters
-  - [ ] Handle service failures (503 errors)
-- [ ] Implement cross-cutting concerns:
-  - [ ] Authentication/Authorization
-  - [ ] Request logging
-  - [ ] Error handling
 - [ ] Test Gateway functionality:
   - [ ] Unauthorized access (401)
   - [ ] Authorized access (200)
   - [ ] Forbidden access for non-admin (403)
   - [ ] Service unavailable handling (503)
-- [ ] Document Gateway configuration
+- [ ] Document Gateway configuration and usage
+- [ ] Add request logging (optional)
 
 ### Technology Stack
 - Python 3.x
-- Flask
-- requests library
+- Flask 3.1.2
+- requests 2.32.5
+- flask-cors 6.0.2
 - Microservices from Lab 5
 
+### Deliverables
+- API Gateway project (`Documents/Lab 6/`)
+- Routing configuration (`gateway_config.py`)
+- Auth stub (`auth.py`)
+- Gateway implementation (`app.py`)
+- Requirements file (`requirements.txt`)
+
 ### Notes
-- Gateway should run on port 5000
-- Backend services should run on different ports (5001, 5002, etc.)
+- Gateway runs on port 5000
+- Backend services run on different ports (5001, 5002, etc.)
 - Gateway acts as single entry point
 - Handles security before routing
 
@@ -355,8 +368,8 @@ This document tracks the progress of all labs in the Software Architecture cours
 **Remaining**: 4/8 labs (50%)
 
 ### Next Steps
-1. Complete Lab 5: Implement at least one microservice
-2. Complete Lab 6: Implement API Gateway
+1. Finish Lab 5: Test Room Service in isolation
+2. Finish Lab 6: Test Gateway + document configuration
 3. Complete Lab 7: Implement Event-Driven Architecture
 4. Complete Lab 8: Create deployment diagram and ATAM analysis
 
