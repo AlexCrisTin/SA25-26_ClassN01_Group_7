@@ -43,11 +43,18 @@ const AdminMessagesManager = {
         });
 
         if (filteredChats.length === 0) {
+            const emptyTitle = searchTerm
+                ? LanguageManager.getTranslation('adminMessages.noResults')
+                : LanguageManager.getTranslation('adminMessages.noMessages');
+            const emptyDesc = searchTerm
+                ? LanguageManager.getTranslation('adminMessages.noResultsDesc')
+                : LanguageManager.getTranslation('adminMessages.noMessagesDesc');
+
             usersList.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">💬</div>
-                    <h3>${searchTerm ? 'Không tìm thấy' : 'Chưa có tin nhắn nào'}</h3>
-                    <p>${searchTerm ? 'Thử tìm kiếm với từ khóa khác' : 'Khách hàng sẽ xuất hiện ở đây khi họ gửi tin nhắn'}</p>
+                    <h3>${emptyTitle}</h3>
+                    <p>${emptyDesc}</p>
                 </div>
             `;
             return;

@@ -712,6 +712,8 @@ const LanguageManager = {
                 searchPlaceholder: 'Tìm kiếm khách hàng...',
                 noMessages: 'Chưa có tin nhắn nào',
                 noMessagesDesc: 'Khách hàng sẽ xuất hiện ở đây khi họ gửi tin nhắn',
+                noResults: 'Không tìm thấy',
+                noResultsDesc: 'Thử tìm kiếm với từ khóa khác',
                 selectCustomer: 'Chọn khách hàng để xem tin nhắn',
                 selectCustomerDesc: 'Chọn một khách hàng từ danh sách bên trái để bắt đầu trò chuyện'
             }
@@ -1425,6 +1427,8 @@ const LanguageManager = {
                 searchPlaceholder: 'Search customers...',
                 noMessages: 'No messages yet',
                 noMessagesDesc: 'Customers will appear here when they send messages',
+                noResults: 'Not found',
+                noResultsDesc: 'Try searching with a different keyword',
                 selectCustomer: 'Select a customer to view messages',
                 selectCustomerDesc: 'Select a customer from the left list to start chatting'
             }
