@@ -6,6 +6,27 @@ let allStaff = [];
 let allServices = [];
 let allUsers = [];
 
+// Helper: build full URL for images served by backend (port 5000)
+function getFullImageUrl(imageUrl) {
+    if (!imageUrl) return imageUrl;
+    // If already absolute URL, keep as is
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+        return imageUrl;
+    }
+    // Derive backend origin from API_BASE_URL if available (http://localhost:5000/api)
+    let backendOrigin = window.location.origin;
+    if (typeof API_BASE_URL !== 'undefined') {
+        try {
+            const url = new URL(API_BASE_URL);
+            backendOrigin = `${url.protocol}//${url.host}`;
+        } catch (e) {
+            // Fallback: strip trailing '/api' if present
+            backendOrigin = API_BASE_URL.replace(/\/api\/?$/, '');
+        }
+    }
+    return `${backendOrigin}${imageUrl}`;
+}
+
 // Expose to window for language manager access
 window.allRooms = allRooms;
 window.allBookings = allBookings;
@@ -98,7 +119,7 @@ function displayRooms(rooms) {
             <td>${room.id}</td>
             <td>
                 ${room.image_url ? 
-                    `<img src="${room.image_url}" alt="Room ${room.room_number}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 10px; vertical-align: middle;">` 
+                    `<img src="${getFullImageUrl(room.image_url)}" alt="Room ${room.room_number}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 10px; vertical-align: middle;">` 
                     : '<span style="color: #999;">No image</span>'
                 }
                 ${room.room_number}
@@ -227,9 +248,10 @@ async function editRoom(roomId) {
         // Show current image if exists
         const currentImageDiv = document.getElementById('edit_room_current_image');
         if (room.image_url) {
+            const fullImageUrl = getFullImageUrl(room.image_url);
             currentImageDiv.innerHTML = `
                 <p style="margin-bottom: 5px; font-size: 12px; color: #666;">Ảnh hiện tại:</p>
-                <img src="${room.image_url}" alt="Current room image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
+                <img src="${fullImageUrl}" alt="Current room image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
             `;
             currentImageDiv.style.display = 'block';
         } else {
