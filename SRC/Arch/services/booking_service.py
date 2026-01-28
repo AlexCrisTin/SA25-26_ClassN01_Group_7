@@ -25,6 +25,14 @@ class BookingService:
         
         if not guest_name or not room_type or not check_in_date:
             raise ValueError("Invalid Data: Guest name, room type, and check-in date are required.")
+
+        # Payment parameters validation (consistency & basic value checks)
+        if payment_method and payment_amount is None:
+            raise ValueError("Invalid Data: payment_amount is required when payment_method is provided.")
+        if payment_amount is not None and payment_method is None:
+            raise ValueError("Invalid Data: payment_method is required when payment_amount is provided.")
+        if payment_amount is not None and payment_amount <= 0:
+            raise ValueError("Invalid Data: Payment amount must be positive.")
         
         # Date validation
         try:

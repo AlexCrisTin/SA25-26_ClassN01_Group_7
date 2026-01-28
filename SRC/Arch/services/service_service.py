@@ -1,5 +1,6 @@
 from repository.service_repository import ServiceRepository
 from repository.service_request_repository import ServiceRequestRepository
+from repository.booking_repository import BookingRepository
 
 class ServiceService:
     #Service: Xử lý logic nghiệp vụ cho Hotel Service.
@@ -7,6 +8,7 @@ class ServiceService:
     def __init__(self):
         self.repo = ServiceRepository()
         self.service_request_repo = ServiceRequestRepository()
+        self.booking_repo = BookingRepository()
 
     def create_service(self, service_name, description, price, category):
         #Tạo service mới với validation
@@ -71,10 +73,26 @@ class ServiceService:
     
     def create_service_request(self, booking_id, service_id, quantity=1):
         #Tạo service request mới
+        if not booking_id or not service_id:
+            raise ValueError("Invalid Data: booking_id and service_id are required.")
+
+        # Validate booking existence and status
+        booking = self.booking_repo.find_by_id(booking_id)
+        if not booking:
+            raise ValueError(f"Invalid Data: Booking with ID {booking_id} not found.")
+        if booking.status in ['cancelled', 'checked_out']:
+            raise ValueError(f"Invalid Data: Cannot create service request for booking {booking_id} with status '{booking.status}'.")
+
         service = self.repo.find_by_id(service_id)
         if not service:
             raise ValueError(f"Service with ID {service_id} not found.")
         
+        # Ensure quantity is a positive integer
+        try:
+            quantity = int(quantity)
+        except (TypeError, ValueError):
+            raise ValueError("Invalid Data: Quantity must be a positive integer.")
+
         if quantity <= 0:
             raise ValueError("Invalid Data: Quantity must be positive.")
         
