@@ -352,6 +352,9 @@ const LanguageManager = {
                 manageStaff: 'Quản Lý Nhân Viên',
                 manageUsers: 'Quản Lý Người Dùng',
                 manageServices: 'Quản Lý Dịch Vụ',
+                services: {
+                    searchPlaceholder: 'Tìm theo tên, mô tả, danh mục'
+                },
                 reports: {
                     title: 'Báo Cáo & Thống Kê',
                     revenue: 'Tổng Doanh Thu',
@@ -689,6 +692,7 @@ const LanguageManager = {
             },
             booking: {
                 confirm: 'Xác Nhận',
+                cancelBooking: 'Hủy Phòng',
                 status: {
                     pending: 'Chờ Xác Nhận',
                     confirmed: 'Đã Xác Nhận',
@@ -1066,6 +1070,9 @@ const LanguageManager = {
                 manageStaff: 'Manage Staff',
                 manageUsers: 'Manage Users',
                 manageServices: 'Manage Services',
+                services: {
+                    searchPlaceholder: 'Search by name, description, category'
+                },
                 reports: {
                     title: 'Reports & Statistics',
                     revenue: 'Total Revenue',
@@ -1404,6 +1411,7 @@ const LanguageManager = {
             },
             booking: {
                 confirm: 'Confirm',
+                cancelBooking: 'Cancel Booking',
                 status: {
                     pending: 'Pending Confirmation',
                     confirmed: 'Confirmed',

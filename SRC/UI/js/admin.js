@@ -557,6 +557,38 @@ function displayServices(services) {
     `).join('');
 }
 
+function filterServices() {
+    const searchInput = document.getElementById('serviceSearch');
+    if (!searchInput) {
+        displayServices(allServices || []);
+        return;
+    }
+
+    const query = searchInput.value.trim().toLowerCase();
+    if (!allServices || allServices.length === 0) {
+        displayServices([]);
+        return;
+    }
+
+    if (!query) {
+        displayServices(allServices);
+        return;
+    }
+
+    const filtered = allServices.filter(s => {
+        const fields = [
+            s.service_name,
+            s.name,
+            s.description,
+            s.category,
+            s.id
+        ];
+        return fields.some(f => f && String(f).toLowerCase().includes(query));
+    });
+
+    displayServices(filtered);
+}
+
 function showAddServiceModal() {
     document.getElementById('addServiceForm').reset();
     document.getElementById('addServiceModal').style.display = 'block';

@@ -108,8 +108,8 @@ function displayBookings(bookings) {
         : 'Xác Nhận';
 
     const cancelText = typeof LanguageManager !== 'undefined'
-        ? LanguageManager.getTranslation('booking.cancelBooking') || 'Hủy Phòng'
-        : 'Hủy Phòng';
+        ? LanguageManager.getTranslation('booking.cancelBooking') || 'Cancel Booking'
+        : 'Cancel Booking';
 
     tbody.innerHTML = bookings.map(booking => `
         <tr>
