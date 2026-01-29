@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-01-29
+
+### Added
+- **Lab 5: Room Service Microservice (standalone)**
+  - Added `Documents/Lab 5/` as a standalone Room Service implementation (port 5001)
+  - Added dedicated MySQL schema `room_service` via `room_service_schema.sql`
+- **Lab 6: API Gateway Pattern (standalone)**
+  - Added `Documents/Lab 6/` API Gateway (port 5000) using Flask + `requests`
+  - Added route-to-service mapping via `gateway_config.py` and an auth stub via `auth.py`
+- **Admin UI enhancements**
+  - Added service search input in Manage Services tab (`admin.html`) with client-side filtering (`admin.js`)
+- **i18n improvements**
+  - Added admin messages empty/search state translations (`adminMessages.noResults`, `adminMessages.noResultsDesc`)
+  - Added booking cancel button translation key (`booking.cancelBooking`)
+
+### Changed
+- **Project checklist**
+  - Updated `checklist_plan.md` to reflect Lab 5 and Lab 6 progress and deliverables
+
+### Fixed
+- **Room image display in Admin panel**
+  - Fixed room image preview in Edit Room modal when frontend is served from a different origin/port by building full backend image URLs (`admin.js`)
+- **Validation hardening**
+  - Added stronger validation in:
+    - `StaffService` (email/phone format, hire_date validation, uniqueness checks)
+    - `ServiceService` service request creation (booking existence/status, quantity validation)
+    - `BookingService` payment parameter consistency checks
+
 ## [0.7.0] - 2026-01-22
 
 ### Added
