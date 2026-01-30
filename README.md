@@ -59,7 +59,6 @@ SA25-26_ClassN01_Group_7/
 ├── Design/                 # Architectural design documentation
 │   ├── database_schema.sql # Database schema
 │   └── *.png              # Diagrams (C4, UML, Component)
-├── homework/              # Lab assignments
 ├── SRC/                   # Source code
 │   ├── Arch/             # Backend (Architecture layer)
 │   │   ├── app.py        # Flask application entry point
