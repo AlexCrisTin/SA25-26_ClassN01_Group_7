@@ -8,10 +8,10 @@ This document tracks the progress of all labs in the Software Architecture cours
 -  **Lab 2**: Layered Architecture Design - **COMPLETED**
 -  **Lab 3**: Layered Architecture Implementation - **COMPLETED**
 -  **Lab 4**: Microservices Decomposition & Communication - **COMPLETED**
--  **Lab 5**: Implementing a Microservice - **IN PROGRESS**
--  **Lab 6**: API Gateway Pattern - **IN PROGRESS**
--  **Lab 7**: Event-Driven Architecture (EDA) & Integration - **PENDING**
--  **Lab 8**: Deployment View & Quality Attribute Analysis (ATAM) - **PENDING**
+-  **Lab 5**: Implementing a Microservice - **COMPLETED**
+-  **Lab 6**: API Gateway Pattern - **COMPLETED**
+-  **Lab 7**: Event-Driven Architecture (EDA) & Integration - **COMPLETED**
+-  **Lab 8**: Deployment View & Quality Attribute Analysis (ATAM) - **COMPLETED**
 
 ---
 
@@ -102,9 +102,9 @@ This document tracks the progress of all labs in the Software Architecture cours
   - [x] Services
   - [x] Staff
   - [x] Check-ins/Check-outs
-  - [] Wallets
-  - [] Coupons
-  - [] Reports
+  - [x] Wallets
+  - [x] Coupons
+  - [x] Reports
 - [x] Database configuration (`SRC/Arch/db_config.py`)
 - [x] Flask application setup (`SRC/Arch/app.py`)
 - [x] Middleware for authentication (`SRC/Arch/middleware/auth.py`)
@@ -162,7 +162,7 @@ This document tracks the progress of all labs in the Software Architecture cours
 - [x] Set up standalone Flask application for a microservice
 - [x] Implement service logic and persistence
 - [x] Expose Service Contract (REST API)
-- [ ] Test the service in isolation
+- [x] Test the service in isolation
 
 ### Completed Tasks
 - [x] Chose Room Service as the microservice to implement
@@ -187,8 +187,8 @@ This document tracks the progress of all labs in the Software Architecture cours
 - [x] Documented service API contract (README.md)
 
 ### Tasks to Complete
-- [ ] Test service in isolation using Postman/cURL
-- [ ] Verify service independence (run alongside monolith)
+- [x] Test service in isolation using Postman/cURL
+- [x] Verify service independence (run alongside monolith)
 
 ### Technology Stack
 - Python 3.x
@@ -236,19 +236,19 @@ This document tracks the progress of all labs in the Software Architecture cours
   - [x] Handle service failures (503 errors)
 - [x] Implemented cross-cutting concerns:
   - [x] Authentication/Authorization (stub)
-  - [ ] Request logging
+  - [x] Request logging
   - [x] Error handling for upstream failures
 - [x] Configured dedicated port for the gateway (5000)
 - [x] Added health check endpoint (`GET /health`)
 
 ### Tasks to Complete
-- [ ] Test Gateway functionality:
-  - [ ] Unauthorized access (401)
-  - [ ] Authorized access (200)
-  - [ ] Forbidden access for non-admin (403)
-  - [ ] Service unavailable handling (503)
-- [ ] Document Gateway configuration and usage
-- [ ] Add request logging (optional)
+- [x] Test Gateway functionality:
+  - [x] Unauthorized access (401)
+  - [x] Authorized access (200)
+  - [x] Forbidden access for non-admin (403)
+  - [x] Service unavailable handling (503)
+- [x] Document Gateway configuration and usage
+- [x] Add request logging (optional)
 
 ### Technology Stack
 - Python 3.x
@@ -275,33 +275,33 @@ This document tracks the progress of all labs in the Software Architecture cours
 ## Lab 7: Event-Driven Architecture (EDA) & Integration 
 
 ### Objectives
-- [ ] Understand Producers, Consumers, and Message Brokers
-- [ ] Install and set up RabbitMQ message broker
-- [ ] Implement Order Service (Event Producer)
-- [ ] Implement Notification Service (Event Consumer)
-- [ ] Demonstrate decoupled nature of services
+- [x] Understand Producers, Consumers, and Message Brokers
+- [x] Install and set up RabbitMQ message broker
+- [x] Implement Order Service (Event Producer)
+- [x] Implement Notification Service (Event Consumer)
+- [x] Demonstrate decoupled nature of services
 
 ### Tasks to Complete
-- [ ] Install RabbitMQ (Docker recommended)
-- [ ] Install Pika library (Python RabbitMQ client)
-- [ ] Set up RabbitMQ connection configuration
-- [ ] Implement Producer Service:
-  - [ ] Connect to RabbitMQ
-  - [ ] Declare queue
-  - [ ] Publish events (e.g., OrderPlacedEvent)
-  - [ ] Handle connection errors
-- [ ] Implement Consumer Service:
-  - [ ] Connect to RabbitMQ
-  - [ ] Register callback function
-  - [ ] Start consuming messages
-  - [ ] Process events (e.g., send email notification)
-  - [ ] Acknowledge messages
-- [ ] Test asynchronous decoupling:
-  - [ ] Start consumer service
-  - [ ] Run producer service
-  - [ ] Verify events are processed asynchronously
-  - [ ] Test fault tolerance (consumer down scenario)
-- [ ] Document event structure and queue names
+- [x] Install RabbitMQ (Docker recommended)
+- [x] Install Pika library (Python RabbitMQ client)
+- [x] Set up RabbitMQ connection configuration
+- [x] Implement Producer Service:
+  - [x] Connect to RabbitMQ
+  - [x] Declare queue
+  - [x] Publish events (e.g., OrderPlacedEvent)
+  - [x] Handle connection errors
+- [x] Implement Consumer Service:
+  - [x] Connect to RabbitMQ
+  - [x] Register callback function
+  - [x] Start consuming messages
+  - [x] Process events (e.g., send email notification)
+  - [x] Acknowledge messages
+- [x] Test asynchronous decoupling:
+  - [x] Start consumer service
+  - [x] Run producer service
+  - [x] Verify events are processed asynchronously
+  - [x] Test fault tolerance (consumer down scenario)
+- [x] Document event structure and queue names
 
 ### Technology Stack
 - Python 3.x
@@ -320,34 +320,34 @@ This document tracks the progress of all labs in the Software Architecture cours
 ## Lab 8: Deployment View & Quality Attribute Analysis (ATAM) 
 
 ### Objectives
-- [ ] Create UML Deployment Diagram
-- [ ] Conduct simplified ATAM analysis
-- [ ] Compare Monolithic vs Microservices architecture
-- [ ] Identify architectural trade-offs
+- [x] Create UML Deployment Diagram
+- [x] Conduct simplified ATAM analysis
+- [x] Compare Monolithic vs Microservices architecture
+- [x] Identify architectural trade-offs
 
 ### Tasks to Complete
-- [ ] Create UML Deployment Diagram:
-  - [ ] Identify nodes (Client Device, Load Balancer, Application Cluster)
-  - [ ] Place artifacts (API Gateway, Services, Message Broker)
-  - [ ] Place data stores (Databases for each service)
-  - [ ] Draw associations (communication links)
-- [ ] Define Quality Attribute Scenarios:
-  - [ ] Scalability Scenario (e.g., 10x traffic spike)
-  - [ ] Availability Scenario (e.g., service failure)
-- [ ] Evaluate architectures against scenarios:
-  - [ ] Monolithic (Layered) approach
-  - [ ] Microservices approach
-- [ ] Create comparison table:
-  - [ ] Scalability analysis
-  - [ ] Availability analysis
-  - [ ] Performance considerations
-  - [ ] Complexity considerations
-- [ ] Identify trade-offs:
-  - [ ] Benefits of Microservices
-  - [ ] Drawbacks of Microservices
-  - [ ] When to use each approach
-- [ ] Document findings and recommendations
-- [ ] Complete Lab Report 8
+- [x] Create UML Deployment Diagram:
+  - [x] Identify nodes (Client Device, Load Balancer, Application Cluster)
+  - [x] Place artifacts (API Gateway, Services, Message Broker)
+  - [x] Place data stores (Databases for each service)
+  - [x] Draw associations (communication links)
+- [x] Define Quality Attribute Scenarios:
+  - [x] Scalability Scenario (e.g., 10x traffic spike)
+  - [x] Availability Scenario (e.g., service failure)
+- [x] Evaluate architectures against scenarios:
+  - [x] Monolithic (Layered) approach
+  - [x] Microservices approach
+- [x] Create comparison table:
+  - [x] Scalability analysis
+  - [x] Availability analysis
+  - [x] Performance considerations
+  - [x] Complexity considerations
+- [x] Identify trade-offs:
+  - [x] Benefits of Microservices
+  - [x] Drawbacks of Microservices
+  - [x] When to use each approach
+- [x] Document findings and recommendations
+- [x] Complete Lab Report 8
 
 ### Technology Stack
 - draw.io (Diagrams.net) for UML Deployment Diagram
@@ -363,15 +363,15 @@ This document tracks the progress of all labs in the Software Architecture cours
 
 ## Overall Progress
 
-**Completed**: 4/8 labs (50%)
+**Completed**: 8/8 labs (100%)
 
-**Remaining**: 4/8 labs (50%)
+**Remaining**: 0/8 labs (0%)
 
 ### Next Steps
-1. Finish Lab 5: Test Room Service in isolation
-2. Finish Lab 6: Test Gateway + document configuration
-3. Complete Lab 7: Implement Event-Driven Architecture
-4. Complete Lab 8: Create deployment diagram and ATAM analysis
+1. ~~Finish Lab 5: Test Room Service in isolation~~ Done
+2. ~~Finish Lab 6: Test Gateway + document configuration~~ Done
+3. ~~Complete Lab 7: Implement Event-Driven Architecture~~ Done
+4. ~~Complete Lab 8: Create deployment diagram and ATAM analysis~~ Done
 
 ---
 
